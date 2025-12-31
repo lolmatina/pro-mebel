@@ -6,7 +6,7 @@ import MainLayout from "./MainLayout";
 export function App() {
   return (
     <MantineProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.BASENAME}>
         <Routes>
           <Route path="admin"></Route>
           <Route element={<MainLayout />}>
