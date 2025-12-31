@@ -23,7 +23,7 @@ jobs:
         run: bun install
 
       - name: Build
-        run: bun build --env=inline
+        run: bun build.ts --env=inline
 
       - name: Upload
         uses: actions/upload-pages-artifact@v3
