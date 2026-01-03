@@ -4,12 +4,12 @@ import type { ComponentPropsWithoutRef } from "react";
 
 type Props = ButtonProps & ComponentPropsWithoutRef<"button">;
 
-export function Button(props: Props) {
+export function Button({ className, ...props }: Props) {
   return (
     <MantineButton
       className={cn(
-        props.className,
-        "py-3.75! px-7.5! h-auto! text-base leading-[120%] rounded-full!"
+        "py-3.75! px-7.5! h-auto! text-base leading-[120%] rounded-full!",
+        className
       )}
       color="#121212"
       {...props}

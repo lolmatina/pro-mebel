@@ -1,11 +1,11 @@
 import { Outlet } from "react-router";
-import { Header } from "./components/Header";
+import { Header } from "./widgets/Header";
 
 export default function MainLayout() {
   return (
     <div className="w-full">
       <Header />
-      <main className="w-full h-[200vh]">
+      <main className="w-full">
         <Outlet />
       </main>
     </div>

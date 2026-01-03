@@ -5,6 +5,7 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 
 @import "@mantine/core/styles.css";
+@import "@mantine/carousel/styles.css";
 
 @theme {
   --color-primary: #121212;

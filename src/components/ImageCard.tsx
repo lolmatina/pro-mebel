@@ -19,19 +19,18 @@ export function ImageCard({
   return (
     <div
       className={cn(
-        "flex justify-start rounded-[40px]",
+        "flex justify-start rounded-[40px] overflow-hidden bg-center bg-no-repeat transition-[background-size] duration-500 ease-out relative group",
         position === "top" && "items-start",
         position === "bottom" && "items-end",
-        padding === "lg" && "lg:p-15",
-        padding === "md" && "lg:p-7.5",
+        padding === "lg" && "lg:p-15 p-6",
+        padding === "md" && "lg:p-7.5 p-6",
         className
       )}
-      style={{
-        backgroundImage: `url(${src})`,
-        backgroundSize: "cover",
-        backgroundPosition: "0 0",
-      }}
     >
+      <div
+        className="absolute inset-0 w-full h-full bg-cover -z-1 group-hover:transform-[scale(1.05)] duration-500 transition-all"
+        style={{ backgroundImage: `url(${src})` }}
+      />
       {children}
     </div>
   );
