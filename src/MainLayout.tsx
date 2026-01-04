@@ -5,7 +5,7 @@ export default function MainLayout() {
   return (
     <div className="w-full">
       <Header />
-      <main className="w-full">
+      <main className="w-full font-poppins">
         <Outlet />
       </main>
     </div>

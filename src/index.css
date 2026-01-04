@@ -25,3 +25,17 @@
     @apply font-poppins;
   }
 }
+
+.mantine-Carousel-indicator {
+  /* transform: translateY(40px) !important; */
+  width: 9px !important;
+  height: 9px !important;
+  transition: width 250ms ease !important;
+  background: #eee6db !important;
+
+  &[data-active] {
+    width: 40px !important;
+    height: 11px !important;
+    background: #ccc6c1 !important;
+  }
+}
