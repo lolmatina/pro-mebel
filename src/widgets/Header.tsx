@@ -3,12 +3,43 @@ import logo from "@/logo.svg";
 import { Burger, Drawer, Menu, TextInput } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconChevronDown, IconSearch } from "@tabler/icons-react";
-import { forwardRef, type ComponentPropsWithoutRef } from "react";
+import { forwardRef, type ComponentPropsWithoutRef, useEffect, useState } from "react";
 import { Button } from "../components/Button";
+import { api, type SidebarCategory } from "@/lib/api";
+import { useNavigate } from "react-router";
 
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure();
   const isLg = useMediaQuery("(min-width: 1024px)");
+  const [categories, setCategories] = useState<SidebarCategory[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const data = await api.getSidebar();
+      setCategories(data);
+    } catch (err) {
+      console.error("Failed to load categories:", err);
+    }
+  };
+
+  const handleSubCategoryClick = (subCategoryId: number) => {
+    navigate(`/catalog?subCategoryIds=${subCategoryId}`);
+  };
+
+  const getAllSubCategories = () => {
+    const allSubCategories: Array<{ id: number; name: string; productCount: number }> = [];
+    categories.forEach((category) => {
+      category.subCategories.forEach((subCategory) => {
+        allSubCategories.push(subCategory);
+      });
+    });
+    return allSubCategories;
+  };
 
   return (
     <div className="max-w-360 mx-auto px-4 py-6 lg:py-4.5 lg:px-15 flex gap-10 justify-between items-center sticky top-0 bg-white z-201">
@@ -37,25 +68,42 @@ export function Header() {
             <MenuItemWithDropdown>Полный каталог</MenuItemWithDropdown>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item>Что то</Menu.Item>
+            {getAllSubCategories().slice(0, 10).map((subCategory) => (
+              <Menu.Item
+                key={subCategory.id}
+                onClick={() => handleSubCategoryClick(subCategory.id)}
+              >
+                {subCategory.name} ({subCategory.productCount})
+              </Menu.Item>
+            ))}
+            {getAllSubCategories().length > 10 && (
+              <Menu.Item onClick={() => navigate('/catalog')}>
+                Показать все
+              </Menu.Item>
+            )}
           </Menu.Dropdown>
         </Menu>
-        <Menu trigger="hover" width={200} position="bottom-start">
-          <Menu.Target>
-            <MenuItemWithDropdown>Наши прошлые проекты</MenuItemWithDropdown>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Item>Что то</Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
-        <Menu trigger="hover" width={200} position="bottom-start">
-          <Menu.Target>
-            <MenuItemWithDropdown>Жилые помещения</MenuItemWithDropdown>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Item>Что то</Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
+        {categories.map((category) => (
+          <Menu key={category.id} trigger="hover" width={200} position="bottom-start">
+            <Menu.Target>
+              <MenuItemWithDropdown>{category.name}</MenuItemWithDropdown>
+            </Menu.Target>
+            <Menu.Dropdown>
+              {category.subCategories.length > 0 ? (
+                category.subCategories.map((subCategory) => (
+                  <Menu.Item
+                    key={subCategory.id}
+                    onClick={() => handleSubCategoryClick(subCategory.id)}
+                  >
+                    {subCategory.name} ({subCategory.productCount})
+                  </Menu.Item>
+                ))
+              ) : (
+                <Menu.Item disabled>Нет подкатегорий</Menu.Item>
+              )}
+            </Menu.Dropdown>
+          </Menu>
+        ))}
       </div>
       <div className="lg:hidden">
         <Burger opened={opened} onClick={toggle} />

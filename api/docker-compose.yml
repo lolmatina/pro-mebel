@@ -1,0 +1,66 @@
+version: '3.7'
+
+volumes:
+    logs:
+        driver: local
+    db_data:
+        driver: local
+
+services:
+    slim:
+        image: php:8.1-alpine
+        working_dir: /var/www
+        command: sh -c "docker-php-ext-install pdo pdo_mysql && php -S 0.0.0.0:8080 -t public"
+        environment:
+            docker: "true"
+            DB_HOST: "db"
+            DB_PORT: "3306"
+            DB_NAME: "orders"
+            DB_USER: "orders_user"
+            DB_PASSWORD: "orders_password"
+            JWT_SECRET: "your-secret-key-change-in-production"
+            ADMIN_USERNAME: "admin"
+            ADMIN_PASSWORD: "admin"
+        ports:
+            - "8080:8080"
+        volumes:
+            - .:/var/www
+            - logs:/var/www/logs
+        depends_on:
+            - db
+        networks:
+            - app-network
+
+    db:
+        image: mysql:8.0
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            MYSQL_ROOT_PASSWORD: "root_password"
+            MYSQL_DATABASE: "orders"
+            MYSQL_USER: "orders_user"
+            MYSQL_PASSWORD: "orders_password"
+        ports:
+            - "3306:3306"
+        volumes:
+            - db_data:/var/lib/mysql
+            - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+        networks:
+            - app-network
+
+    phpmyadmin:
+        image: phpmyadmin:latest
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+            PMA_USER: orders_user
+            PMA_PASSWORD: orders_password
+        ports:
+            - "8081:80"
+        depends_on:
+            - db
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge

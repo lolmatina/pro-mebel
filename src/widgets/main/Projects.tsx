@@ -1,102 +1,14 @@
 import { Button } from "@/components/Button";
 import { Carousel } from "@mantine/carousel";
 import { useEffect, useState } from "react";
-import image from "@/assets/main/hero/image1.jpg";
 import type { EmblaCarouselType } from "embla-carousel";
 import { useMediaQuery } from "@mantine/hooks";
+import { api, type SidebarCategory, type Product } from "@/lib/api";
+import { useNavigate } from "react-router";
 
-const categories = [
-  {
-    id: 1,
-    name: "Наши проекты",
-    children: [
-      {
-        id: 1,
-        name: "Спальня",
-        items: [
-          {
-            id: 1,
-            title: "Спальня",
-            description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-          },
-          {
-            id: 2,
-            title: "Спальня",
-            description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-          },
-          {
-            id: 3,
-            title: "Спальня",
-            description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-          },
-          {
-            id: 4,
-            title: "Спальня",
-            description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-          },
-          {
-            id: 5,
-            title: "Спальня",
-            description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Жилые помещения",
-    children: [
-      {
-        id: 2,
-        name: "Спальня",
-        items: [
-          {
-            id: 6,
-            title: "Спальня",
-            description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-          },
-          {
-            id: 7,
-            title: "Спальня",
-            description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Жилые помещения",
-    children: [
-      {
-        id: 3,
-        name: "Спальня 2",
-        items: [
-          {
-            id: 8,
-            title: "Спальня",
-            description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-          },
-          {
-            id: 9,
-            title: "Спальня",
-            description:
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-          },
-        ],
-      },
-    ],
-  },
-];
+interface CategoryWithProducts extends SidebarCategory {
+  products?: Product[];
+}
 
 export function MainProjects() {
   const [active, setActive] = useState<number>();
@@ -104,29 +16,52 @@ export function MainProjects() {
   const [embla, setEmbla] = useState<EmblaCarouselType | null>(null);
   const [emblaSub, setEmblaSub] = useState<EmblaCarouselType | null>(null);
   const isLg = useMediaQuery("(min-width: 1024px)");
-
+  const [categories, setCategories] = useState<CategoryWithProducts[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const navigate = useNavigate();
   useEffect(() => {
-    const getCategories = () => {
-      // There must be fetching
-      const values = categories;
+    fetchData();
+  }, []);
 
-      if (values.length > 0) {
+  const fetchData = async () => {
+    try {
+      // Fetch categories with subcategories
+      const categoriesData = await api.getSidebar();
+      
+      // Fetch all products
+      const productsResponse = await api.getProducts(1, 100);
+      const allProducts = productsResponse.data;
+      
+      setCategories(categoriesData);
+      setProducts(allProducts);
+
+      if (categoriesData.length > 0) {
         setActive(0);
         setActiveSub(0);
       }
-    };
-
-    getCategories();
-  }, []);
+    } catch (err) {
+      console.error("Failed to load data:", err);
+    }
+  };
 
   const handleChangeCategory = (idx: number) => {
     if (idx < 0 || idx >= categories.length) return;
     setActive(idx);
     const category = categories[idx];
 
-    if (category && category.children.length > 0) setActiveSub(0);
+    if (category && category.subCategories.length > 0) setActiveSub(0);
 
     if (embla) embla.scrollTo(idx);
+  };
+
+  const getProductsForSubCategory = (subCategoryId: number) => {
+    return products.filter(product => product.subCategoryId === subCategoryId);
+  };
+
+  const getProductImageUrl = (imagePath: string) => {
+    return imagePath.startsWith('http')
+      ? imagePath
+      : `http://localhost:8080/${imagePath}`;
   };
 
   return (
@@ -168,10 +103,9 @@ export function MainProjects() {
           {typeof active !== "undefined" &&
             active >= 0 &&
             active < categories.length &&
-            categories[active]?.children.map((subcategory, idx) => (
-              <Carousel.Slide ml={isLg && idx === 0 ? 60 : idx === 0 ? 16 : 0}>
+            categories[active]?.subCategories.map((subcategory, idx) => (
+              <Carousel.Slide key={subcategory.id} ml={isLg && idx === 0 ? 60 : idx === 0 ? 16 : 0}>
                 <Button
-                  key={subcategory.id}
                   className="transition-all"
                   variant={idx === activeSub ? "filled" : "outline"}
                   onClick={() => {
@@ -196,7 +130,7 @@ export function MainProjects() {
             </p>
           </div>
           <div>
-            <Button>Перейти в полный раздел</Button>
+            <Button onClick={() => navigate("/catalog")}>Перейти в полный раздел</Button>
           </div>
         </div>
         <div className="h-full w-full lg:overflow-hidden">
@@ -217,45 +151,49 @@ export function MainProjects() {
           >
             {typeof active !== "undefined" &&
               typeof activeSub !== "undefined" &&
-              categories[active]?.children[activeSub]?.items.map((item) => (
-                <Carousel.Slide key={item.id}>
-                  <div className="h-112 w-full relative overflow-hidden group rounded-[30px]">
-                    <div
-                      className="absolute inset-0 bg-cover bg-center transition-all group-hover:scale-110 duration-500"
-                      style={{ backgroundImage: `url(${image})` }}
-                    />
-                    <div
-                      className="absolute scale-110 inset-0 transition-all blur-xl"
-                      style={{
-                        maskImage: `linear-gradient(
-                                to top,
-                                white 0%,
-                                white 35%,
-                                transparent 50%
+              categories[active]?.subCategories[activeSub] &&
+              getProductsForSubCategory(categories[active].subCategories[activeSub].id).map((product) => {
+                const productImage = getProductImageUrl(product.image);
+                return (
+                  <Carousel.Slide key={product.id}>
+                    <div className="h-112 w-full relative overflow-hidden group rounded-[30px]">
+                      <div
+                        className="absolute inset-0 bg-cover bg-center transition-all group-hover:scale-110 duration-500"
+                        style={{ backgroundImage: `url(${productImage})` }}
+                      />
+                      <div
+                        className="absolute scale-110 inset-0 transition-all blur-xl"
+                        style={{
+                          maskImage: `linear-gradient(
+                                  to top,
+                                  white 0%,
+                                  white 35%,
+                                  transparent 50%
+                                )`,
+                          WebkitMaskImage: `linear-gradient(
+                                  to top,
+                                  black 0%,
+                                  black 25%,
+                                  transparent 50%
                               )`,
-                        WebkitMaskImage: `linear-gradient(
-                                to top,
-                                black 0%,
-                                black 25%,
-                                transparent 50%
-                            )`,
-                        backgroundImage: `url(${image})`,
-                      }}
-                    />
-                    <div className="absolute bottom-0 lg:-bottom-16 transition-all lg:group-hover:bottom-0 p-3.75 text-white flex flex-col gap-2">
-                      <span className="text-[28px] font-medium">
-                        {item.title}
-                      </span>
-                      <span className="text-sm leading-[120%]">
-                        {item.description}
-                      </span>
-                      <Button variant="white" fullWidth className="mt-3">
-                        <span className="text-main">Перейти в конструктор</span>
-                      </Button>
+                          backgroundImage: `url(${productImage})`,
+                        }}
+                      />
+                      <div className="absolute bottom-0 lg:-bottom-16 transition-all lg:group-hover:bottom-0 p-3.75 text-white flex flex-col gap-2">
+                        <span className="text-[28px] font-medium">
+                          {product.name}
+                        </span>
+                        <span className="text-sm leading-[120%]">
+                          {product.description}
+                        </span>
+                        <Button variant="white" fullWidth className="mt-3">
+                          <span className="text-main">Перейти в конструктор</span>
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </Carousel.Slide>
-              ))}
+                  </Carousel.Slide>
+                );
+              })}
           </Carousel>
         </div>
       </div>

@@ -5,9 +5,34 @@ import { Button } from "@/components/Button";
 import { useEffect, useState } from "react";
 import type { EmblaCarouselType } from "embla-carousel";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { api, type Review } from "@/lib/api";
 
 export function MainReviews() {
   const [embla, setEmbla] = useState<EmblaCarouselType | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  const fetchReviews = async () => {
+    try {
+      setLoading(true);
+      const response = await api.getReviews(1, 100); // Get all reviews
+      setReviews(response.data);
+    } catch (err) {
+      console.error("Failed to load reviews:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getImageUrl = (imagePath: string) => {
+    return imagePath.startsWith('http')
+      ? imagePath
+      : `http://localhost:8080/${imagePath}`;
+  };
 
   return (
     <div className="max-w-360 mx-auto px-4 py-10 lg:px-15 lg:py-15">
@@ -23,81 +48,42 @@ export function MainReviews() {
         </p>
       </div>
       <div className="lg:px-18 lg:mt-18 mt-12.5">
-        <Carousel
-          slideSize={{ lg: 400, md: "50%", sm: "100%" }}
-          slideGap={24}
-          withControls={false}
-          getEmblaApi={setEmbla}
-          emblaOptions={{
-            dragFree: false,
-            loop: false,
-          }}
-        >
-          <Carousel.Slide>
-            <div className="w-full h-87 p-6 text-center text-main border border-[rgba(0,0,0,0.1)] rounded-3xl">
-              <div className="w-14 h-14 mx-auto rounded-full bg-gray-600" />
-              <h4 className="text-[28px] font-medium leading-[120%] mt-4">
-                Имя Фамилия
-              </h4>
-              <p className="text-lg text-main leading-[120%] mt-8">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever
-              </p>
-              <div className="flex justify-center mt-8">
-                <Rating value={5} readOnly />
-              </div>
-            </div>
-          </Carousel.Slide>
-          <Carousel.Slide>
-            <div className="w-full h-87 p-6 text-center text-main border border-[rgba(0,0,0,0.1)] rounded-3xl">
-              <div className="w-14 h-14 mx-auto rounded-full bg-gray-600" />
-              <h4 className="text-[28px] font-medium leading-[120%] mt-4">
-                Имя Фамилия
-              </h4>
-              <p className="text-lg text-main leading-[120%] mt-8">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever
-              </p>
-              <div className="flex justify-center mt-8">
-                <Rating value={5} readOnly />
-              </div>
-            </div>
-          </Carousel.Slide>
-          <Carousel.Slide>
-            <div className="w-full h-87 p-6 text-center text-main border border-[rgba(0,0,0,0.1)] rounded-3xl">
-              <div className="w-14 h-14 mx-auto rounded-full bg-gray-600" />
-              <h4 className="text-[28px] font-medium leading-[120%] mt-4">
-                Имя Фамилия
-              </h4>
-              <p className="text-lg text-main leading-[120%] mt-8">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever
-              </p>
-              <div className="flex justify-center mt-8">
-                <Rating value={5} readOnly />
-              </div>
-            </div>
-          </Carousel.Slide>
-          <Carousel.Slide>
-            <div className="w-full h-87 p-6 text-center text-main border border-[rgba(0,0,0,0.1)] rounded-3xl">
-              <div className="w-14 h-14 mx-auto rounded-full bg-gray-600" />
-              <h4 className="text-[28px] font-medium leading-[120%] mt-4">
-                Имя Фамилия
-              </h4>
-              <p className="text-lg text-main leading-[120%] mt-8">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever
-              </p>
-              <div className="flex justify-center mt-8">
-                <Rating value={5} readOnly />
-              </div>
-            </div>
-          </Carousel.Slide>
-        </Carousel>
+        {loading ? (
+          <div className="text-center py-10">Loading reviews...</div>
+        ) : reviews.length === 0 ? (
+          <div className="text-center py-10">No reviews yet</div>
+        ) : (
+          <Carousel
+            slideSize={{ lg: 400, md: "50%", sm: "100%" }}
+            slideGap={24}
+            withControls={false}
+            getEmblaApi={setEmbla}
+            emblaOptions={{
+              dragFree: false,
+              loop: false,
+            }}
+          >
+            {reviews.map((review) => (
+              <Carousel.Slide key={review.id}>
+                <div className="w-full h-87 p-6 text-center text-main border border-[rgba(0,0,0,0.1)] rounded-3xl">
+                  <div 
+                    className="w-14 h-14 mx-auto rounded-full bg-gray-600 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${getImageUrl(review.image)})` }}
+                  />
+                  <h4 className="text-[28px] font-medium leading-[120%] mt-4">
+                    {review.name}
+                  </h4>
+                  <p className="text-lg text-main leading-[120%] mt-8 line-clamp-4">
+                    {review.review}
+                  </p>
+                  <div className="flex justify-center mt-8">
+                    <Rating value={review.rating} readOnly />
+                  </div>
+                </div>
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        )}
         <div className="flex lg:hidden justify-between items-center mt-12.5">
           <div
             className="flex justify-center items-center w-12.5 h-12.5 bg-main text-white rounded-full"
