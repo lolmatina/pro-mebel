@@ -7,6 +7,7 @@ use App\Application\Handlers\ShutdownHandler;
 use App\Application\ResponseEmitter\ResponseEmitter;
 use App\Application\Settings\SettingsInterface;
 use DI\ContainerBuilder;
+use Psr\Log\LoggerInterface;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
 
@@ -93,8 +94,19 @@ $request = $serverRequestCreator->createServerRequestFromGlobals();
 $responseFactory = $app->getResponseFactory();
 $errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
 
+// Get logger for shutdown handler
+$logger = $container->get(LoggerInterface::class);
+
+// Log incoming request
+$logger->info('Incoming request', [
+    'method' => $_SERVER['REQUEST_METHOD'] ?? 'N/A',
+    'uri' => $_SERVER['REQUEST_URI'] ?? 'N/A',
+    'remote_addr' => $_SERVER['REMOTE_ADDR'] ?? 'N/A',
+    'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'N/A',
+]);
+
 // Create Shutdown Handler
-$shutdownHandler = new ShutdownHandler($request, $errorHandler, $displayErrorDetails);
+$shutdownHandler = new ShutdownHandler($request, $errorHandler, $displayErrorDetails, $logger);
 register_shutdown_function($shutdownHandler);
 
 // Add Routing Middleware
