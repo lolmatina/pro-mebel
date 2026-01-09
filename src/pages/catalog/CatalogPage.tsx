@@ -25,7 +25,7 @@ export default function CatalogPage() {
 
   useEffect(() => {
     fetchSidebarData();
-    
+
     // Read subCategoryIds from URL
     const subCategoryIdsParam = searchParams.get('subCategoryIds');
     if (subCategoryIdsParam) {
@@ -184,7 +184,7 @@ export default function CatalogPage() {
                     // Handle both relative paths (uploads/xxx) and absolute URLs (https://...)
                     const imageUrl = product.image.startsWith("http")
                       ? product.image
-                      : `http://localhost:8080/${product.image}`;
+                      : `${process.env.API_BASE_URL}/${product.image}`;
 
                     return (
                       <ImageCard

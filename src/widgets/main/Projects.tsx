@@ -27,11 +27,11 @@ export function MainProjects() {
     try {
       // Fetch categories with subcategories
       const categoriesData = await api.getSidebar();
-      
+
       // Fetch all products
       const productsResponse = await api.getProducts(1, 100);
       const allProducts = productsResponse.data;
-      
+
       setCategories(categoriesData);
       setProducts(allProducts);
 
@@ -61,7 +61,7 @@ export function MainProjects() {
   const getProductImageUrl = (imagePath: string) => {
     return imagePath.startsWith('http')
       ? imagePath
-      : `http://localhost:8080/${imagePath}`;
+      : `${process.env.API_BASE_URL}/${imagePath}`;
   };
 
   return (

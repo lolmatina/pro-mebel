@@ -108,7 +108,7 @@ export default function ProductsPage() {
       formDataToSend.append('name', formData.name);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('subCategoryId', formData.subCategoryId);
-      
+
       if (imageFile) {
         formDataToSend.append('image', imageFile);
       }
@@ -168,7 +168,7 @@ export default function ProductsPage() {
                 <Table.Td>{product.id}</Table.Td>
                 <Table.Td>
                   <Image
-                    src={`http://localhost:8080/${product.image}`}
+                    src={`${process.env.API_BASE_URL}/${product.image}`}
                     alt={product.name}
                     w={50}
                     h={50}
@@ -251,7 +251,7 @@ export default function ProductsPage() {
           <div style={{ marginBottom: '1rem' }}>
             <div style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: '#666' }}>Current Image:</div>
             <Image
-              src={`http://localhost:8080/${editingProduct.image}`}
+              src={`${process.env.API_BASE_URL}/${editingProduct.image}`}
               alt={editingProduct.name}
               w={200}
               h={200}

@@ -31,7 +31,7 @@ export function MainReviews() {
   const getImageUrl = (imagePath: string) => {
     return imagePath.startsWith('http')
       ? imagePath
-      : `http://localhost:8080/${imagePath}`;
+      : `${process.env.API_BASE_URL}/${imagePath}`;
   };
 
   return (
@@ -66,7 +66,7 @@ export function MainReviews() {
             {reviews.map((review) => (
               <Carousel.Slide key={review.id}>
                 <div className="w-full h-87 p-6 text-center text-main border border-[rgba(0,0,0,0.1)] rounded-3xl">
-                  <div 
+                  <div
                     className="w-14 h-14 mx-auto rounded-full bg-gray-600 bg-cover bg-center"
                     style={{ backgroundImage: `url(${getImageUrl(review.image)})` }}
                   />

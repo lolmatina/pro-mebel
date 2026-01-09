@@ -111,7 +111,7 @@ export default function ReviewsPage() {
       formDataToSend.append('name', formData.name);
       formDataToSend.append('review', formData.review);
       formDataToSend.append('rating', formData.rating.toString());
-      
+
       if (imageFile) {
         formDataToSend.append('image', imageFile);
       }
@@ -167,7 +167,7 @@ export default function ReviewsPage() {
                 <Table.Td>{review.id}</Table.Td>
                 <Table.Td>
                   <Image
-                    src={`http://localhost:8080/${review.image}`}
+                    src={`${process.env.API_BASE_URL}/${review.image}`}
                     alt={review.name}
                     w={50}
                     h={50}
@@ -262,7 +262,7 @@ export default function ReviewsPage() {
           <div style={{ marginBottom: '1rem' }}>
             <div style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: '#666' }}>Current Image:</div>
             <Image
-              src={`http://localhost:8080/${editingReview.image}`}
+              src={`${process.env.API_BASE_URL}/${editingReview.image}`}
               alt={editingReview.name}
               w={200}
               h={200}
