@@ -5,7 +5,7 @@ import image3 from "@/assets/main/about/image3.jpg";
 
 export function MainAbout() {
   return (
-    <div className="max-w-360 mx-auto px-4 lg:px-15 py-15">
+    <div className="max-w-360 mx-auto px-4 lg:px-15 py-15" id="about">
       <div className="flex flex-col lg:flex-row lg:justify-between items-start">
         <span className="text-[#002522] border border-[rgba(34,34,34,0.1)] text-xl py-2 px-6 rounded-full">
           Немного о PRO Mebel

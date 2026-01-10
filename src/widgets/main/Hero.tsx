@@ -9,7 +9,7 @@ import { Carousel } from "@mantine/carousel";
 export function Hero() {
   const isSm = useMediaQuery("(max-width: 767px)");
   return (
-    <div className="max-w-360 mx-auto px-4 lg:px-15">
+    <div className="max-w-360 mx-auto px-4 lg:px-15" id="main">
       <div className="w-full lg:flex gap-2.5">
         <div className="lg:w-239.5 pb-4 lg:pb-0">
           <ImageCard

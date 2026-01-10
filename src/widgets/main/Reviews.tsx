@@ -49,9 +49,9 @@ export function MainReviews() {
       </div>
       <div className="lg:px-18 lg:mt-18 mt-12.5">
         {loading ? (
-          <div className="text-center py-10">Loading reviews...</div>
+          <div className="text-center py-10"></div>
         ) : reviews.length === 0 ? (
-          <div className="text-center py-10">No reviews yet</div>
+          <div className="text-center py-10">Список отзывов пуст</div>
         ) : (
           <Carousel
             slideSize={{ lg: 400, md: "50%", sm: "100%" }}

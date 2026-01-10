@@ -12,7 +12,12 @@
   --color-main: #222222;
   --color-secondary: #737b8b;
   --color-brown: #8b6a4b;
+
   --font-poppins: "Poppins", sans-serif;
+
+  /* animation */
+  --animate-rotation-left: rotate-left-anim 1.2s ease-in-out forwards infinite;
+  --animate-rotation-right: rotate-right-anim 1.2s ease-in-out forwards infinite;
 }
 
 @layer base {
@@ -23,6 +28,7 @@
 
   body {
     @apply font-poppins;
+    scroll-behavior: smooth;
   }
 }
 
@@ -37,5 +43,26 @@
     width: 40px !important;
     height: 11px !important;
     background: #ccc6c1 !important;
+  }
+}
+
+@keyframes rotate-left-anim {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+
+@keyframes rotate-right-anim {
+  0% {
+    transform: rotateX(0deg);
+  }
+  50% {
+    transform: rotateX(-90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
   }
 }

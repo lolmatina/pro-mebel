@@ -3,10 +3,16 @@ import logo from "@/logo.svg";
 import { Burger, Drawer, Menu, TextInput } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconChevronDown, IconSearch } from "@tabler/icons-react";
-import { forwardRef, type ComponentPropsWithoutRef, useEffect, useState } from "react";
+import {
+  forwardRef,
+  type ComponentPropsWithoutRef,
+  useEffect,
+  useState,
+} from "react";
 import { Button } from "../components/Button";
 import { api, type SidebarCategory } from "@/lib/api";
 import { useNavigate } from "react-router";
+import { Logo } from "@/components/Logo";
 
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure();
@@ -32,7 +38,11 @@ export function Header() {
   };
 
   const getAllSubCategories = () => {
-    const allSubCategories: Array<{ id: number; name: string; productCount: number }> = [];
+    const allSubCategories: Array<{
+      id: number;
+      name: string;
+      productCount: number;
+    }> = [];
     categories.forEach((category) => {
       category.subCategories.forEach((subCategory) => {
         allSubCategories.push(subCategory);
@@ -42,18 +52,10 @@ export function Header() {
   };
 
   return (
-    <div className="max-w-360 mx-auto px-4 py-6 lg:py-4.5 lg:px-15 flex gap-10 justify-between items-center sticky top-0 bg-white z-201">
+    <div className="max-w-360 mx-auto px-4 py-6 lg:py-4.5 lg:px-15 flex gap-10 justify-between items-center sticky top-0 left-0 right-0 bg-white z-201">
       <div className="flex gap-13 justify-start items-center z-201">
         <div className="flex justify-start items-center gap-2">
-          <img src={logo} alt="Pro Mebel" />
-          <span
-            className={cn(
-              "font-semibold text-2xl text-main leading-7.5 uppercase whitespace-nowrap",
-              ""
-            )}
-          >
-            Pro Mebel
-          </span>
+          <Logo />
         </div>
         <div className="hidden lg:block">
           <TextInput
@@ -68,23 +70,30 @@ export function Header() {
             <MenuItemWithDropdown>Полный каталог</MenuItemWithDropdown>
           </Menu.Target>
           <Menu.Dropdown>
-            {getAllSubCategories().slice(0, 10).map((subCategory) => (
-              <Menu.Item
-                key={subCategory.id}
-                onClick={() => handleSubCategoryClick(subCategory.id)}
-              >
-                {subCategory.name} ({subCategory.productCount})
-              </Menu.Item>
-            ))}
+            {getAllSubCategories()
+              .slice(0, 10)
+              .map((subCategory) => (
+                <Menu.Item
+                  key={subCategory.id}
+                  onClick={() => handleSubCategoryClick(subCategory.id)}
+                >
+                  {subCategory.name} ({subCategory.productCount})
+                </Menu.Item>
+              ))}
             {getAllSubCategories().length > 10 && (
-              <Menu.Item onClick={() => navigate('/catalog')}>
+              <Menu.Item onClick={() => navigate("/catalog")}>
                 Показать все
               </Menu.Item>
             )}
           </Menu.Dropdown>
         </Menu>
         {categories.map((category) => (
-          <Menu key={category.id} trigger="hover" width={200} position="bottom-start">
+          <Menu
+            key={category.id}
+            trigger="hover"
+            width={200}
+            position="bottom-start"
+          >
             <Menu.Target>
               <MenuItemWithDropdown>{category.name}</MenuItemWithDropdown>
             </Menu.Target>
@@ -128,19 +137,40 @@ export function Header() {
               />
               <ul className="flex flex-col gap-4 mt-10">
                 <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
-                  Главная
+                  <a href="/#main">Главная</a>
                 </li>
                 <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
-                  Главная
+                  <a href="/#should-know">Все что вам нужно</a>
                 </li>
                 <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
-                  Главная
+                  <a href="/#about">О PRO MEBEL в цифрах</a>
                 </li>
                 <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
-                  Главная
+                  <a href="/#constructor">Конструктор</a>
                 </li>
                 <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
-                  Главная
+                  <a href="/#projects">Несколько наших работ</a>
+                </li>
+                <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
+                  <a href="/#work-pipeline">Как мы работаем</a>
+                </li>
+                <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
+                  <a href="/#reviews">Наши довольные клиенты</a>
+                </li>
+                <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
+                  <a href="/#about-us">Немного информации о нас и прочее</a>
+                </li>
+                <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
+                  <a href="/#choose">
+                    Подберите медель
+                    <br /> под интерьер вашей мечты
+                  </a>
+                </li>
+                <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
+                  <a href="/#faq">Все что вам требуется знать</a>
+                </li>
+                <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
+                  <a href="/#footer">Контакты</a>
                 </li>
               </ul>
             </div>
