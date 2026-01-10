@@ -27,11 +27,11 @@ export function MainProjects() {
     try {
       // Fetch categories with subcategories
       const categoriesData = await api.getSidebar();
-      
+
       // Fetch all products
       const productsResponse = await api.getProducts(1, 100);
       const allProducts = productsResponse.data;
-      
+
       setCategories(categoriesData);
       setProducts(allProducts);
 
@@ -55,11 +55,13 @@ export function MainProjects() {
   };
 
   const getProductsForSubCategory = (subCategoryId: number) => {
-    return products.filter(product => product.subCategoryId === subCategoryId);
+    return products.filter(
+      (product) => product.subCategoryId === subCategoryId
+    );
   };
 
   const getProductImageUrl = (imagePath: string) => {
-    return imagePath.startsWith('http')
+    return imagePath.startsWith("http")
       ? imagePath
       : `http://localhost:8080/${imagePath}`;
   };
@@ -99,12 +101,19 @@ export function MainProjects() {
           slideGap={10}
           withControls={false}
           getEmblaApi={setEmblaSub}
+          emblaOptions={{
+            dragFree: true,
+            loop: true,
+          }}
         >
           {typeof active !== "undefined" &&
             active >= 0 &&
             active < categories.length &&
             categories[active]?.subCategories.map((subcategory, idx) => (
-              <Carousel.Slide key={subcategory.id} ml={isLg && idx === 0 ? 60 : idx === 0 ? 16 : 0}>
+              <Carousel.Slide
+                key={subcategory.id}
+                ml={isLg && idx === 0 ? 60 : idx === 0 ? 16 : 0}
+              >
                 <Button
                   className="transition-all"
                   variant={idx === activeSub ? "filled" : "outline"}
@@ -130,7 +139,9 @@ export function MainProjects() {
             </p>
           </div>
           <div>
-            <Button onClick={() => navigate("/catalog")}>Перейти в полный раздел</Button>
+            <Button onClick={() => navigate("/catalog")}>
+              Перейти в полный раздел
+            </Button>
           </div>
         </div>
         <div className="h-full w-full lg:overflow-hidden">
@@ -142,17 +153,25 @@ export function MainProjects() {
             }}
             slideSize={343}
             slideGap={24}
-            withControls={isLg}
+            withControls={
+              isLg &&
+              getProductsForSubCategory(
+                categories?.[active || 0]?.subCategories?.[activeSub || 0]
+                  ?.id || 0
+              )?.length > 3
+            }
             withIndicators={!isLg}
             emblaOptions={{
-              dragFree: false,
-              loop: false,
+              dragFree: true,
+              loop: true,
             }}
           >
             {typeof active !== "undefined" &&
               typeof activeSub !== "undefined" &&
               categories[active]?.subCategories[activeSub] &&
-              getProductsForSubCategory(categories[active].subCategories[activeSub].id).map((product) => {
+              getProductsForSubCategory(
+                categories[active].subCategories[activeSub].id
+              ).map((product) => {
                 const productImage = getProductImageUrl(product.image);
                 return (
                   <Carousel.Slide key={product.id}>
@@ -187,7 +206,9 @@ export function MainProjects() {
                           {product.description}
                         </span>
                         <Button variant="white" fullWidth className="mt-3">
-                          <span className="text-main">Перейти в конструктор</span>
+                          <span className="text-main">
+                            Перейти в конструктор
+                          </span>
                         </Button>
                       </div>
                     </div>

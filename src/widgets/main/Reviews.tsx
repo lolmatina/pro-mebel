@@ -29,7 +29,7 @@ export function MainReviews() {
   };
 
   const getImageUrl = (imagePath: string) => {
-    return imagePath.startsWith('http')
+    return imagePath.startsWith("http")
       ? imagePath
       : `http://localhost:8080/${imagePath}`;
   };
@@ -59,16 +59,18 @@ export function MainReviews() {
             withControls={false}
             getEmblaApi={setEmbla}
             emblaOptions={{
-              dragFree: false,
-              loop: false,
+              dragFree: true,
+              loop: true,
             }}
           >
             {reviews.map((review) => (
               <Carousel.Slide key={review.id}>
                 <div className="w-full h-87 p-6 text-center text-main border border-[rgba(0,0,0,0.1)] rounded-3xl">
-                  <div 
+                  <div
                     className="w-14 h-14 mx-auto rounded-full bg-gray-600 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${getImageUrl(review.image)})` }}
+                    style={{
+                      backgroundImage: `url(${getImageUrl(review.image)})`,
+                    }}
                   />
                   <h4 className="text-[28px] font-medium leading-[120%] mt-4">
                     {review.name}
