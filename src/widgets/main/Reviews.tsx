@@ -31,7 +31,7 @@ export function MainReviews() {
   const getImageUrl = (imagePath: string) => {
     return imagePath.startsWith("http")
       ? imagePath
-      : `http://localhost:8080/${imagePath}`;
+      : `${process.env.API_BASE_URL}/${imagePath}`;
   };
 
   return (

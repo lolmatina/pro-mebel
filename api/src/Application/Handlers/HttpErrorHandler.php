@@ -31,6 +31,34 @@ class HttpErrorHandler extends SlimErrorHandler
             'An internal error has occurred while processing your request.'
         );
 
+        // Log the exception with full details
+        if ($this->logger) {
+            $logContext = [
+                'exception' => get_class($exception),
+                'message' => $exception->getMessage(),
+                'code' => $exception->getCode(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'trace' => $exception->getTraceAsString(),
+                'request_uri' => $_SERVER['REQUEST_URI'] ?? 'N/A',
+                'request_method' => $_SERVER['REQUEST_METHOD'] ?? 'N/A',
+                'request_body' => file_get_contents('php://input'),
+                'headers' => getallheaders(),
+            ];
+
+            if ($statusCode >= 500) {
+                $this->logger->error(
+                    'Server Error: ' . $exception->getMessage(),
+                    $logContext
+                );
+            } else {
+                $this->logger->warning(
+                    'Client Error: ' . $exception->getMessage(),
+                    $logContext
+                );
+            }
+        }
+
         if ($exception instanceof HttpException) {
             $statusCode = $exception->getCode();
             $error->setDescription($exception->getMessage());
