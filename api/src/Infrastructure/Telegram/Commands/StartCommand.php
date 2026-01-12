@@ -72,23 +72,16 @@ class StartCommand extends SystemCommand
             );
 
         } catch (\Exception $e) {
-            error_log('Telegram bot StartCommand error: ' . $e->getMessage());
-            error_log('Trace: ' . $e->getTraceAsString());
+            error_log('Telegram bot error: ' . $e->getMessage());
             return $this->replyToChat(
                 "❌ Произошла ошибка при авторизации.\n" .
-                "Пожалуйста, попробуйте позже.\n\n" .
-                "Ошибка: " . $e->getMessage()
+                "Пожалуйста, попробуйте позже."
             );
         }
     }
 
     private function getTelegramUserRepository(): TelegramUserRepository
     {
-        // Autoloader should handle this, but ensure Database class is available
-        if (!class_exists('App\Infrastructure\Database\Database')) {
-            require_once __DIR__ . '/../../../Infrastructure/Database/Database.php';
-        }
-        
         return new \App\Infrastructure\Persistence\TelegramUser\DatabaseTelegramUserRepository();
     }
 }

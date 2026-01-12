@@ -26,12 +26,6 @@ class TelegramWebhookAction extends Action
         }
 
         try {
-            // Log incoming request
-            $input = $this->request->getBody()->getContents();
-            $this->logger->info('Telegram webhook received', [
-                'input' => $input,
-            ]);
-
             // Create Telegram API object
             $telegram = new Telegram($botToken, $botUsername);
 
@@ -51,30 +45,22 @@ class TelegramWebhookAction extends Action
             ]);
             */
 
-            // Handle webhook request (pass the input directly)
+            // Handle webhook request
             $serverResponse = $telegram->handle();
 
             $this->logger->info('Telegram webhook processed', [
                 'ok' => $serverResponse->isOk(),
                 'description' => $serverResponse->getDescription(),
-                'result' => $serverResponse->getResult(),
             ]);
 
-            // Return success - Telegram expects 200 OK
-            return $this->response->withStatus(200);
+            return $this->respondWithData([
+                'ok' => $serverResponse->isOk(),
+                'description' => $serverResponse->getDescription(),
+            ]);
 
         } catch (TelegramException $e) {
-            $this->logger->error('Telegram webhook error: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-            ]);
-            // Still return 200 to prevent Telegram from retrying
-            return $this->response->withStatus(200);
-        } catch (\Exception $e) {
-            $this->logger->error('Unexpected error in webhook: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-            ]);
-            // Still return 200 to prevent Telegram from retrying
-            return $this->response->withStatus(200);
+            $this->logger->error('Telegram webhook error: ' . $e->getMessage());
+            return $this->respondWithData(['error' => $e->getMessage()], 500);
         }
     }
 }
