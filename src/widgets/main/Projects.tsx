@@ -73,7 +73,7 @@ export function MainProjects() {
       <h2 className="text-[40px] leading-[120%] px-4 font-medium text-main text-center lg:hidden">
         Несколько наших работ
       </h2>
-      <div className="mt-4 lg:mt-0">
+      <div className="mt-4 lg:mt-0 overflow-hidden">
         <Carousel
           slideSize="auto"
           slideGap={10}
@@ -100,7 +100,7 @@ export function MainProjects() {
       <div className="lg:hidden px-4 text-lg opacity-80 text-main font-medium text-center mt-4">
         Мы занимаемся многопрофильной сборкой и все прочее
       </div>
-      <div className="mt-7.5 flex gap-2.5">
+      <div className="mt-7.5 flex gap-2.5 overflow-hidden">
         <Carousel
           slideSize="auto"
           slideGap={10}
