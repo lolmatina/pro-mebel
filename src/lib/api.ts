@@ -54,6 +54,17 @@ export interface Review {
   image: string;
 }
 
+export interface Application {
+  id: number;
+  email: string;
+  fullName: string;
+  city: string;
+  description: string;
+  readyToOrder: boolean;
+  productId: number | null;
+  createdAt: string;
+}
+
 class ApiClient {
   private baseUrl: string;
   private token: string | null = null;
@@ -344,6 +355,25 @@ class ApiClient {
 
   async deleteReview(id: number): Promise<void> {
     await this.request(`/admin/reviews/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Applications
+  async getApplications(page = 1, limit = 10): Promise<PaginatedResponse<Application>> {
+    const response = await this.request<ApiResponse<PaginatedResponse<Application>>>(
+      `/admin/applications?page=${page}&limit=${limit}`
+    );
+    return response.data!;
+  }
+
+  async getApplication(id: number): Promise<Application> {
+    const response = await this.request<ApiResponse<Application>>(`/admin/applications/${id}`);
+    return response.data!;
+  }
+
+  async deleteApplication(id: number): Promise<void> {
+    await this.request(`/admin/applications/${id}`, {
       method: 'DELETE',
     });
   }

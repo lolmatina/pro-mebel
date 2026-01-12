@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Application\Actions\Application\CreateApplicationAction;
+use App\Application\Actions\Application\DeleteApplicationAction;
+use App\Application\Actions\Application\ListApplicationsAction;
+use App\Application\Actions\Application\ViewApplicationAction;
 use App\Application\Actions\Auth\LoginAction;
 use App\Application\Actions\Category\CreateCategoryAction;
 use App\Application\Actions\Category\DeleteCategoryAction;
@@ -24,6 +28,7 @@ use App\Application\Actions\SubCategory\DeleteSubCategoryAction;
 use App\Application\Actions\SubCategory\ListSubCategoriesAction;
 use App\Application\Actions\SubCategory\UpdateSubCategoryAction;
 use App\Application\Actions\SubCategory\ViewSubCategoryAction;
+use App\Application\Actions\Telegram\TelegramWebhookAction;
 use App\Application\Actions\User\ListUsersAction;
 use App\Application\Actions\User\ViewUserAction;
 use App\Application\Middleware\JwtAuthMiddleware;
@@ -79,6 +84,12 @@ return function (App $app) {
     // Authentication route (public)
     $app->post('/login', LoginAction::class);
 
+    // Public route for application submission
+    $app->post('/applications', CreateApplicationAction::class);
+
+    // Telegram webhook (public)
+    $app->post('/webhook', TelegramWebhookAction::class);
+
     // Admin routes (protected by JWT)
     $app->group('/admin', function (Group $group) {
         // Category CRUD (admin only)
@@ -109,6 +120,13 @@ return function (App $app) {
             $subGroup->put('/{id}', UpdateReviewAction::class);
             $subGroup->post('/{id}', UpdateReviewAction::class); // For file uploads
             $subGroup->delete('/{id}', DeleteReviewAction::class);
+        });
+
+        // Application management (admin only)
+        $group->group('/applications', function (Group $subGroup) {
+            $subGroup->get('', ListApplicationsAction::class);
+            $subGroup->get('/{id}', ViewApplicationAction::class);
+            $subGroup->delete('/{id}', DeleteApplicationAction::class);
         });
     })->add(JwtAuthMiddleware::class);
 };

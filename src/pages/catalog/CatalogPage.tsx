@@ -108,20 +108,17 @@ export default function CatalogPage() {
             <h1 className="text-2xl font-bold">{getHeaderTitle()}</h1>
           </div>
           <div className="flex gap-2">
-            <Button
+            <span
               onClick={openDrawer}
-              variant="outline"
-              className="flex-1 rounded-full border-2 border-black"
-              leftSection={<IconAdjustments size={18} />}
+              className="flex-1 rounded-full"
             >
               Вариация фильтров
-            </Button>
-            <Button
-              variant="outline"
-              className="flex-1 rounded-full border-2 border-black"
+            </span>
+            <span
+              className="flex-1 rounded-full"
             >
               Список фильтров
-            </Button>
+            </span>
           </div>
           {selectedSubCategories.length > 0 && (
             <div className="mt-4">
@@ -149,7 +146,7 @@ export default function CatalogPage() {
             {/* Desktop Header Section */}
             <div className="hidden lg:flex items-center justify-between mb-8">
               <h1 className="text-4xl font-bold">{getHeaderTitle()}</h1>
-              <div className="flex gap-4">
+              <div className="flex gap-4 hidden">
                 <Button
                   color="#222222"
                   variant="outline"
@@ -230,14 +227,17 @@ export default function CatalogPage() {
           opened={drawerOpened}
           onClose={closeDrawer}
           position="bottom"
-          size="85%"
+          size="100%"
           title="Вариация фильтров"
           classNames={{
             title: "text-xl font-bold",
             header: "border-b pb-4",
             body: "pt-4",
+            root: "z-99999999 absolute",
+            inner: "z-99999999"
           }}
         >
+          <div className="pt-4">
           <Sidebar
             selectedSubCategories={selectedSubCategories}
             onSubCategoryChange={(ids) => {
@@ -245,6 +245,7 @@ export default function CatalogPage() {
               closeDrawer();
             }}
           />
+          </div>
         </Drawer>
       </div>
     </div>

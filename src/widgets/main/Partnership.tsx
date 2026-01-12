@@ -3,7 +3,10 @@ import { Button } from "@/components/Button";
 
 export function MainPartnership() {
   return (
-    <div className="max-w-360 mx-auto px-4 lg:px-15 py-10 text-white">
+    <div
+      className="max-w-360 mx-auto px-4 lg:px-15 py-10 text-white"
+      id="work-pipeline"
+    >
       <div
         className="p rounded-[40px] bg-cover bg-bottom lg:pt-18 px-8 pt-8 pb-8 lg:px-20 lg:pb-8.5"
         style={{ backgroundImage: `url(${image})` }}

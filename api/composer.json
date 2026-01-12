@@ -27,6 +27,7 @@
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
         "firebase/php-jwt": "^7.0",
+        "longman/telegram-bot": "^0.80",
         "monolog/monolog": "^2.8",
         "php-di/php-di": "^7.0",
         "slim/psr7": "^1.5",

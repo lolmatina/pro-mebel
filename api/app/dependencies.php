@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Application\Settings\SettingsInterface;
+use App\Domain\TelegramUser\TelegramUserRepository;
 use App\Infrastructure\Storage\FileUploader;
+use App\Infrastructure\Telegram\TelegramBotService;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -29,6 +31,19 @@ return function (ContainerBuilder $containerBuilder) {
         },
         FileUploader::class => function (ContainerInterface $c) {
             return new FileUploader(__DIR__ . '/../public/uploads');
+        },
+        TelegramBotService::class => function (ContainerInterface $c) {
+            $botToken = $_ENV['TELEGRAM_BOT_TOKEN'] ?? '';
+            $botUsername = $_ENV['TELEGRAM_BOT_USERNAME'] ?? '';
+            
+            if (empty($botToken) || empty($botUsername)) {
+                throw new \RuntimeException('Telegram bot credentials not configured in .env file');
+            }
+            
+            $telegramUserRepository = $c->get(TelegramUserRepository::class);
+            $logger = $c->get(LoggerInterface::class);
+            
+            return new TelegramBotService($botToken, $botUsername, $telegramUserRepository, $logger);
         },
     ]);
 };

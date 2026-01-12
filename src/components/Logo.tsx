@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router";
+
 export function Logo({ color = "#000000" }: { color?: string }) {
+  const navigate = useNavigate()
   return (
-    <div className="inline-flex items-center justify-start group cursor-pointer gap-2.25">
+    <div className="inline-flex items-center justify-start group cursor-pointer gap-2.25" onClick={() => navigate("/")}>
       <div className="relative w-9.5 h-11">
         <svg
           xmlns="http://www.w3.org/2000/svg"

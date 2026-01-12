@@ -5,7 +5,7 @@ import image3 from "@/assets/main/products/Image3.jpg";
 
 export function MainProducts() {
   return (
-    <div className="max-w-360 mx-auto px-4 lg:px-15 lg:py-15">
+    <div className="max-w-360 mx-auto px-4 lg:px-15 lg:py-15" id="choose">
       <div
         className="block lg:hidden w-full aspect-343/232 bg-cover bg-center rounded-lg mt-9"
         style={{ backgroundImage: `url(${image1})` }}

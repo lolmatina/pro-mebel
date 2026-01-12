@@ -10,26 +10,33 @@ import CategoriesPage from "./pages/admin/CategoriesPage";
 import SubCategoriesPage from "./pages/admin/SubCategoriesPage";
 import ProductsPage from "./pages/admin/ProductsPage";
 import ReviewsPage from "./pages/admin/ReviewsPage";
+import ApplicationsPage from "./pages/admin/ApplicationsPage";
 import CatalogPage from "./pages/catalog/CatalogPage";
+import { ApplicationFormProvider } from "./lib/ApplicationFormContext";
+import { ApplicationForm } from "./widgets/ApplicationForm";
 
 export function App() {
   return (
     <MantineProvider>
       <BrowserRouter basename={process.env.BASENAME}>
-        <Routes>
-          <Route path="admin/login" element={<LoginPage />} />
-          <Route path="admin" element={<AdminLayout />}>
-            <Route index element={<DashboardPage />} />
-            <Route path="categories" element={<CategoriesPage />} />
-            <Route path="subcategories" element={<SubCategoriesPage />} />
-            <Route path="products" element={<ProductsPage />} />
-            <Route path="reviews" element={<ReviewsPage />} />
-          </Route>
-          <Route element={<MainLayout />}>
-            <Route index element={<MainPage />} />
-            <Route path="catalog" element={<CatalogPage />} />
-          </Route>
-        </Routes>
+        <ApplicationFormProvider>
+          <Routes>
+            <Route path="admin/login" element={<LoginPage />} />
+            <Route path="admin" element={<AdminLayout />}>
+              <Route index element={<DashboardPage />} />
+              <Route path="categories" element={<CategoriesPage />} />
+              <Route path="subcategories" element={<SubCategoriesPage />} />
+              <Route path="products" element={<ProductsPage />} />
+              <Route path="reviews" element={<ReviewsPage />} />
+              <Route path="applications" element={<ApplicationsPage />} />
+            </Route>
+            <Route element={<MainLayout />}>
+              <Route index element={<MainPage />} />
+              <Route path="catalog" element={<CatalogPage />} />
+            </Route>
+          </Routes>
+          <ApplicationForm />
+        </ApplicationFormProvider>
       </BrowserRouter>
     </MantineProvider>
   );

@@ -7,7 +7,6 @@ import { useMediaQuery } from "@mantine/hooks";
 import { Carousel } from "@mantine/carousel";
 
 export function Hero() {
-  const isSm = useMediaQuery("(max-width: 767px)");
   return (
     <div className="max-w-360 mx-auto px-4 lg:px-15" id="main">
       <div className="w-full lg:flex gap-2.5">
@@ -95,7 +94,10 @@ export function Hero() {
             </Carousel.Slide>
           </Carousel>
         </div>
-        <div className="w-full lg:max-w-78 text-main lg:mr-10 mt-8.5">
+        <div
+          className="w-full lg:max-w-78 text-main lg:mr-10 mt-8.5"
+          id="should-know"
+        >
           <h2 className="text-[56px] lg:text-[65px] leading-[100%] -tracking-[4px] font-normal">
             Все что <br /> вам нужно
           </h2>

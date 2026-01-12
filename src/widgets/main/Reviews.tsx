@@ -35,7 +35,10 @@ export function MainReviews() {
   };
 
   return (
-    <div className="max-w-360 mx-auto px-4 py-10 lg:px-15 lg:py-15">
+    <div
+      className="max-w-360 mx-auto px-4 py-10 lg:px-15 lg:py-15"
+      id="reviews"
+    >
       <div className="text-center">
         <span className="text-[#002522] text-xl uppercase py-2 px-6 border rounded-full border-[rgba(34,34,34,0.1)]">
           отзывы
@@ -106,7 +109,10 @@ export function MainReviews() {
           </div>
         </div>
       </div>
-      <h4 className="text-[22px] font-medium text-main mt-10 lg:mt-15">
+      <h4
+        className="text-[22px] font-medium text-main mt-10 lg:mt-15"
+        id="about-us"
+      >
         Что о нас говорят наши клиенты
       </h4>
       <div className="flex flex-col lg:flex-row justify-between lg:gap-15 mt-7.5 pb-15">

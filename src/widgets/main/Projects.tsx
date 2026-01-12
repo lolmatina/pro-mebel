@@ -5,12 +5,14 @@ import type { EmblaCarouselType } from "embla-carousel";
 import { useMediaQuery } from "@mantine/hooks";
 import { api, type SidebarCategory, type Product } from "@/lib/api";
 import { useNavigate } from "react-router";
+import { useApplicationForm } from "@/lib/ApplicationFormContext";
 
 interface CategoryWithProducts extends SidebarCategory {
   products?: Product[];
 }
 
 export function MainProjects() {
+  const { openForm } = useApplicationForm();
   const [active, setActive] = useState<number>();
   const [activeSub, setActiveSub] = useState<number>();
   const [embla, setEmbla] = useState<EmblaCarouselType | null>(null);
@@ -67,7 +69,7 @@ export function MainProjects() {
   };
 
   return (
-    <div className="max-w-360 mx-auto py-10">
+    <div className="max-w-360 mx-auto py-10" id="projects">
       <h2 className="text-[40px] leading-[120%] px-4 font-medium text-main text-center lg:hidden">
         Несколько наших работ
       </h2>
@@ -79,7 +81,10 @@ export function MainProjects() {
           getEmblaApi={setEmbla}
         >
           {categories.map((category, idx) => (
-            <Carousel.Slide ml={isLg && idx === 0 ? 60 : idx === 0 ? 16 : 0}>
+            <Carousel.Slide
+              key={category.id}
+              ml={isLg && idx === 0 ? 60 : idx === 0 ? 16 : 0}
+            >
               <Button
                 key={category.id}
                 className="transition-all"
@@ -205,10 +210,13 @@ export function MainProjects() {
                         <span className="text-sm leading-[120%]">
                           {product.description}
                         </span>
-                        <Button variant="white" fullWidth className="mt-3">
-                          <span className="text-main">
-                            Перейти в конструктор
-                          </span>
+                        <Button
+                          variant="white"
+                          fullWidth
+                          className="mt-3"
+                          onClick={() => openForm({ productId: product.id })}
+                        >
+                          <span className="text-main">Отправить заявку</span>
                         </Button>
                       </div>
                     </div>
@@ -221,7 +229,9 @@ export function MainProjects() {
 
       <div className="text-center mt-11 flex flex-col px-4 lg:hidden items-center gap-4">
         <p className="text-lg opacity-80 font-medium ">Свайпните в сторону</p>
-        <Button>Перейти в полный раздел</Button>
+        <Button onClick={() => navigate("/catalog")}>
+          Перейти в полный раздел
+        </Button>
       </div>
     </div>
   );

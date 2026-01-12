@@ -68,7 +68,7 @@ export function Sidebar({
   }
 
   return (
-    <div className="max-w-74.25">
+    <div className="w-full lg:max-w-74.25">
       <div className="w-full">
         <TextInput
           placeholder="Поиск"
@@ -84,7 +84,7 @@ export function Sidebar({
           </div>
         )}
 
-        <Accordion multiple className="mt-4" value={opened}>
+        <Accordion multiple className="mt-4" value={opened} onChange={(val) => setOpened(val)}>
           {categories.map((category) => (
             <Accordion.Item key={category.id} value={category.id.toString()}>
               <Accordion.Control>

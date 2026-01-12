@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
+use App\Domain\Application\ApplicationRepository;
 use App\Domain\Category\CategoryRepository;
 use App\Domain\Product\ProductRepository;
 use App\Domain\Review\ReviewRepository;
 use App\Domain\SubCategory\SubCategoryRepository;
+use App\Domain\TelegramUser\TelegramUserRepository;
 use App\Domain\User\UserRepository;
+use App\Infrastructure\Persistence\Application\DatabaseApplicationRepository;
 use App\Infrastructure\Persistence\Category\DatabaseCategoryRepository;
 use App\Infrastructure\Persistence\Product\DatabaseProductRepository;
 use App\Infrastructure\Persistence\Review\DatabaseReviewRepository;
 use App\Infrastructure\Persistence\SubCategory\DatabaseSubCategoryRepository;
+use App\Infrastructure\Persistence\TelegramUser\DatabaseTelegramUserRepository;
 use App\Infrastructure\Persistence\User\InMemoryUserRepository;
 use DI\ContainerBuilder;
 
@@ -22,5 +26,7 @@ return function (ContainerBuilder $containerBuilder) {
         SubCategoryRepository::class => \DI\autowire(DatabaseSubCategoryRepository::class),
         ProductRepository::class => \DI\autowire(DatabaseProductRepository::class),
         ReviewRepository::class => \DI\autowire(DatabaseReviewRepository::class),
+        ApplicationRepository::class => \DI\autowire(DatabaseApplicationRepository::class),
+        TelegramUserRepository::class => \DI\autowire(DatabaseTelegramUserRepository::class),
     ]);
 };
