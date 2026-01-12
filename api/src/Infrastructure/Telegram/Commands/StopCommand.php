@@ -40,21 +40,22 @@ class StopCommand extends SystemCommand
             );
 
         } catch (\Exception $e) {
-            error_log('Telegram bot error: ' . $e->getMessage());
+            error_log('Telegram bot StopCommand error: ' . $e->getMessage());
+            error_log('Trace: ' . $e->getTraceAsString());
             return $this->replyToChat(
                 "❌ Произошла ошибка.\n" .
-                "Пожалуйста, попробуйте позже."
+                "Пожалуйста, попробуйте позже.\n\n" .
+                "Ошибка: " . $e->getMessage()
             );
         }
     }
 
     private function getTelegramUserRepository(): TelegramUserRepository
     {
-        require_once __DIR__ . '/../../../../Domain/TelegramUser/TelegramUserRepository.php';
-        require_once __DIR__ . '/../../../../Domain/TelegramUser/TelegramUser.php';
-        require_once __DIR__ . '/../../../../Domain/TelegramUser/TelegramUserNotFoundException.php';
-        require_once __DIR__ . '/../../../../Domain/DomainException/DomainRecordNotFoundException.php';
-        require_once __DIR__ . '/../../../../Infrastructure/Persistence/TelegramUser/DatabaseTelegramUserRepository.php';
+        // Autoloader should handle this, but ensure Database class is available
+        if (!class_exists('App\Infrastructure\Database\Database')) {
+            require_once __DIR__ . '/../../../Infrastructure/Database/Database.php';
+        }
         
         return new \App\Infrastructure\Persistence\TelegramUser\DatabaseTelegramUserRepository();
     }

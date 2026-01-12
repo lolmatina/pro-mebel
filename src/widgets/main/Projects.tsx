@@ -102,6 +102,7 @@ export function MainProjects() {
       </div>
       <div className="mt-7.5 flex gap-2.5 overflow-hidden">
         <Carousel
+          w="100%"
           slideSize="auto"
           slideGap={10}
           withControls={false}
