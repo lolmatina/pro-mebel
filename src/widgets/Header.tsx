@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
-import { Burger, Drawer, Menu, TextInput } from "@mantine/core";
+import { Burger, Drawer, Menu } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { IconChevronDown, IconSearch } from "@tabler/icons-react";
+import { IconChevronDown } from "@tabler/icons-react";
 import {
   forwardRef,
   type ComponentPropsWithoutRef,
@@ -11,13 +11,14 @@ import {
 import { api, type SidebarCategory } from "@/lib/api";
 import { useLocation, useNavigate } from "react-router";
 import { Logo } from "@/components/Logo";
+import { useApplicationForm } from "@/lib/ApplicationFormContext";
 
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure();
   const isLg = useMediaQuery("(min-width: 1024px)");
   const [categories, setCategories] = useState<SidebarCategory[]>([]);
   const navigate = useNavigate();
-  const location = useLocation();
+  const { openForm } = useApplicationForm();
 
   useEffect(() => {
     fetchCategories();
@@ -51,7 +52,7 @@ export function Header() {
   };
 
   return (
-    <div className="w-full sticky top-0 left-0 right-0 bg-white z-201">
+    <div className="w-full bg-white z-201">
       <div className="max-w-360 mx-auto px-4 py-6 lg:py-4.5 lg:px-15 flex gap-10 justify-between items-center">
         <div className="flex gap-13 justify-start items-center z-201">
           <div className="flex justify-start items-center gap-2">
@@ -228,7 +229,10 @@ export function Header() {
                   </li>
                 </ul>
               </div>
-              <button className="bg-main mt-17 px-6 py-3 text-[13px] leading-5.25 rounded-full font-semibold! text-white outline-0 transition-all active:scale-95 border-none">
+              <button
+                onClick={() => openForm({})}
+                className="bg-main mt-17 px-6 py-3 text-[13px] leading-5.25 rounded-full font-semibold! text-white outline-0 transition-all active:scale-95 border-none"
+              >
                 Отправить
               </button>
             </div>

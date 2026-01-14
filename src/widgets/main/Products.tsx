@@ -2,8 +2,10 @@ import { Button } from "@/components/Button";
 import image1 from "@/assets/main/products/Image1.jpg";
 import image2 from "@/assets/main/products/Image2.jpg";
 import image3 from "@/assets/main/products/Image3.jpg";
+import { useApplicationForm } from "@/lib/ApplicationFormContext";
 
 export function MainProducts() {
+  const { openForm } = useApplicationForm();
   return (
     <div className="max-w-360 mx-auto px-4 lg:px-15 lg:py-15" id="choose">
       <div
@@ -30,7 +32,7 @@ export function MainProducts() {
             industry. Lorem Ipsum has been the industry's standard dummy text
             ever since the 1500s
           </p>
-          <Button className="mt-6" fullWidth>
+          <Button className="mt-6" fullWidth onClick={() => openForm({})}>
             Оставить заявку
           </Button>
           <div

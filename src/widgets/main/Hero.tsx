@@ -3,7 +3,6 @@ import image1 from "@/assets/main/hero/image1.jpg";
 import image2 from "@/assets/main/hero/image2.jpg";
 import image3 from "@/assets/main/hero/image3.jpg";
 import { Button } from "@/components/Button";
-import { useMediaQuery } from "@mantine/hooks";
 import { Carousel } from "@mantine/carousel";
 
 export function Hero() {
@@ -27,9 +26,11 @@ export function Hero() {
                 </p>
               </div>
               <div className="text-center md:text-left">
-                <Button className="w-full! max-w-75!">
-                  Собрать свой проект
-                </Button>
+                <a href="/#constructor">
+                  <Button className="w-full! max-w-75!">
+                    Собрать свой проект
+                  </Button>
+                </a>
               </div>
             </div>
           </ImageCard>
@@ -104,7 +105,11 @@ export function Hero() {
           <p className="text-lg text-main leading-[120%] font-medium mt-6 mb-10.5">
             Мы занимаемся многопрофильной сборкой и все прочее
           </p>
-          <Button variant="outline">Перейти в конструктор</Button>
+          <a href="/#constructor">
+            <Button variant="outline">
+            Перейти в конструктор
+          </Button>
+          </a>
         </div>
         <div className="hidden xl:flex gap-2.5 w-full justify-evenly">
           <ImageCard

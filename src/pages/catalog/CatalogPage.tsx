@@ -6,6 +6,7 @@ import { Button, Loader, Drawer, Pagination } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconChevronDown, IconAdjustments } from "@tabler/icons-react";
 import { useSearchParams } from "react-router";
+import { Footer } from "@/widgets/Footer";
 
 export default function CatalogPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -27,9 +28,12 @@ export default function CatalogPage() {
     fetchSidebarData();
 
     // Read subCategoryIds from URL
-    const subCategoryIdsParam = searchParams.get('subCategoryIds');
+    const subCategoryIdsParam = searchParams.get("subCategoryIds");
     if (subCategoryIdsParam) {
-      const ids = subCategoryIdsParam.split(',').map(id => parseInt(id, 10)).filter(id => !isNaN(id));
+      const ids = subCategoryIdsParam
+        .split(",")
+        .map((id) => parseInt(id, 10))
+        .filter((id) => !isNaN(id));
       setSelectedSubCategories(ids);
     }
   }, [searchParams]);
@@ -72,7 +76,7 @@ export default function CatalogPage() {
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const getSelectedSubCategoryNames = () => {
@@ -108,28 +112,21 @@ export default function CatalogPage() {
             <h1 className="text-2xl font-bold">{getHeaderTitle()}</h1>
           </div>
           <div className="flex gap-2">
-            <span
-              onClick={openDrawer}
-              className="flex-1 rounded-full"
-            >
+            <span onClick={openDrawer} className="flex-1 rounded-full">
               Вариация фильтров
             </span>
-            <span
-              className="flex-1 rounded-full"
-            >
-              Список фильтров
-            </span>
+
+            {selectedSubCategories.length > 0 && (
+              <div>
+                <button
+                  onClick={() => handleSubCategoryChange([])}
+                  className="text-[#B89671] text-sm underline"
+                >
+                  Очистить фильтры
+                </button>
+              </div>
+            )}
           </div>
-          {selectedSubCategories.length > 0 && (
-            <div className="mt-4">
-              <button
-                onClick={() => handleSubCategoryChange([])}
-                className="text-[#B89671] text-sm underline"
-              >
-                Очистить фильтры
-              </button>
-            </div>
-          )}
         </div>
 
         <div className="flex gap-8">
@@ -142,7 +139,7 @@ export default function CatalogPage() {
           </div>
 
           {/* Products Grid */}
-          <div className="flex-1">
+          <div className="flex-1 pb-10">
             {/* Desktop Header Section */}
             <div className="hidden lg:flex items-center justify-between mb-8">
               <h1 className="text-4xl font-bold">{getHeaderTitle()}</h1>
@@ -189,9 +186,9 @@ export default function CatalogPage() {
                         src={imageUrl}
                         position="bottom"
                         padding="md"
-                        className="h-100 cursor-pointer"
+                        className="h-100 cursor-pointer relative"
                       >
-                        <div className="z-10">
+                        <div className="z-10 w-full h-full flex flex-col justify-end bg-[rgba(0,0,0,0.4)] absolute inset-0 lg:p-7.5 p-6">
                           <h3 className="text-white text-2xl font-bold leading-[120%]">
                             {product.name}
                           </h3>
@@ -234,20 +231,21 @@ export default function CatalogPage() {
             header: "border-b pb-4",
             body: "pt-4",
             root: "z-99999999 absolute",
-            inner: "z-99999999"
+            inner: "z-99999999",
           }}
         >
           <div className="pt-4">
-          <Sidebar
-            selectedSubCategories={selectedSubCategories}
-            onSubCategoryChange={(ids) => {
-              handleSubCategoryChange(ids);
-              closeDrawer();
-            }}
-          />
+            <Sidebar
+              selectedSubCategories={selectedSubCategories}
+              onSubCategoryChange={(ids) => {
+                handleSubCategoryChange(ids);
+                closeDrawer();
+              }}
+            />
           </div>
         </Drawer>
       </div>
+      <Footer />
     </div>
   );
 }

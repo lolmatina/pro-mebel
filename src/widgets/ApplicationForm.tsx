@@ -4,6 +4,7 @@ import image from "@/assets/Img.jpg";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { IconX } from "@tabler/icons-react";
 
 export function ApplicationForm() {
   const { opened, productId, closeForm, description } = useApplicationForm();
@@ -65,7 +66,10 @@ export function ApplicationForm() {
         inner: "z-99999999",
       }}
     >
-      <div className="w-screen lg:h-screen flex justify-evenly flex-col-reverse lg:flex-row">
+      <div className="w-screen lg:h-screen flex justify-evenly flex-col-reverse lg:flex-row relative">
+        <span className="absolute right-0 top-0 p-3" onClick={closeForm}>
+          <IconX size={40} />
+        </span>
         {!sent ? (
           <div className="w-full h-full flex justify-center items-center">
             <div className="flex flex-col w-full py-10 px-8 lg:py-0 lg:px-0 lg:w-97.75 gap-8">

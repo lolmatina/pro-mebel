@@ -1,8 +1,10 @@
 import { Button } from "@/components/Button";
+import { useApplicationForm } from "@/lib/ApplicationFormContext";
 import { Accordion } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 
 export function MainFAQ() {
+  const { openForm } = useApplicationForm();
   return (
     <div className="max-w-360 mx-auto px-4 lg:px-15 py-15" id="faq">
       <div className="pt-15 flex flex-col lg:flex-row gap-15 lg:gap-26 text-main">
@@ -99,7 +101,7 @@ export function MainFAQ() {
         </div>
       </div>
       <div className="lg:hidden">
-        <Button variant="outline" fullWidth>
+        <Button variant="outline" fullWidth onClick={() => openForm({})}>
           Узнать больше
         </Button>
       </div>

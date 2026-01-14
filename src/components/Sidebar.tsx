@@ -70,11 +70,6 @@ export function Sidebar({
   return (
     <div className="w-full lg:max-w-74.25">
       <div className="w-full">
-        <TextInput
-          placeholder="Поиск"
-          rightSection={<IconSearch size={18} />}
-        />
-
         {selectedSubCategories.length > 0 && (
           <div
             className="text-[#B89671] text-lg font-medium mt-8.75 cursor-pointer hover:underline"
@@ -84,7 +79,12 @@ export function Sidebar({
           </div>
         )}
 
-        <Accordion multiple className="mt-4" value={opened} onChange={(val) => setOpened(val)}>
+        <Accordion
+          multiple
+          className="mt-4"
+          value={opened}
+          onChange={(val) => setOpened(val)}
+        >
           {categories.map((category) => (
             <Accordion.Item key={category.id} value={category.id.toString()}>
               <Accordion.Control>

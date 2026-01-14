@@ -62,9 +62,14 @@ export function MainPartnership() {
           </div>
         </div>
         <div className="lg:w-142.5 mt-7.5">
-          <Button variant="white" fullWidth>
+          <a href="/#constructor">
+          <Button
+            variant="white"
+            fullWidth 
+          >
             <span className="text-main">Перейти в конструктор</span>
           </Button>
+          </a>
         </div>
       </div>
     </div>

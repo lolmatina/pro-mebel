@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import type { EmblaCarouselType } from "embla-carousel";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { api, type Review } from "@/lib/api";
+import { useApplicationForm } from "@/lib/ApplicationFormContext";
 
 export function MainReviews() {
   const [embla, setEmbla] = useState<EmblaCarouselType | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const { openForm } = useApplicationForm();
 
   useEffect(() => {
     fetchReviews();
@@ -132,7 +134,12 @@ export function MainReviews() {
             ever since the 1500s, when an unknown printer took a galley of type
             and scrambled it to make a type specimen book.
           </p>
-          <Button variant="outline" className="mt-6" fullWidth>
+          <Button
+            variant="outline"
+            className="mt-6"
+            fullWidth
+            onClick={() => openForm({})}
+          >
             Узнать больше
           </Button>
         </div>

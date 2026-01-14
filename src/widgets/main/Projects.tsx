@@ -1,7 +1,6 @@
 import { Button } from "@/components/Button";
 import { Carousel } from "@mantine/carousel";
-import { useEffect, useState } from "react";
-import type { EmblaCarouselType } from "embla-carousel";
+import { useEffect, useState, useMemo, useCallback, memo, useRef } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { api, type SidebarCategory, type Product } from "@/lib/api";
 import { useNavigate } from "react-router";
@@ -11,16 +10,159 @@ interface CategoryWithProducts extends SidebarCategory {
   products?: Product[];
 }
 
+// Custom scrollable tabs component
+const ScrollableTabs = memo(
+  ({
+    items,
+    activeIndex,
+    onTabClick,
+    isLg,
+  }: {
+    items: Array<{ id: number; name: string }>;
+    activeIndex: number | undefined;
+    onTabClick: (index: number) => void;
+    isLg: boolean;
+  }) => {
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+    const centerTab = useCallback((index: number) => {
+      const container = scrollContainerRef.current;
+      const tab = tabRefs.current[index];
+
+      if (!container || !tab) return;
+
+      const containerWidth = container.offsetWidth;
+      const tabLeft = tab.offsetLeft;
+      const tabWidth = tab.offsetWidth;
+
+      // Calculate scroll position to center the tab
+      const scrollPosition = tabLeft - containerWidth / 2 + tabWidth / 2;
+
+      container.scrollTo({
+        left: scrollPosition,
+        behavior: "smooth",
+      });
+    }, []);
+
+    useEffect(() => {
+      if (typeof activeIndex !== "undefined") {
+        centerTab(activeIndex);
+      }
+    }, [activeIndex, centerTab]);
+
+    return (
+      <div
+        ref={scrollContainerRef}
+        className="overflow-x-auto overflow-y-hidden scrollbar-hide"
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        }}
+      >
+        <div
+          className="flex gap-2.5 min-w-min"
+          style={{ paddingLeft: isLg ? "60px" : "16px", paddingRight: "16px" }}
+        >
+          {items.map((item, idx) => (
+            <Button
+              key={item.id}
+              //@ts-ignore
+              ref={(el) => {
+                tabRefs.current[idx] = el;
+              }}
+              className="transition-all whitespace-nowrap"
+              variant={idx === activeIndex ? "filled" : "outline"}
+              onClick={() => onTabClick(idx)}
+            >
+              {item.name}
+            </Button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+);
+
+ScrollableTabs.displayName = "ScrollableTabs";
+
+// Memoized product card component
+const ProductCard = memo(
+  ({
+    product,
+    isLg,
+    onOpenForm,
+  }: {
+    product: Product;
+    isLg: boolean;
+    onOpenForm: (productId: number) => void;
+  }) => {
+    const productImage = useMemo(() => {
+      return product.image.startsWith("http")
+        ? product.image
+        : `${process.env.API_BASE_URL}/${product.image}`;
+    }, [product.image]);
+
+    return (
+      <Carousel.Slide key={product.id}>
+        <div className="h-112 w-full relative overflow-hidden group rounded-[30px]">
+          {/* Use img tag instead of background-image for better performance */}
+          <img
+            src={productImage}
+            alt={product.name}
+            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110 duration-500"
+          />
+          {/* Simplified blur effect for mobile, full effect for desktop */}
+          {isLg && (
+            <div
+              className="absolute scale-110 inset-0 transition-opacity blur-xl opacity-80"
+              style={{
+                maskImage: `linear-gradient(to top, white 0%, white 35%, transparent 50%)`,
+                WebkitMaskImage: `linear-gradient(to top, black 0%, black 25%, transparent 50%)`,
+                backgroundImage: `url(${productImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+          )}
+          <div
+            className={`absolute ${
+              isLg
+                ? "-bottom-16 transition-all group-hover:bottom-0"
+                : "bottom-0"
+            } p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent`}
+          >
+            <span className="text-[28px] font-medium">{product.name}</span>
+            <span className="text-sm leading-[120%]">
+              {product.description}
+            </span>
+            <Button
+              variant="white"
+              fullWidth
+              className="mt-3"
+              onClick={() => onOpenForm(product.id)}
+            >
+              <span className="text-main">Отправить заявку</span>
+            </Button>
+          </div>
+        </div>
+      </Carousel.Slide>
+    );
+  }
+);
+
+ProductCard.displayName = "ProductCard";
+
 export function MainProjects() {
   const { openForm } = useApplicationForm();
   const [active, setActive] = useState<number>();
   const [activeSub, setActiveSub] = useState<number>();
-  const [embla, setEmbla] = useState<EmblaCarouselType | null>(null);
-  const [emblaSub, setEmblaSub] = useState<EmblaCarouselType | null>(null);
   const isLg = useMediaQuery("(min-width: 1024px)");
   const [categories, setCategories] = useState<CategoryWithProducts[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -30,8 +172,8 @@ export function MainProjects() {
       // Fetch categories with subcategories
       const categoriesData = await api.getSidebar();
 
-      // Fetch all products
-      const productsResponse = await api.getProducts(1, 100);
+      // Fetch fewer products initially for better performance
+      const productsResponse = await api.getProducts(1, 50);
       const allProducts = productsResponse.data;
 
       setCategories(categoriesData);
@@ -46,94 +188,82 @@ export function MainProjects() {
     }
   };
 
-  const handleChangeCategory = (idx: number) => {
-    if (idx < 0 || idx >= categories.length) return;
-    setActive(idx);
-    const category = categories[idx];
+  const handleChangeCategory = useCallback(
+    (idx: number) => {
+      if (idx < 0 || idx >= categories.length) return;
+      setActive(idx);
+      const category = categories[idx];
 
-    if (category && category.subCategories.length > 0) setActiveSub(0);
+      if (category && category.subCategories.length > 0) setActiveSub(0);
+    },
+    [categories]
+  );
 
-    if (embla) embla.scrollTo(idx);
-  };
+  // Memoize filtered products to avoid recalculation on every render
+  const currentSubCategoryId = useMemo(() => {
+    if (typeof active === "undefined" || typeof activeSub === "undefined")
+      return null;
+    return categories[active]?.subCategories?.[activeSub]?.id;
+  }, [active, activeSub, categories]);
 
-  const getProductsForSubCategory = (subCategoryId: number) => {
+  const filteredProducts = useMemo(() => {
+    if (!currentSubCategoryId) return [];
     return products.filter(
-      (product) => product.subCategoryId === subCategoryId
+      (product) => product.subCategoryId === currentSubCategoryId
     );
-  };
+  }, [products, currentSubCategoryId]);
 
-  const getProductImageUrl = (imagePath: string) => {
-    return imagePath.startsWith("http")
-      ? imagePath
-      : `${process.env.API_BASE_URL}/${imagePath}`;
-  };
+  const handleOpenForm = useCallback(
+    (productId: number) => {
+      openForm({ productId });
+    },
+    [openForm]
+  );
+
+  const handleNavigateToCatalog = useCallback(() => {
+    navigate("/catalog");
+  }, [navigate]);
+
+  const handleSubCategoryChange = useCallback((idx: number) => {
+    setActiveSub(idx);
+  }, []);
+
+  const currentSubCategories = useMemo(() => {
+    if (typeof active === "undefined") return [];
+    return categories[active]?.subCategories || [];
+  }, [active, categories]);
 
   return (
     <div className="max-w-360 mx-auto py-10" id="projects">
       <h2 className="text-[40px] leading-[120%] px-4 font-medium text-main text-center lg:hidden">
         Несколько наших работ
       </h2>
-      <div className="mt-4 lg:mt-0 overflow-hidden">
-        <Carousel
-          slideSize="auto"
-          slideGap={10}
-          withControls={false}
-          getEmblaApi={setEmbla}
-        >
-          {categories.map((category, idx) => (
-            <Carousel.Slide
-              key={category.id}
-              ml={isLg && idx === 0 ? 60 : idx === 0 ? 16 : 0}
-            >
-              <Button
-                key={category.id}
-                className="transition-all"
-                variant={idx === active ? "filled" : "outline"}
-                onClick={() => handleChangeCategory(idx)}
-              >
-                {category.name}
-              </Button>
-            </Carousel.Slide>
-          ))}
-        </Carousel>
+
+      {/* Categories Tabs */}
+      <div className="mt-4 lg:mt-0">
+        <ScrollableTabs
+          items={categories}
+          activeIndex={active}
+          onTabClick={handleChangeCategory}
+          isLg={isLg}
+        />
       </div>
+
       <div className="lg:hidden px-4 text-lg opacity-80 text-main font-medium text-center mt-4">
         Мы занимаемся многопрофильной сборкой и все прочее
       </div>
-      <div className="mt-7.5 flex gap-2.5 overflow-hidden">
-        <Carousel
-          w="100%"
-          slideSize="auto"
-          slideGap={10}
-          withControls={false}
-          getEmblaApi={setEmblaSub}
-          emblaOptions={{
-            dragFree: true,
-            loop: true,
-          }}
-        >
-          {typeof active !== "undefined" &&
-            active >= 0 &&
-            active < categories.length &&
-            categories[active]?.subCategories.map((subcategory, idx) => (
-              <Carousel.Slide
-                key={subcategory.id}
-                ml={isLg && idx === 0 ? 60 : idx === 0 ? 16 : 0}
-              >
-                <Button
-                  className="transition-all"
-                  variant={idx === activeSub ? "filled" : "outline"}
-                  onClick={() => {
-                    setActiveSub(idx);
-                    if (emblaSub) emblaSub.scrollTo(idx);
-                  }}
-                >
-                  {subcategory.name}
-                </Button>
-              </Carousel.Slide>
-            ))}
-        </Carousel>
-      </div>
+
+      {/* Subcategories tabs */}
+      {currentSubCategories.length > 0 && (
+        <div className="mt-7.5">
+          <ScrollableTabs
+            items={currentSubCategories}
+            activeIndex={activeSub}
+            onTabClick={handleSubCategoryChange}
+            isLg={isLg}
+          />
+        </div>
+      )}
       <div className="mt-7.5 h-auto flex gap-14 lg:h-112 px-4 lg:px-15 w-full">
         <div className="min-w-76 max-w-76 h-full hidden lg:flex flex-col justify-between">
           <div>
@@ -145,7 +275,7 @@ export function MainProjects() {
             </p>
           </div>
           <div>
-            <Button onClick={() => navigate("/catalog")}>
+            <Button onClick={handleNavigateToCatalog}>
               Перейти в полный раздел
             </Button>
           </div>
@@ -159,78 +289,28 @@ export function MainProjects() {
             }}
             slideSize={343}
             slideGap={24}
-            withControls={
-              isLg &&
-              getProductsForSubCategory(
-                categories?.[active || 0]?.subCategories?.[activeSub || 0]
-                  ?.id || 0
-              )?.length > 3
-            }
+            withControls={isLg && filteredProducts.length > 3}
             withIndicators={!isLg}
             emblaOptions={{
-              dragFree: true,
-              loop: true,
+              dragFree: false,
+              loop: false,
             }}
           >
-            {typeof active !== "undefined" &&
-              typeof activeSub !== "undefined" &&
-              categories[active]?.subCategories[activeSub] &&
-              getProductsForSubCategory(
-                categories[active].subCategories[activeSub].id
-              ).map((product) => {
-                const productImage = getProductImageUrl(product.image);
-                return (
-                  <Carousel.Slide key={product.id}>
-                    <div className="h-112 w-full relative overflow-hidden group rounded-[30px]">
-                      <div
-                        className="absolute inset-0 bg-cover bg-center transition-all group-hover:scale-110 duration-500"
-                        style={{ backgroundImage: `url(${productImage})` }}
-                      />
-                      <div
-                        className="absolute scale-110 inset-0 transition-all blur-xl"
-                        style={{
-                          maskImage: `linear-gradient(
-                                  to top,
-                                  white 0%,
-                                  white 35%,
-                                  transparent 50%
-                                )`,
-                          WebkitMaskImage: `linear-gradient(
-                                  to top,
-                                  black 0%,
-                                  black 25%,
-                                  transparent 50%
-                              )`,
-                          backgroundImage: `url(${productImage})`,
-                        }}
-                      />
-                      <div className="absolute bottom-0 lg:-bottom-16 transition-all lg:group-hover:bottom-0 p-3.75 text-white flex flex-col gap-2">
-                        <span className="text-[28px] font-medium">
-                          {product.name}
-                        </span>
-                        <span className="text-sm leading-[120%]">
-                          {product.description}
-                        </span>
-                        <Button
-                          variant="white"
-                          fullWidth
-                          className="mt-3"
-                          onClick={() => openForm({ productId: product.id })}
-                        >
-                          <span className="text-main">Отправить заявку</span>
-                        </Button>
-                      </div>
-                    </div>
-                  </Carousel.Slide>
-                );
-              })}
+            {filteredProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                isLg={isLg}
+                onOpenForm={handleOpenForm}
+              />
+            ))}
           </Carousel>
         </div>
       </div>
 
       <div className="text-center mt-11 flex flex-col px-4 lg:hidden items-center gap-4">
         <p className="text-lg opacity-80 font-medium ">Свайпните в сторону</p>
-        <Button onClick={() => navigate("/catalog")}>
+        <Button onClick={handleNavigateToCatalog}>
           Перейти в полный раздел
         </Button>
       </div>
