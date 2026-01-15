@@ -39,6 +39,12 @@ class ShutdownHandler
             $errorLine = $error['line'];
             $errorMessage = $error['message'];
             $errorType = $error['type'];
+            
+            // Ignore deprecation warnings (E_DEPRECATED and E_USER_DEPRECATED)
+            if ($errorType === E_DEPRECATED || $errorType === E_USER_DEPRECATED) {
+                return;
+            }
+            
             $message = 'An error while processing your request. Please try again later.';
 
             // Log the fatal error
