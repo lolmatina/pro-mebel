@@ -28,6 +28,7 @@ use App\Application\Actions\SubCategory\DeleteSubCategoryAction;
 use App\Application\Actions\SubCategory\ListSubCategoriesAction;
 use App\Application\Actions\SubCategory\UpdateSubCategoryAction;
 use App\Application\Actions\SubCategory\ViewSubCategoryAction;
+use App\Application\Actions\Telegram\StopTelegramBotAction;
 use App\Application\Actions\Telegram\TelegramWebhookAction;
 use App\Application\Actions\User\ListUsersAction;
 use App\Application\Actions\User\ViewUserAction;
@@ -128,5 +129,8 @@ return function (App $app) {
             $subGroup->get('/{id}', ViewApplicationAction::class);
             $subGroup->delete('/{id}', DeleteApplicationAction::class);
         });
+
+        // Telegram bot management (admin only)
+        $group->post('/telegram/stop', StopTelegramBotAction::class);
     })->add(JwtAuthMiddleware::class);
 };

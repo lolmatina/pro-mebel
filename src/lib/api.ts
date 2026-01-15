@@ -377,6 +377,17 @@ class ApiClient {
       method: 'DELETE',
     });
   }
+
+  // Telegram Bot Management
+  async stopTelegramBot(): Promise<{ success: boolean; message: string; updates_cleared: number }> {
+    const response = await this.request<ApiResponse<{ success: boolean; message: string; updates_cleared: number }>>(
+      '/admin/telegram/stop',
+      {
+        method: 'POST',
+      }
+    );
+    return response.data!;
+  }
 }
 
 export const api = new ApiClient(API_BASE_URL);
