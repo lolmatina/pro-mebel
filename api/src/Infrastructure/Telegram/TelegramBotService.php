@@ -56,6 +56,15 @@ class TelegramBotService
             return;
         }
 
+        // Initialize Request with Telegram instance
+        try {
+            $telegram = $this->getTelegram();
+            Request::initialize($telegram);
+        } catch (\Exception $e) {
+            $this->logger->error('Failed to initialize Telegram Request: ' . $e->getMessage());
+            return;
+        }
+
         $message = $this->formatApplicationMessage($application, $product);
 
         foreach ($activeUsers as $user) {
@@ -135,6 +144,10 @@ class TelegramBotService
     public function sendMessage(int $chatId, string $message): void
     {
         try {
+            // Initialize Request with Telegram instance
+            $telegram = $this->getTelegram();
+            Request::initialize($telegram);
+
             $data = [
                 'chat_id' => $chatId,
                 'text' => $message,
