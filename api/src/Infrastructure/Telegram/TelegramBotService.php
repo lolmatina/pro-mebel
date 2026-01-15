@@ -37,7 +37,17 @@ class TelegramBotService
     public function getTelegram(): Telegram
     {
         try {
-            return new Telegram($this->botToken, $this->botUsername);
+            // Suppress deprecation warnings from the Telegram library
+            // This is a known issue with longman/telegram-bot on PHP 8.2+
+            $errorReporting = error_reporting();
+            error_reporting($errorReporting & ~E_DEPRECATED);
+            
+            $telegram = new Telegram($this->botToken, $this->botUsername);
+            
+            // Restore error reporting
+            error_reporting($errorReporting);
+            
+            return $telegram;
         } catch (TelegramException $e) {
             $this->logger->error('Failed to create Telegram instance: ' . $e->getMessage());
             throw new \RuntimeException('Failed to initialize Telegram bot: ' . $e->getMessage());
@@ -59,7 +69,15 @@ class TelegramBotService
         // Initialize Request with Telegram instance
         try {
             $telegram = $this->getTelegram();
+            
+            // Suppress deprecation warnings from the Telegram library
+            $errorReporting = error_reporting();
+            error_reporting($errorReporting & ~E_DEPRECATED);
+            
             Request::initialize($telegram);
+            
+            // Restore error reporting
+            error_reporting($errorReporting);
         } catch (\Exception $e) {
             $this->logger->error('Failed to initialize Telegram Request: ' . $e->getMessage());
             return;
@@ -146,8 +164,13 @@ class TelegramBotService
         try {
             // Initialize Request with Telegram instance
             $telegram = $this->getTelegram();
+            
+            // Suppress deprecation warnings from the Telegram library
+            $errorReporting = error_reporting();
+            error_reporting($errorReporting & ~E_DEPRECATED);
+            
             Request::initialize($telegram);
-
+            
             $data = [
                 'chat_id' => $chatId,
                 'text' => $message,
@@ -155,6 +178,10 @@ class TelegramBotService
             ];
 
             Request::sendMessage($data);
+            
+            // Restore error reporting
+            error_reporting($errorReporting);
+            
             $this->logger->info("Message sent to chat_id: {$chatId}");
         } catch (TelegramException $e) {
             $this->logger->error("Failed to send message to chat_id {$chatId}: {$e->getMessage()}");
