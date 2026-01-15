@@ -34,12 +34,12 @@ export default function DashboardPage() {
   }, []);
 
   const handleStopBot = async () => {
-    if (!confirm('Stop Telegram bot and clear webhook? This will stop all notifications.')) return;
+    if (!confirm('Stop Telegram bot and clear webhook? This will stop all notifications and drop pending updates.')) return;
     
     setStoppingBot(true);
     try {
       const result = await api.stopTelegramBot();
-      alert(`Bot stopped! Cleared ${result.updates_cleared} pending updates.`);
+      alert('Bot stopped successfully! Webhook deleted and all pending updates dropped.');
     } catch (error) {
       alert('Failed to stop bot: ' + (error instanceof Error ? error.message : 'Unknown error'));
     } finally {

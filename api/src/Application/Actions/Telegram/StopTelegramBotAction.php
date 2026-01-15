@@ -29,23 +29,19 @@ class StopTelegramBotAction extends Action
             // Create Telegram API object
             $telegram = new Telegram($botToken, $botUsername);
 
-            // Delete webhook
-            $deleteResult = $telegram->deleteWebhook();
-            
-            // Clear pending updates
-            $updatesResult = $telegram->handleGetUpdates(null, 100);
-            $clearedCount = count($updatesResult->getResult());
+            // Delete webhook and drop all pending updates
+            $deleteResult = $telegram->deleteWebhook(['drop_pending_updates' => true]);
 
             $this->logger->info('Telegram bot stopped', [
                 'webhook_deleted' => $deleteResult->isOk(),
-                'updates_cleared' => $clearedCount,
+                'pending_updates_dropped' => true,
             ]);
 
             return $this->respondWithData([
                 'success' => true,
                 'message' => 'Bot stopped successfully',
                 'webhook_deleted' => $deleteResult->isOk(),
-                'updates_cleared' => $clearedCount,
+                'pending_updates_dropped' => true,
             ]);
 
         } catch (TelegramException $e) {

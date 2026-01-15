@@ -379,8 +379,8 @@ class ApiClient {
   }
 
   // Telegram Bot Management
-  async stopTelegramBot(): Promise<{ success: boolean; message: string; updates_cleared: number }> {
-    const response = await this.request<ApiResponse<{ success: boolean; message: string; updates_cleared: number }>>(
+  async stopTelegramBot(): Promise<{ success: boolean; message: string; pending_updates_dropped: boolean }> {
+    const response = await this.request<ApiResponse<{ success: boolean; message: string; pending_updates_dropped: boolean }>>(
       '/admin/telegram/stop',
       {
         method: 'POST',

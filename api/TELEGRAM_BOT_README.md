@@ -67,20 +67,7 @@ The tables will be created automatically from `docker/mysql/init.sql`.
 
 ## Running the Bot
 
-You have two options to run the bot:
-
-### Option 1: Long Polling (Recommended for Development)
-
-Run the bot in the foreground:
-
-```bash
-cd api
-php bot.php
-```
-
-The bot will continuously poll for updates. Press `Ctrl+C` to stop.
-
-### Option 2: Webhook (Recommended for Production)
+The bot runs via webhook only (production-ready setup):
 
 1. Update `.env` with your webhook URL:
 
@@ -96,11 +83,13 @@ php set_webhook.php
 
 3. The webhook is automatically available at `/webhook` endpoint
 
-4. To switch back to polling, delete the webhook:
+4. To stop the bot and clear pending updates:
 
 ```bash
 php delete_webhook.php
 ```
+
+Or use the emergency stop button in the admin panel dashboard.
 
 ## User Guide
 
@@ -233,10 +222,11 @@ If the application includes a product with an image, the image will be attached.
 
 ### Bot not receiving updates
 
-1. Check if the bot is running: `ps aux | grep bot.php`
+1. Check webhook status: `php set_webhook.php` (it will show current webhook info)
 2. Check bot logs in `logs/app.log`
 3. Verify bot token and username in `.env`
-4. Delete webhook if using polling: `php delete_webhook.php`
+4. Verify webhook URL is publicly accessible
+5. Check server logs for incoming webhook requests
 
 ### Users not receiving notifications
 
@@ -279,11 +269,10 @@ api/
 │   │       └── TelegramBotService.php
 │   └── Application/
 │       └── Actions/
-│           └── Application/      # API actions
-├── bot.php                       # Long polling script
-├── webhook.php                   # Webhook handler
-├── set_webhook.php              # Webhook setup
-└── delete_webhook.php           # Webhook deletion
+│           ├── Application/      # Application API actions
+│           └── Telegram/         # Telegram webhook handler
+├── set_webhook.php              # Webhook setup script
+└── delete_webhook.php           # Webhook deletion script
 ```
 
 ## Support

@@ -26,12 +26,12 @@ try {
     // Create Telegram API object
     $telegram = new Telegram($botToken, $botUsername);
 
-    // Delete webhook
-    $result = $telegram->deleteWebhook();
+    // Delete webhook and drop pending updates
+    $result = $telegram->deleteWebhook(['drop_pending_updates' => true]);
 
     if ($result->isOk()) {
         echo "Webhook was deleted successfully!\n";
-        echo "You can now use long polling (bot.php)\n";
+        echo "All pending updates have been dropped.\n";
     } else {
         echo "Failed to delete webhook: " . $result->getDescription() . "\n";
     }
