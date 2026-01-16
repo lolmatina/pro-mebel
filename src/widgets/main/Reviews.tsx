@@ -7,6 +7,7 @@ import type { EmblaCarouselType } from "embla-carousel";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { api, type Review } from "@/lib/api";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
+import { motion } from "framer-motion";
 
 export function MainReviews() {
   const [embla, setEmbla] = useState<EmblaCarouselType | null>(null);
@@ -41,7 +42,13 @@ export function MainReviews() {
       className="max-w-360 mx-auto px-4 py-10 lg:px-15 lg:py-15"
       id="reviews"
     >
-      <div className="text-center">
+      <motion.div
+        className="text-center"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
         <span className="text-[#002522] text-xl uppercase py-2 px-6 border rounded-full border-[rgba(34,34,34,0.1)]">
           отзывы
         </span>
@@ -51,8 +58,14 @@ export function MainReviews() {
         <p className="hidden lg:block text-lg text-main mt-6 leading-[120%]">
           Немного отзывов от наших заказчиков
         </p>
-      </div>
-      <div className="lg:px-18 lg:mt-18 mt-12.5">
+      </motion.div>
+      <motion.div
+        className="lg:px-18 lg:mt-18 mt-12.5"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      >
         {loading ? (
           <div className="text-center py-10"></div>
         ) : reviews.length === 0 ? (
@@ -110,21 +123,47 @@ export function MainReviews() {
             <IconChevronRight size={25} />
           </div>
         </div>
-      </div>
-      <h4
+      </motion.div>
+      <motion.h4
         className="text-[22px] font-medium text-main mt-10 lg:mt-15"
         id="about-us"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
         Что о нас говорят наши клиенты
-      </h4>
-      <div className="flex flex-col lg:flex-row justify-between lg:gap-15 mt-7.5 pb-15">
-        <div
+      </motion.h4>
+      <motion.div
+        className="flex flex-col lg:flex-row justify-between lg:gap-15 mt-7.5 pb-15"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={{
+          visible: {
+            transition: {
+              staggerChildren: 0.2,
+            },
+          },
+        }}
+      >
+        <motion.div
           className="lg:min-w-164 lg:h-91.75 w-full aspect-164/92 bg-cover bg-center rounded-[40px]"
+          variants={{
+            hidden: { opacity: 0, scale: 0.95 },
+            visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+          }}
           style={{
             backgroundImage: `url(${image})`,
           }}
         />
-        <div className="py-4">
+        <motion.div
+          className="py-4"
+          variants={{
+            hidden: { opacity: 0, x: 30 },
+            visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+          }}
+        >
           <h2 className="text-[40px] lg:text-[60px] -tracking-[3px] leading-[120%] lg:leading-16.25 text-main font-normal">
             Немного информации о нас и прочее
           </h2>
@@ -142,8 +181,8 @@ export function MainReviews() {
           >
             Узнать больше
           </Button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

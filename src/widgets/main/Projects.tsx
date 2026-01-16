@@ -5,6 +5,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { api, type SidebarCategory, type Product } from "@/lib/api";
 import { useNavigate } from "react-router";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
+import { motion } from "framer-motion";
 
 interface CategoryWithProducts extends SidebarCategory {
   products?: Product[];
@@ -235,23 +236,41 @@ export function MainProjects() {
 
   return (
     <div className="max-w-360 mx-auto py-10" id="projects">
-      <h2 className="text-[40px] leading-[120%] px-4 font-medium text-main text-center lg:hidden">
+      <motion.h2
+        className="text-[40px] leading-[120%] px-4 font-medium text-main text-center lg:hidden"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
         Несколько наших работ
-      </h2>
+      </motion.h2>
 
       {/* Categories Tabs */}
-      <div className="mt-4 lg:mt-0">
+      <motion.div
+        className="mt-4 lg:mt-0"
+        initial={{ opacity: 0, x: -30 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
         <ScrollableTabs
           items={categories}
           activeIndex={active}
           onTabClick={handleChangeCategory}
           isLg={isLg}
         />
-      </div>
+      </motion.div>
 
-      <div className="lg:hidden px-4 text-lg opacity-80 text-main font-medium text-center mt-4">
+      <motion.div
+        className="lg:hidden px-4 text-lg opacity-80 text-main font-medium text-center mt-4"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 0.8 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.5 }}
+      >
         Мы занимаемся многопрофильной сборкой и все прочее
-      </div>
+      </motion.div>
 
       {/* Subcategories tabs */}
       {currentSubCategories.length > 0 && (
@@ -265,7 +284,13 @@ export function MainProjects() {
         </div>
       )}
       <div className="mt-7.5 h-auto flex gap-14 lg:h-112 px-4 lg:px-15 w-full">
-        <div className="min-w-76 max-w-76 h-full hidden lg:flex flex-col justify-between">
+        <motion.div
+          className="min-w-76 max-w-76 h-full hidden lg:flex flex-col justify-between"
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
           <div>
             <h2 className="text-[40px] text-main font-medium leading-[120%]">
               Несколько наших работ
@@ -279,8 +304,14 @@ export function MainProjects() {
               Перейти в полный раздел
             </Button>
           </div>
-        </div>
-        <div className="h-full w-full lg:overflow-hidden">
+        </motion.div>
+        <motion.div
+          className="h-full w-full lg:overflow-hidden"
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
           <Carousel
             styles={{
               indicators: {
@@ -305,7 +336,7 @@ export function MainProjects() {
               />
             ))}
           </Carousel>
-        </div>
+        </motion.div>
       </div>
 
       <div className="text-center mt-11 flex flex-col px-4 lg:hidden items-center gap-4">

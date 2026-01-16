@@ -19,3 +19,39 @@ export function Button({ className, ...props }: Props) {
     />
   );
 }
+
+type NewButtonProps = {
+  variant?: "filled" | "outline";
+  fullWidth?: boolean;
+} & ComponentPropsWithoutRef<"button">;
+
+export function ButtonWithAnimation({
+  className,
+  variant = "filled",
+  fullWidth = false,
+  ...props
+}: NewButtonProps) {
+  return (
+    <button
+      className={cn(
+        "animated-button px-5 py-[17.5px] text-sm font-medium leading-[110%] outline-none rounded-full text-center",
+        variant === "filled" && "bg-main text-white border-none",
+        variant === "outline" && "bg-transparent border-[#DDDDDD] border",
+        fullWidth && "w-full",
+        className
+      )}
+      style={
+        {
+          "--btn-bg-color": "#222222",
+        } as React.CSSProperties
+      }
+      {...props}
+    >
+      <span>{props.children}</span>
+      <span>{props.children}</span>
+      <span>{props.children}</span>
+      <span>{props.children}</span>
+      <div className="opacity-0">{props.children}</div>
+    </button>
+  );
+}

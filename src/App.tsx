@@ -14,6 +14,7 @@ import ApplicationsPage from "./pages/admin/ApplicationsPage";
 import CatalogPage from "./pages/catalog/CatalogPage";
 import { ApplicationFormProvider } from "./lib/ApplicationFormContext";
 import { ApplicationForm } from "./widgets/ApplicationForm";
+import { TestPage } from "./pages/TestPage";
 
 export function App() {
   return (
@@ -33,6 +34,7 @@ export function App() {
             <Route element={<MainLayout />}>
               <Route index element={<MainPage />} />
               <Route path="catalog" element={<CatalogPage />} />
+              <Route path="test" element={<TestPage />} />
             </Route>
           </Routes>
           <ApplicationForm />

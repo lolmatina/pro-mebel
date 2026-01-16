@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 
 export const Constructor = () => {
   const containerRef = useRef(null);
@@ -31,8 +32,15 @@ export const Constructor = () => {
   }, []);
 
   return (
-    <div className="max-w-360 mx-auto px-4 lg:px-15" id="constructor">
+    <motion.div
+      className="max-w-360 mx-auto px-4 lg:px-15"
+      id="constructor"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div ref={containerRef} style={{ height: "100%", width: "100%" }} />;
-    </div>
+    </motion.div>
   );
 };
