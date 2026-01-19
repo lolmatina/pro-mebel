@@ -121,7 +121,7 @@ export default function CatalogPage() {
             <h1 className="text-2xl font-bold">{getHeaderTitle()}</h1>
           </div>
           <div className="flex gap-2 justify-center items-center">
-            <Button color="#222222" variant="outline" onClick={openDrawer} className="flex-1 rounded-full">
+            <Button color="#222222" variant="outline" onClick={openDrawer} className="flex-1 rounded-full" fullWidth={false}>
               Вариация фильтров
             </Button>
 
