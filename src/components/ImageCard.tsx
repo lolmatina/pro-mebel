@@ -7,6 +7,7 @@ type Props = {
   children?: ReactNode;
   src: string;
   className?: string;
+  onClick?: () => void;
 };
 
 export function ImageCard({
@@ -15,9 +16,11 @@ export function ImageCard({
   children,
   src,
   className,
+  onClick,
 }: Props) {
   return (
     <div
+      onClick={onClick}
       className={cn(
         "flex justify-start rounded-[40px] overflow-hidden bg-center bg-no-repeat transition-[background-size] duration-500 ease-out relative group",
         position === "top" && "items-start",

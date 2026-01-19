@@ -8,10 +8,12 @@ import { useMediaQuery } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { useFeatureFlag } from "@/lib/FeatureFlagContext";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
+import { useNavigate } from "react-router";
 
 export function Hero() {
   const { constructorEnabled, heroBlocks } = useFeatureFlag();
   const { openForm } = useApplicationForm();
+  const navigate = useNavigate();
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const canUseConstructor = Boolean(constructorEnabled) && isDesktop;
 
@@ -79,6 +81,7 @@ export function Hero() {
               padding="md"
               src={heroBlocks[0]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[0]?.image}` : image2}
               className="w-full aspect-352/380 "
+              onClick={() => navigate(heroBlocks[0]?.link ?? "/")}
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
                 {heroBlocks[0]?.title ?? "Диваны"}
@@ -96,6 +99,7 @@ export function Hero() {
               padding="md"
               src={heroBlocks[1]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[1]?.image}` : image3}
               className="w-full aspect-352/380 "
+              onClick={() => navigate(heroBlocks[1]?.link ?? "/")}
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
                 {heroBlocks[1]?.title ?? "Для спальных комнат"}
@@ -122,6 +126,7 @@ export function Hero() {
           >
             <Carousel.Slide>
               <div
+                onClick={() => navigate(heroBlocks[0]?.link ?? "/")}
                 className="w-full h-47.25 rounded-3xl p-6 bg-cover bg-center"
                 style={{ backgroundImage: `url(${heroBlocks[0]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[0]?.image}` : image1})` }}
               >
@@ -130,6 +135,7 @@ export function Hero() {
             </Carousel.Slide>
             <Carousel.Slide>
               <div
+                onClick={() => navigate(heroBlocks[1]?.link ?? "/")}
                 className="w-full h-47.25 rounded-3xl p-6 bg-contain bg-center"
                 style={{ backgroundImage: `url(${heroBlocks[1]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[1]?.image}` : image2})` }}
               >
@@ -138,6 +144,7 @@ export function Hero() {
             </Carousel.Slide>
             <Carousel.Slide>
               <div
+                onClick={() => navigate(heroBlocks[2]?.link ?? "/")}
                 className="w-full h-47.25 rounded-3xl p-6 bg-cover bg-center"
                 style={{ backgroundImage: `url(${heroBlocks[2]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[2]?.image}` : image3})` }}
               >
@@ -188,6 +195,7 @@ export function Hero() {
               padding="md"
               src={heroBlocks[2]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[2]?.image}` : image3}
               className="w-full aspect-479/380"
+              onClick={() => navigate(heroBlocks[2]?.link ?? "/")}
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
                 {heroBlocks[2]?.title ?? "Мебель для кухни"}
@@ -206,6 +214,7 @@ export function Hero() {
               padding="md"
               src={heroBlocks[3]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[3]?.image}` : image1}
               className="w-full aspect-479/380"
+              onClick={() => navigate(heroBlocks[3]?.link ?? "/")}
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
                 {heroBlocks[3]?.title ?? "Мебель для кухни"}
