@@ -21,9 +21,10 @@ class CreateSubCategoryAction extends SubCategoryAction
         }
         
         $name = (string) $data['name'];
+        $categoryId = isset($data['categoryId']) ? (int) $data['categoryId'] : null;
         
         // Save to database
-        $subCategory = $this->subCategoryRepository->create($name);
+        $subCategory = $this->subCategoryRepository->create($name, $categoryId);
         
         $this->logger->info("SubCategory created: {$name}");
 

@@ -24,9 +24,10 @@ class UpdateSubCategoryAction extends SubCategoryAction
         }
         
         $name = (string) $data['name'];
+        $categoryId = isset($data['categoryId']) ? (int) $data['categoryId'] : null;
         
         // Update in database
-        $updatedSubCategory = $this->subCategoryRepository->update($subCategoryId, $name);
+        $updatedSubCategory = $this->subCategoryRepository->update($subCategoryId, $name, $categoryId);
         
         $this->logger->info("SubCategory of id `{$subCategoryId}` was updated.");
 

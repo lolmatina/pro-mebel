@@ -21,6 +21,7 @@ export function Header() {
   const navigate = useNavigate();
   const { openForm } = useApplicationForm();
   const { constructorEnabled } = useFeatureFlag();
+  const canUseConstructor = Boolean(constructorEnabled) && isLg;
 
   useEffect(() => {
     fetchCategories();
@@ -157,7 +158,7 @@ export function Header() {
                     </a>
                   </li>
                   <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
-                    {constructorEnabled ? (
+                    {canUseConstructor ? (
                       <a
                         className="no-underline text-main"
                         onClick={close}

@@ -1,10 +1,12 @@
-import { api, SubCategory } from '@/lib/api';
+import { api } from '@/lib/api';
+import type { SubCategory, Category } from '@/lib/api';
 import {
   ActionIcon,
   Button,
   Group,
   Modal,
   Pagination,
+  Select,
   Table,
   TextInput,
   Title,
@@ -15,12 +17,14 @@ import { useEffect, useState } from 'react';
 
 export default function SubCategoriesPage() {
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
   const [editingSubCategory, setEditingSubCategory] = useState<SubCategory | null>(null);
   const [name, setName] = useState('');
+  const [categoryId, setCategoryId] = useState<string>('');
 
   const loadSubCategories = async () => {
     setLoading(true);
@@ -35,19 +39,31 @@ export default function SubCategoriesPage() {
     }
   };
 
+  const loadCategories = async () => {
+    try {
+      const response = await api.getCategories(1, 100);
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Не удалось загрузить категории:', error);
+    }
+  };
+
   useEffect(() => {
     loadSubCategories();
+    loadCategories();
   }, [page]);
 
   const handleCreate = () => {
     setEditingSubCategory(null);
     setName('');
+    setCategoryId('');
     open();
   };
 
   const handleEdit = (subCategory: SubCategory) => {
     setEditingSubCategory(subCategory);
     setName(subCategory.name);
+    setCategoryId(subCategory.categoryId?.toString() || '');
     open();
   };
 
@@ -64,10 +80,11 @@ export default function SubCategoriesPage() {
 
   const handleSubmit = async () => {
     try {
+      const categoryIdValue = categoryId ? parseInt(categoryId) : null;
       if (editingSubCategory) {
-        await api.updateSubCategory(editingSubCategory.id, name);
+        await api.updateSubCategory(editingSubCategory.id, name, categoryIdValue);
       } else {
-        await api.createSubCategory(name);
+        await api.createSubCategory(name, categoryIdValue);
       }
       close();
       loadSubCategories();
@@ -90,28 +107,34 @@ export default function SubCategoriesPage() {
           <Table.Tr>
             <Table.Th>ID</Table.Th>
             <Table.Th>Название</Table.Th>
+            <Table.Th>Категория</Table.Th>
             <Table.Th style={{ width: 120 }}>Действия</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
             <Table.Tr>
-              <Table.Td colSpan={3} style={{ textAlign: 'center' }}>
+              <Table.Td colSpan={4} style={{ textAlign: 'center' }}>
                 Загрузка...
               </Table.Td>
             </Table.Tr>
           ) : subCategories.length === 0 ? (
             <Table.Tr>
-              <Table.Td colSpan={3} style={{ textAlign: 'center' }}>
+              <Table.Td colSpan={4} style={{ textAlign: 'center' }}>
                 Подкатегории не найдены
               </Table.Td>
             </Table.Tr>
           ) : (
-            subCategories.map((subCategory) => (
-              <Table.Tr key={subCategory.id}>
-                <Table.Td>{subCategory.id}</Table.Td>
-                <Table.Td>{subCategory.name}</Table.Td>
-                <Table.Td>
+            subCategories.map((subCategory) => {
+              const categoryName = subCategory.categoryId
+                ? categories.find((c) => c.id === subCategory.categoryId)?.name || 'Неизвестно'
+                : '-';
+              return (
+                <Table.Tr key={subCategory.id}>
+                  <Table.Td>{subCategory.id}</Table.Td>
+                  <Table.Td>{subCategory.name}</Table.Td>
+                  <Table.Td>{categoryName}</Table.Td>
+                  <Table.Td>
                   <Group gap="xs">
                     <ActionIcon
                       variant="light"
@@ -130,7 +153,8 @@ export default function SubCategoriesPage() {
                   </Group>
                 </Table.Td>
               </Table.Tr>
-            ))
+              );
+            })
           )}
         </Table.Tbody>
       </Table>
@@ -152,6 +176,19 @@ export default function SubCategoriesPage() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           mb="md"
+          required
+        />
+        <Select
+          label="Категория"
+          placeholder="Выбрать категорию"
+          value={categoryId}
+          onChange={(value) => setCategoryId(value || '')}
+          data={categories.map((category) => ({
+            value: category.id.toString(),
+            label: category.name,
+          }))}
+          mb="md"
+          clearable
         />
         <Group justify="flex-end">
           <Button variant="default" onClick={close}>

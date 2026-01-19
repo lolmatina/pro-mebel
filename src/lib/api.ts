@@ -24,6 +24,7 @@ export interface Category {
 export interface SubCategory {
   id: number;
   name: string;
+  categoryId?: number | null;
 }
 
 export interface Product {
@@ -191,18 +192,18 @@ class ApiClient {
     return response.data!;
   }
 
-  async createSubCategory(name: string): Promise<SubCategory> {
+  async createSubCategory(name: string, categoryId?: number | null): Promise<SubCategory> {
     const response = await this.request<ApiResponse<SubCategory>>('/admin/subcategories', {
       method: 'POST',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, categoryId }),
     });
     return response.data!;
   }
 
-  async updateSubCategory(id: number, name: string): Promise<SubCategory> {
+  async updateSubCategory(id: number, name: string, categoryId?: number | null): Promise<SubCategory> {
     const response = await this.request<ApiResponse<SubCategory>>(`/admin/subcategories/${id}`, {
       method: 'PUT',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, categoryId }),
     });
     return response.data!;
   }

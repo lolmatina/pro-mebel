@@ -8,14 +8,16 @@ import { MainProducts } from "@/widgets/main/Products";
 import { MainProjects } from "@/widgets/main/Projects";
 import { MainReviews } from "@/widgets/main/Reviews";
 import { useFeatureFlag } from "@/lib/FeatureFlagContext";
+import { useMediaQuery } from "@mantine/hooks";
 
 export default function MainPage() {
   const { constructorEnabled } = useFeatureFlag();
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   return (
     <div className="w-full">
       <Hero />
-      {constructorEnabled && <Constructor />}
+      {constructorEnabled && isDesktop && <Constructor />}
       <MainAbout />
       <MainProjects />
       <MainPartnership />

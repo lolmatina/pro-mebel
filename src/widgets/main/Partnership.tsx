@@ -1,5 +1,6 @@
 import image from "@/assets/main/partnership/image.jpg";
 import { Button } from "@/components/Button";
+import { useMediaQuery } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { useFeatureFlag } from "@/lib/FeatureFlagContext";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
@@ -7,6 +8,8 @@ import { useApplicationForm } from "@/lib/ApplicationFormContext";
 export function MainPartnership() {
   const { constructorEnabled } = useFeatureFlag();
   const { openForm } = useApplicationForm();
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const canUseConstructor = Boolean(constructorEnabled) && isDesktop;
 
   return (
     <motion.div
@@ -120,7 +123,7 @@ export function MainPartnership() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          {constructorEnabled ? (
+          {canUseConstructor ? (
             <a href="/#constructor">
               <Button
                 variant="white"

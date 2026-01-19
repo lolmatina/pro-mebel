@@ -4,6 +4,7 @@ import image2 from "@/assets/main/hero/image2.jpg";
 import image3 from "@/assets/main/hero/image3.jpg";
 import { Button } from "@/components/Button";
 import { Carousel } from "@mantine/carousel";
+import { useMediaQuery } from "@mantine/hooks";
 import { motion } from "framer-motion";
 import { useFeatureFlag } from "@/lib/FeatureFlagContext";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
@@ -11,6 +12,8 @@ import { useApplicationForm } from "@/lib/ApplicationFormContext";
 export function Hero() {
   const { constructorEnabled } = useFeatureFlag();
   const { openForm } = useApplicationForm();
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const canUseConstructor = Boolean(constructorEnabled) && isDesktop;
 
   return (
     <div className="max-w-360 mx-auto px-4 lg:px-15" id="main">
@@ -47,14 +50,14 @@ export function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
               >
-                {constructorEnabled ? (
+                {canUseConstructor ? (
                   <a href="/#constructor">
                     <Button className="w-full! max-w-75!">
                       Собрать свой проект
                     </Button>
                   </a>
                 ) : (
-                  <Button 
+                  <Button
                     className="w-full! max-w-75!"
                     onClick={() => openForm({})}
                   >
@@ -157,14 +160,14 @@ export function Hero() {
           <p className="text-lg text-main leading-[120%] font-medium mt-6 mb-10.5">
             Мы занимаемся многопрофильной сборкой и все прочее
           </p>
-          {constructorEnabled ? (
+          {canUseConstructor ? (
             <a href="/#constructor">
               <Button variant="outline">
                 Перейти в конструктор
               </Button>
             </a>
           ) : (
-            <Button 
+            <Button
               variant="outline"
               onClick={() => openForm({})}
             >

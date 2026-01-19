@@ -80,25 +80,35 @@ class DatabaseSubCategoryRepository implements SubCategoryRepository
         return $subCategories;
     }
 
-    public function create(string $name): SubCategory
+    public function create(string $name, ?int $categoryId = null): SubCategory
     {
-        $stmt = $this->db->prepare('INSERT INTO subcategories (name, category_id) VALUES (:name, NULL)');
-        $stmt->execute(['name' => $name]);
+        $stmt = $this->db->prepare('INSERT INTO subcategories (name, category_id) VALUES (:name, :category_id)');
+        $stmt->execute([
+            'name' => $name,
+            'category_id' => $categoryId
+        ]);
 
         $id = (int) $this->db->lastInsertId();
 
-        return new SubCategory($id, $name, null);
+        return new SubCategory($id, $name, $categoryId);
     }
 
-    public function update(int $id, string $name): SubCategory
+    public function update(int $id, string $name, ?int $categoryId = null): SubCategory
     {
         // First check if exists
         $existing = $this->findSubCategoryOfId($id);
 
-        $stmt = $this->db->prepare('UPDATE subcategories SET name = :name WHERE id = :id');
-        $stmt->execute(['id' => $id, 'name' => $name]);
+        // If categoryId is not provided, keep the existing one
+        $finalCategoryId = $categoryId !== null ? $categoryId : $existing->getCategoryId();
 
-        return new SubCategory($id, $name, $existing->getCategoryId());
+        $stmt = $this->db->prepare('UPDATE subcategories SET name = :name, category_id = :category_id WHERE id = :id');
+        $stmt->execute([
+            'id' => $id,
+            'name' => $name,
+            'category_id' => $finalCategoryId
+        ]);
+
+        return new SubCategory($id, $name, $finalCategoryId);
     }
 
     public function delete(int $id): void
