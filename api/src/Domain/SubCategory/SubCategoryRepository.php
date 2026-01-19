@@ -23,6 +23,12 @@ interface SubCategoryRepository
      * @return SubCategory[]
      */
     public function findByCategoryId(int $categoryId): array;
+
+    public function create(string $name, ?int $categoryId = null): SubCategory;
+
+    public function update(int $id, string $name, ?int $categoryId = null): SubCategory;
+
+    public function delete(int $id): void;
 }
 
 

@@ -1,4 +1,4 @@
-import { api, HeroBlock } from '@/lib/api';
+import { api, type HeroBlock } from '@/lib/api';
 import {
   ActionIcon,
   Button,

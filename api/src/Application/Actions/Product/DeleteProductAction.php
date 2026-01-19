@@ -28,7 +28,9 @@ class DeleteProductAction extends ProductAction
         // Delete the image file
         $this->fileUploader->delete($product->getImage());
         
-        // In a real implementation, you would delete from database
+        // Delete from database
+        $this->productRepository->delete($productId);
+
         $this->logger->info("Product of id `{$productId}` was deleted.");
 
         return $this->respondWithData(['message' => 'Product deleted successfully'], 200);

@@ -14,9 +14,11 @@ class DeleteCategoryAction extends CategoryAction
     protected function action(): Response
     {
         $categoryId = (int) $this->resolveArg('id');
-        $category = $this->categoryRepository->findCategoryOfId($categoryId);
+        $this->categoryRepository->findCategoryOfId($categoryId);
         
-        // In a real implementation, you would delete from database
+        // Delete from database
+        $this->categoryRepository->delete($categoryId);
+
         $this->logger->info("Category of id `{$categoryId}` was deleted.");
 
         return $this->respondWithData(['message' => 'Category deleted successfully'], 200);

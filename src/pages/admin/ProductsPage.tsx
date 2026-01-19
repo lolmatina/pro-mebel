@@ -1,4 +1,4 @@
-import { api, Product, SubCategory } from '@/lib/api';
+import { api, type Product, type SubCategory } from '@/lib/api';
 import {
   ActionIcon,
   Button,
@@ -6,6 +6,7 @@ import {
   Group,
   Image,
   Modal,
+  MultiSelect,
   Pagination,
   Select,
   Table,
@@ -25,6 +26,7 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [filterSubCategoryIds, setFilterSubCategoryIds] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -35,7 +37,11 @@ export default function ProductsPage() {
   const loadProducts = async () => {
     setLoading(true);
     try {
-      const response = await api.getProducts(page, 10);
+      const response = await api.getProducts(
+        page,
+        10,
+        filterSubCategoryIds.length ? filterSubCategoryIds.map(Number) : undefined,
+      );
       setProducts(response.data);
       setTotalPages(response.pagination.totalPages);
     } catch (error) {
@@ -57,7 +63,12 @@ export default function ProductsPage() {
   useEffect(() => {
     loadProducts();
     loadSubCategories();
-  }, [page]);
+  }, [page, filterSubCategoryIds]);
+
+  const handleFilterChange = (values: string[]) => {
+    setPage(1);
+    setFilterSubCategoryIds(values);
+  };
 
   const handleCreate = () => {
     setEditingProduct(null);
@@ -136,6 +147,19 @@ export default function ProductsPage() {
         <Button leftSection={<IconPlus size={16} />} onClick={handleCreate}>
           Добавить продукт
         </Button>
+      </Group>
+
+      <Group mb="md">
+        <MultiSelect
+          label="Фильтр по подкатегориям"
+          placeholder="Выберите подкатегорию"
+          data={subCategories.map((sc) => ({ value: sc.id.toString(), label: sc.name }))}
+          value={filterSubCategoryIds}
+          onChange={handleFilterChange}
+          clearable
+          searchable
+          nothingFoundMessage="Нет подкатегорий"
+        />
       </Group>
 
       <Table striped highlightOnHover>

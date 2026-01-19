@@ -14,9 +14,11 @@ class DeleteSubCategoryAction extends SubCategoryAction
     protected function action(): Response
     {
         $subCategoryId = (int) $this->resolveArg('id');
-        $subCategory = $this->subCategoryRepository->findSubCategoryOfId($subCategoryId);
+        $this->subCategoryRepository->findSubCategoryOfId($subCategoryId);
         
-        // In a real implementation, you would delete from database
+        // Delete from database
+        $this->subCategoryRepository->delete($subCategoryId);
+
         $this->logger->info("SubCategory of id `{$subCategoryId}` was deleted.");
 
         return $this->respondWithData(['message' => 'SubCategory deleted successfully'], 200);

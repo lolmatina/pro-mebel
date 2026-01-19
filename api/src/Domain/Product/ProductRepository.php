@@ -23,6 +23,12 @@ interface ProductRepository
      * @return Product[]
      */
     public function findBySubCategoryId(int $subCategoryId): array;
+
+    public function create(string $name, string $description, string $image, int $subCategoryId): Product;
+
+    public function update(int $id, string $name, string $description, string $image, int $subCategoryId): Product;
+
+    public function delete(int $id): void;
 }
 
 

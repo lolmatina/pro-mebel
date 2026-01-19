@@ -17,6 +17,12 @@ interface CategoryRepository
      * @throws CategoryNotFoundException
      */
     public function findCategoryOfId(int $id): Category;
+
+    public function create(string $name): Category;
+
+    public function update(int $id, string $name): Category;
+
+    public function delete(int $id): void;
 }
 
 
