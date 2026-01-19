@@ -1,10 +1,31 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { api } from "@/lib/api";
 
 export const Constructor = () => {
   const containerRef = useRef(null);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const checkSetting = async () => {
+      try {
+        const setting = await api.getSetting('feature_flag');
+        setIsEnabled(setting.value);
+      } catch (error) {
+        console.error('Failed to load constructor setting:', error);
+        setIsEnabled(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkSetting();
+  }, []);
+
+  useEffect(() => {
+    if (!isEnabled || isLoading) return;
+
     const params = decodeURIComponent(window.location.search.substring(1));
 
     const iframe = document.createElement("iframe");
@@ -29,7 +50,15 @@ export const Constructor = () => {
         //@ts-ignore
         containerRef.current.innerHTML = "";
     };
-  }, []);
+  }, [isEnabled, isLoading]);
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (!isEnabled) {
+    return null;
+  }
 
   return (
     <motion.div

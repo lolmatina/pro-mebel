@@ -388,6 +388,24 @@ class ApiClient {
     );
     return response.data!;
   }
+
+  // Settings
+  async getSetting(key: string = 'feature_flag'): Promise<{ value: boolean }> {
+    const response = await this.request<ApiResponse<{ value: boolean }>>(
+      `/setting?key=${key}`
+    );
+    return response.data!;
+  }
+
+  async toggleSetting(key: string = 'feature_flag'): Promise<{ value: boolean; message: string }> {
+    const response = await this.request<ApiResponse<{ value: boolean; message: string }>>(
+      `/admin/setting/toggle?key=${key}`,
+      {
+        method: 'POST',
+      }
+    );
+    return response.data!;
+  }
 }
 
 export const api = new ApiClient(API_BASE_URL);

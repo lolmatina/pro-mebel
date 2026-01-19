@@ -1,6 +1,6 @@
 import { api } from '@/lib/api';
-import { Button, Card, Grid, Group, Text, Title } from '@mantine/core';
-import { IconAlertTriangle, IconBox, IconCategory, IconTags } from '@tabler/icons-react';
+import { Button, Card, Grid, Group, Switch, Text, Title } from '@mantine/core';
+import { IconAlertTriangle, IconBox, IconCategory, IconTags, IconTool } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
@@ -10,14 +10,17 @@ export default function DashboardPage() {
     products: 0,
   });
   const [stoppingBot, setStoppingBot] = useState(false);
+  const [constructorEnabled, setConstructorEnabled] = useState(false);
+  const [togglingConstructor, setTogglingConstructor] = useState(false);
 
   useEffect(() => {
     const loadStats = async () => {
       try {
-        const [categories, subCategories, products] = await Promise.all([
+        const [categories, subCategories, products, setting] = await Promise.all([
           api.getCategories(1, 1),
           api.getSubCategories(1, 1),
           api.getProducts(1, 1),
+          api.getSetting('feature_flag'),
         ]);
 
         setStats({
@@ -25,6 +28,7 @@ export default function DashboardPage() {
           subCategories: subCategories.pagination.total,
           products: products.pagination.total,
         });
+        setConstructorEnabled(setting.value);
       } catch (error) {
         console.error('Failed to load stats:', error);
       }
@@ -44,6 +48,18 @@ export default function DashboardPage() {
       alert('Failed to stop bot: ' + (error instanceof Error ? error.message : 'Unknown error'));
     } finally {
       setStoppingBot(false);
+    }
+  };
+
+  const handleToggleConstructor = async () => {
+    setTogglingConstructor(true);
+    try {
+      const result = await api.toggleSetting('feature_flag');
+      setConstructorEnabled(result.value);
+    } catch (error) {
+      alert('Failed to toggle constructor: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    } finally {
+      setTogglingConstructor(false);
     }
   };
 
@@ -106,6 +122,31 @@ export default function DashboardPage() {
                   Products
                 </Text>
               </div>
+            </Group>
+          </Card>
+        </Grid.Col>
+
+        <Grid.Col span={{ base: 12, md: 12 }}>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Group justify="space-between">
+              <Group>
+                <IconTool size={40} color={constructorEnabled ? 'green' : 'gray'} />
+                <div>
+                  <Text size="lg" fw={600}>
+                    Constructor
+                  </Text>
+                  <Text size="sm" c="dimmed">
+                    {constructorEnabled ? 'Enabled' : 'Disabled'}
+                  </Text>
+                </div>
+              </Group>
+              <Switch
+                size="lg"
+                checked={constructorEnabled}
+                onChange={handleToggleConstructor}
+                disabled={togglingConstructor}
+                color="green"
+              />
             </Group>
           </Card>
         </Grid.Col>

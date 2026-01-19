@@ -23,6 +23,8 @@ use App\Application\Actions\Review\DeleteReviewAction;
 use App\Application\Actions\Review\ListReviewsAction;
 use App\Application\Actions\Review\UpdateReviewAction;
 use App\Application\Actions\Review\ViewReviewAction;
+use App\Application\Actions\Setting\GetSettingAction;
+use App\Application\Actions\Setting\ToggleSettingAction;
 use App\Application\Actions\SubCategory\CreateSubCategoryAction;
 use App\Application\Actions\SubCategory\DeleteSubCategoryAction;
 use App\Application\Actions\SubCategory\ListSubCategoriesAction;
@@ -91,6 +93,9 @@ return function (App $app) {
     // Telegram webhook (public)
     $app->post('/webhook', TelegramWebhookAction::class);
 
+    // Public route to get setting value
+    $app->get('/setting', GetSettingAction::class);
+
     // Admin routes (protected by JWT)
     $app->group('/admin', function (Group $group) {
         // Category CRUD (admin only)
@@ -132,5 +137,8 @@ return function (App $app) {
 
         // Telegram bot management (admin only)
         $group->post('/telegram/stop', StopTelegramBotAction::class);
+
+        // Setting toggle (admin only)
+        $group->post('/setting/toggle', ToggleSettingAction::class);
     })->add(JwtAuthMiddleware::class);
 };

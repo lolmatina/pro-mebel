@@ -61,6 +61,14 @@ CREATE TABLE IF NOT EXISTS applications (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS settings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    setting_key VARCHAR(255) NOT NULL UNIQUE,
+    setting_value TINYINT(1) NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Insert sample data
 
 INSERT INTO categories (name) VALUES
@@ -86,5 +94,8 @@ INSERT INTO reviews (name, review, rating, image) VALUES
     ('John Doe', 'Excellent service and quality products! Highly recommended.', 5, 'https://example.com/john.jpg'),
     ('Jane Smith', 'Very satisfied with my purchase. Fast delivery and great customer support.', 4, 'https://example.com/jane.jpg'),
     ('Mike Johnson', 'Good quality, but could be better. Overall a positive experience.', 3, 'https://example.com/mike.jpg');
+
+INSERT INTO settings (setting_key, setting_value) VALUES
+    ('feature_flag', 0);
 
 
