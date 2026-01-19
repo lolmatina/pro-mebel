@@ -43,28 +43,18 @@ export function Footer() {
               <span>Для Клиентов</span>
               <ul className="opacity-50 block space-y-2.5 mt-3.75">
                 <li className="block">
-                  <Link to="" className="no-underline text-white">
-                    Lorem Ipsum 
+                  <Link to="https://www.instagram.com/promebel_salon_uralsk?igsh=cThyZ2VneHE3NDlv&utm_source=qr" className="no-underline text-white">
+                    Instagram
                   </Link>
                 </li>
                 <li className="block">
-                  <Link to="" className="no-underline text-white">
-                    Lorem Ipsum 
-                  </Link>
-                </li>
-                <li className="block">
-                  <Link to="" className="no-underline text-white">
-                    Lorem Ipsum 
-                  </Link>
-                </li>
-                <li className="block">
-                  <Link to="" className="no-underline text-white">
-                    Lorem Ipsum 
+                  <Link to="mailto:admin@promebel.org" className="no-underline text-white">
+                    Email
                   </Link>
                 </li>
               </ul>
             </div>
-            <div className="text-sm leading-[120%]">
+            {/* <div className="text-sm leading-[120%]">
               <span>Для Клиентов</span>
               <ul className="opacity-50 block space-y-2.5 mt-3.75">
                 <li className="block">
@@ -113,7 +103,7 @@ export function Footer() {
                   </Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

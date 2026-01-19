@@ -15,7 +15,7 @@ export default function MainPage() {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-x-hidden">
       <Hero />
       {constructorEnabled && isDesktop && <Constructor />}
       <MainAbout />
