@@ -2,6 +2,7 @@ import { TextInput, Checkbox, Accordion, Loader } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { api, type SidebarCategory } from "../lib/api";
+import clsx from "clsx";
 
 interface SidebarProps {
   selectedSubCategories?: number[];
@@ -40,7 +41,7 @@ export function Sidebar({
 
     const newSelected = selectedSubCategories.includes(subCategoryId)
       ? selectedSubCategories.filter((id) => id !== subCategoryId)
-      : [...selectedSubCategories, subCategoryId];
+      : [subCategoryId];
 
     onSubCategoryChange(newSelected);
   };
@@ -94,23 +95,13 @@ export function Sidebar({
               </Accordion.Control>
               <Accordion.Panel>
                 {category.subCategories.map((subCategory) => (
-                  <Checkbox
+                  <span
                     key={subCategory.id}
-                    label={`${subCategory.name} (${subCategory.productCount})`}
-                    checked={selectedSubCategories.includes(subCategory.id)}
-                    onChange={() => handleSubCategoryToggle(subCategory.id)}
-                    className="mb-6"
-                    styles={{
-                      input: {
-                        borderColor: "#222222",
-                        borderWidth: "1.5px",
-                      },
-                      label: {
-                        textTransform: "uppercase",
-                        tabSize: "16px",
-                      },
-                    }}
-                  />
+                    onClick={() => handleSubCategoryToggle(subCategory.id)}
+                    className={clsx("mb-6 text-main text-base font-normal block cursor-pointer hover:underline px-3.75 py-1.5", selectedSubCategories.includes(subCategory.id) && "bg-[#E7E2DE] rounded-[15px]")}
+                  >
+                    {subCategory.name} ({subCategory.productCount})
+                  </span>
                 ))}
               </Accordion.Panel>
             </Accordion.Item>

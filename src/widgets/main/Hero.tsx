@@ -5,8 +5,13 @@ import image3 from "@/assets/main/hero/image3.jpg";
 import { Button } from "@/components/Button";
 import { Carousel } from "@mantine/carousel";
 import { motion } from "framer-motion";
+import { useFeatureFlag } from "@/lib/FeatureFlagContext";
+import { useApplicationForm } from "@/lib/ApplicationFormContext";
 
 export function Hero() {
+  const { constructorEnabled } = useFeatureFlag();
+  const { openForm } = useApplicationForm();
+
   return (
     <div className="max-w-360 mx-auto px-4 lg:px-15" id="main">
       <div className="w-full lg:flex gap-2.5">
@@ -42,11 +47,20 @@ export function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
               >
-                <a href="/#constructor">
-                  <Button className="w-full! max-w-75!">
-                    Собрать свой проект
+                {constructorEnabled ? (
+                  <a href="/#constructor">
+                    <Button className="w-full! max-w-75!">
+                      Собрать свой проект
+                    </Button>
+                  </a>
+                ) : (
+                  <Button 
+                    className="w-full! max-w-75!"
+                    onClick={() => openForm({})}
+                  >
+                    Оставить заявку
                   </Button>
-                </a>
+                )}
               </motion.div>
             </div>
           </ImageCard>
@@ -143,11 +157,20 @@ export function Hero() {
           <p className="text-lg text-main leading-[120%] font-medium mt-6 mb-10.5">
             Мы занимаемся многопрофильной сборкой и все прочее
           </p>
-          <a href="/#constructor">
-            <Button variant="outline">
-              Перейти в конструктор
+          {constructorEnabled ? (
+            <a href="/#constructor">
+              <Button variant="outline">
+                Перейти в конструктор
+              </Button>
+            </a>
+          ) : (
+            <Button 
+              variant="outline"
+              onClick={() => openForm({})}
+            >
+              Оставить заявку
             </Button>
-          </a>
+          )}
         </motion.div>
         <div className="hidden xl:flex gap-2.5 w-full justify-evenly">
           <motion.div

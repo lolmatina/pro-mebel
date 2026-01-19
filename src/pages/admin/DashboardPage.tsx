@@ -30,7 +30,7 @@ export default function DashboardPage() {
         });
         setConstructorEnabled(setting.value);
       } catch (error) {
-        console.error('Failed to load stats:', error);
+        console.error('Не удалось загрузить статистику:', error);
       }
     };
 
@@ -38,14 +38,14 @@ export default function DashboardPage() {
   }, []);
 
   const handleStopBot = async () => {
-    if (!confirm('Stop Telegram bot and clear webhook? This will stop all notifications and drop pending updates.')) return;
-    
+    if (!confirm('Остановить Telegram бота и очистить webhook? Это остановит все уведомления и удалит ожидающие обновления.')) return;
+
     setStoppingBot(true);
     try {
       const result = await api.stopTelegramBot();
-      alert('Bot stopped successfully! Webhook deleted and all pending updates dropped.');
+      alert('Бот успешно остановлен! Webhook удален и все ожидающие обновления удалены.');
     } catch (error) {
-      alert('Failed to stop bot: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      alert('Не удалось остановить бота: ' + (error instanceof Error ? error.message : 'Неизвестная ошибка'));
     } finally {
       setStoppingBot(false);
     }
@@ -57,7 +57,7 @@ export default function DashboardPage() {
       const result = await api.toggleSetting('feature_flag');
       setConstructorEnabled(result.value);
     } catch (error) {
-      alert('Failed to toggle constructor: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      alert('Не удалось переключить конструктор: ' + (error instanceof Error ? error.message : 'Неизвестная ошибка'));
     } finally {
       setTogglingConstructor(false);
     }
@@ -65,17 +65,17 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <Group justify="space-between" mb="xl">
-        <Title order={2}>Dashboard</Title>
+      {/* <Group justify="space-between" mb="xl">
+        <Title order={2}>Дэшборд</Title>
         <Button
           color="red"
           leftSection={<IconAlertTriangle size={16} />}
           onClick={handleStopBot}
           loading={stoppingBot}
         >
-          Emergency: Stop Telegram Bot
+          Экстренно: Остановить Telegram бота
         </Button>
-      </Group>
+      </Group> */}
 
       <Grid>
         <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
@@ -87,7 +87,7 @@ export default function DashboardPage() {
                   {stats.categories}
                 </Text>
                 <Text size="sm" c="dimmed">
-                  Categories
+                  Категории
                 </Text>
               </div>
             </Group>
@@ -103,7 +103,7 @@ export default function DashboardPage() {
                   {stats.subCategories}
                 </Text>
                 <Text size="sm" c="dimmed">
-                  SubCategories
+                  Подкатегории
                 </Text>
               </div>
             </Group>
@@ -119,7 +119,7 @@ export default function DashboardPage() {
                   {stats.products}
                 </Text>
                 <Text size="sm" c="dimmed">
-                  Products
+                  Продукты
                 </Text>
               </div>
             </Group>
@@ -133,10 +133,10 @@ export default function DashboardPage() {
                 <IconTool size={40} color={constructorEnabled ? 'green' : 'gray'} />
                 <div>
                   <Text size="lg" fw={600}>
-                    Constructor
+                    Конструктор
                   </Text>
                   <Text size="sm" c="dimmed">
-                    {constructorEnabled ? 'Enabled' : 'Disabled'}
+                    {constructorEnabled ? 'Включено' : 'Выключено'}
                   </Text>
                 </div>
               </Group>

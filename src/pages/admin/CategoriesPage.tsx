@@ -29,7 +29,7 @@ export default function CategoriesPage() {
       setCategories(response.data);
       setTotalPages(response.pagination.totalPages);
     } catch (error) {
-      console.error('Failed to load categories:', error);
+      console.error('Не удалось загрузить категории:', error);
     } finally {
       setLoading(false);
     }
@@ -52,13 +52,13 @@ export default function CategoriesPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this category?')) return;
+    if (!confirm('Вы уверены, что хотите удалить эту категорию?')) return;
 
     try {
       await api.deleteCategory(id);
       loadCategories();
     } catch (error) {
-      alert('Failed to delete category');
+      alert('Не удалось удалить категорию');
     }
   };
 
@@ -72,16 +72,16 @@ export default function CategoriesPage() {
       close();
       loadCategories();
     } catch (error) {
-      alert('Failed to save category');
+      alert('Не удалось сохранить категорию');
     }
   };
 
   return (
     <div>
       <Group justify="space-between" mb="xl">
-        <Title order={2}>Categories</Title>
+        <Title order={2}>Категории</Title>
         <Button leftSection={<IconPlus size={16} />} onClick={handleCreate}>
-          Add Category
+          Добавить категорию
         </Button>
       </Group>
 
@@ -89,21 +89,21 @@ export default function CategoriesPage() {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>ID</Table.Th>
-            <Table.Th>Name</Table.Th>
-            <Table.Th style={{ width: 120 }}>Actions</Table.Th>
+            <Table.Th>Название</Table.Th>
+            <Table.Th style={{ width: 120 }}>Действия</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
             <Table.Tr>
               <Table.Td colSpan={3} style={{ textAlign: 'center' }}>
-                Loading...
+                Загрузка...
               </Table.Td>
             </Table.Tr>
           ) : categories.length === 0 ? (
             <Table.Tr>
               <Table.Td colSpan={3} style={{ textAlign: 'center' }}>
-                No categories found
+                Категории не найдены
               </Table.Td>
             </Table.Tr>
           ) : (
@@ -144,21 +144,21 @@ export default function CategoriesPage() {
       <Modal
         opened={opened}
         onClose={close}
-        title={editingCategory ? 'Edit Category' : 'Create Category'}
+        title={editingCategory ? 'Редактировать категорию' : 'Создать категорию'}
       >
         <TextInput
-          label="Name"
-          placeholder="Category name"
+          label="Название"
+          placeholder="Название категории"
           value={name}
           onChange={(e) => setName(e.target.value)}
           mb="md"
         />
         <Group justify="flex-end">
           <Button variant="default" onClick={close}>
-            Cancel
+            Отмена
           </Button>
           <Button onClick={handleSubmit} disabled={!name.trim()}>
-            {editingCategory ? 'Update' : 'Create'}
+            {editingCategory ? 'Обновить' : 'Создать'}
           </Button>
         </Group>
       </Modal>

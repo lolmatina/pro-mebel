@@ -47,7 +47,7 @@ export default function ReviewsPage() {
       setReviews(response.data);
       setTotalPages(response.pagination.totalPages);
     } catch (error) {
-      console.error('Failed to load reviews:', error);
+      console.error('Не удалось загрузить отзывы:', error);
     } finally {
       setLoading(false);
     }
@@ -80,29 +80,29 @@ export default function ReviewsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this review?')) return;
+    if (!confirm('Вы уверены, что хотите удалить этот отзыв?')) return;
 
     try {
       await api.deleteReview(id);
       loadReviews();
     } catch (error) {
-      alert('Failed to delete review');
+      alert('Не удалось удалить отзыв');
     }
   };
 
   const handleSubmit = async () => {
     if (!formData.name.trim() || !formData.review.trim()) {
-      alert('Please fill in all fields');
+      alert('Пожалуйста, заполните все поля');
       return;
     }
 
     if (formData.rating < 1 || formData.rating > 5) {
-      alert('Rating must be between 1 and 5');
+      alert('Рейтинг должен быть от 1 до 5');
       return;
     }
 
     if (!editingReview && !imageFile) {
-      alert('Please select an image file');
+      alert('Пожалуйста, выберите файл изображения');
       return;
     }
 
@@ -124,16 +124,16 @@ export default function ReviewsPage() {
       close();
       loadReviews();
     } catch (error) {
-      alert('Failed to save review: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      alert('Не удалось сохранить отзыв: ' + (error instanceof Error ? error.message : 'Неизвестная ошибка'));
     }
   };
 
   return (
     <div>
       <Group justify="space-between" mb="xl">
-        <Title order={2}>Reviews</Title>
+        <Title order={2}>Отзывы</Title>
         <Button leftSection={<IconPlus size={16} />} onClick={handleCreate}>
-          Add Review
+          Добавить отзыв
         </Button>
       </Group>
 
@@ -141,24 +141,24 @@ export default function ReviewsPage() {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>ID</Table.Th>
-            <Table.Th>Image</Table.Th>
-            <Table.Th>Name</Table.Th>
-            <Table.Th>Review</Table.Th>
-            <Table.Th>Rating</Table.Th>
-            <Table.Th style={{ width: 120 }}>Actions</Table.Th>
+            <Table.Th>Изображение</Table.Th>
+            <Table.Th>Имя</Table.Th>
+            <Table.Th>Отзыв</Table.Th>
+            <Table.Th>Рейтинг</Table.Th>
+            <Table.Th style={{ width: 120 }}>Действия</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
             <Table.Tr>
               <Table.Td colSpan={6} style={{ textAlign: 'center' }}>
-                Loading...
+                Загрузка...
               </Table.Td>
             </Table.Tr>
           ) : reviews.length === 0 ? (
             <Table.Tr>
               <Table.Td colSpan={6} style={{ textAlign: 'center' }}>
-                No reviews found
+                Отзывы не найдены
               </Table.Td>
             </Table.Tr>
           ) : (
@@ -217,20 +217,20 @@ export default function ReviewsPage() {
       <Modal
         opened={opened}
         onClose={close}
-        title={editingReview ? 'Edit Review' : 'Create Review'}
+        title={editingReview ? 'Редактировать отзыв' : 'Создать отзыв'}
         size="lg"
       >
         <TextInput
-          label="Name"
-          placeholder="Reviewer name"
+          label="Имя"
+          placeholder="Имя рецензента"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           mb="md"
           required
         />
         <Textarea
-          label="Review"
-          placeholder="Review text"
+          label="Отзыв"
+          placeholder="Текст отзыва"
           value={formData.review}
           onChange={(e) => setFormData({ ...formData, review: e.target.value })}
           mb="md"
@@ -239,7 +239,7 @@ export default function ReviewsPage() {
         />
         <div style={{ marginBottom: '1rem' }}>
           <label style={{ fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.5rem', display: 'block' }}>
-            Rating <span style={{ color: 'red' }}>*</span>
+            Рейтинг <span style={{ color: 'red' }}>*</span>
           </label>
           <Rating
             value={formData.rating}
@@ -248,19 +248,19 @@ export default function ReviewsPage() {
           />
         </div>
         <FileInput
-          label="Review Image"
-          placeholder="Select image file"
+          label="Изображение отзыва"
+          placeholder="Выбрать файл изображения"
           accept="image/*"
           value={imageFile}
           onChange={setImageFile}
           mb="md"
           required={!editingReview}
           leftSection={<IconUpload size={16} />}
-          description={editingReview ? 'Leave empty to keep current image' : 'JPEG, PNG, GIF, or WebP'}
+          description={editingReview ? 'Оставить пустым, чтобы сохранить текущее изображение' : 'JPEG, PNG, GIF или WebP'}
         />
         {editingReview && editingReview.image && !imageFile && (
           <div style={{ marginBottom: '1rem' }}>
-            <div style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: '#666' }}>Current Image:</div>
+            <div style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: '#666' }}>Текущее изображение:</div>
             <Image
               src={`${process.env.API_BASE_URL}/${editingReview.image}`}
               alt={editingReview.name}
@@ -273,10 +273,10 @@ export default function ReviewsPage() {
         )}
         <Group justify="flex-end">
           <Button variant="default" onClick={close}>
-            Cancel
+            Отмена
           </Button>
           <Button onClick={handleSubmit}>
-            {editingReview ? 'Update' : 'Create'}
+            {editingReview ? 'Обновить' : 'Создать'}
           </Button>
         </Group>
       </Modal>

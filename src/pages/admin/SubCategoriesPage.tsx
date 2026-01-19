@@ -29,7 +29,7 @@ export default function SubCategoriesPage() {
       setSubCategories(response.data);
       setTotalPages(response.pagination.totalPages);
     } catch (error) {
-      console.error('Failed to load subcategories:', error);
+      console.error('Не удалось загрузить подкатегории:', error);
     } finally {
       setLoading(false);
     }
@@ -52,13 +52,13 @@ export default function SubCategoriesPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this subcategory?')) return;
+    if (!confirm('Вы уверены, что хотите удалить эту подкатегорию?')) return;
 
     try {
       await api.deleteSubCategory(id);
       loadSubCategories();
     } catch (error) {
-      alert('Failed to delete subcategory');
+      alert('Не удалось удалить подкатегорию');
     }
   };
 
@@ -72,16 +72,16 @@ export default function SubCategoriesPage() {
       close();
       loadSubCategories();
     } catch (error) {
-      alert('Failed to save subcategory');
+      alert('Не удалось сохранить подкатегорию');
     }
   };
 
   return (
     <div>
       <Group justify="space-between" mb="xl">
-        <Title order={2}>SubCategories</Title>
+        <Title order={2}>Подкатегории</Title>
         <Button leftSection={<IconPlus size={16} />} onClick={handleCreate}>
-          Add SubCategory
+          Добавить подкатегорию
         </Button>
       </Group>
 
@@ -89,21 +89,21 @@ export default function SubCategoriesPage() {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>ID</Table.Th>
-            <Table.Th>Name</Table.Th>
-            <Table.Th style={{ width: 120 }}>Actions</Table.Th>
+            <Table.Th>Название</Table.Th>
+            <Table.Th style={{ width: 120 }}>Действия</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
             <Table.Tr>
               <Table.Td colSpan={3} style={{ textAlign: 'center' }}>
-                Loading...
+                Загрузка...
               </Table.Td>
             </Table.Tr>
           ) : subCategories.length === 0 ? (
             <Table.Tr>
               <Table.Td colSpan={3} style={{ textAlign: 'center' }}>
-                No subcategories found
+                Подкатегории не найдены
               </Table.Td>
             </Table.Tr>
           ) : (
@@ -144,21 +144,21 @@ export default function SubCategoriesPage() {
       <Modal
         opened={opened}
         onClose={close}
-        title={editingSubCategory ? 'Edit SubCategory' : 'Create SubCategory'}
+        title={editingSubCategory ? 'Редактировать подкатегорию' : 'Создать подкатегорию'}
       >
         <TextInput
-          label="Name"
-          placeholder="SubCategory name"
+          label="Название"
+          placeholder="Название подкатегории"
           value={name}
           onChange={(e) => setName(e.target.value)}
           mb="md"
         />
         <Group justify="flex-end">
           <Button variant="default" onClick={close}>
-            Cancel
+            Отмена
           </Button>
           <Button onClick={handleSubmit} disabled={!name.trim()}>
-            {editingSubCategory ? 'Update' : 'Create'}
+            {editingSubCategory ? 'Обновить' : 'Создать'}
           </Button>
         </Group>
       </Modal>

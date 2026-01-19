@@ -1,8 +1,13 @@
 import image from "@/assets/main/partnership/image.jpg";
 import { Button } from "@/components/Button";
 import { motion } from "framer-motion";
+import { useFeatureFlag } from "@/lib/FeatureFlagContext";
+import { useApplicationForm } from "@/lib/ApplicationFormContext";
 
 export function MainPartnership() {
+  const { constructorEnabled } = useFeatureFlag();
+  const { openForm } = useApplicationForm();
+
   return (
     <motion.div
       className="max-w-360 mx-auto px-4 lg:px-15 py-10 text-white"
@@ -115,14 +120,24 @@ export function MainPartnership() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <a href="/#constructor">
-          <Button
-            variant="white"
-            fullWidth 
-          >
-            <span className="text-main">Перейти в конструктор</span>
-          </Button>
-          </a>
+          {constructorEnabled ? (
+            <a href="/#constructor">
+              <Button
+                variant="white"
+                fullWidth 
+              >
+                <span className="text-main">Перейти в конструктор</span>
+              </Button>
+            </a>
+          ) : (
+            <Button
+              variant="white"
+              fullWidth
+              onClick={() => openForm({})}
+            >
+              <span className="text-main">Оставить заявку</span>
+            </Button>
+          )}
         </motion.div>
       </div>
     </motion.div>

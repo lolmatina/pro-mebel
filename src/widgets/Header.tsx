@@ -12,6 +12,7 @@ import { api, type SidebarCategory } from "@/lib/api";
 import { useLocation, useNavigate } from "react-router";
 import { Logo } from "@/components/Logo";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
+import { useFeatureFlag } from "@/lib/FeatureFlagContext";
 
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure();
@@ -19,6 +20,7 @@ export function Header() {
   const [categories, setCategories] = useState<SidebarCategory[]>([]);
   const navigate = useNavigate();
   const { openForm } = useApplicationForm();
+  const { constructorEnabled } = useFeatureFlag();
 
   useEffect(() => {
     fetchCategories();
@@ -155,13 +157,25 @@ export function Header() {
                     </a>
                   </li>
                   <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
-                    <a
-                      className="no-underline text-main"
-                      onClick={close}
-                      href="/#constructor"
-                    >
-                      Конструктор
-                    </a>
+                    {constructorEnabled ? (
+                      <a
+                        className="no-underline text-main"
+                        onClick={close}
+                        href="/#constructor"
+                      >
+                        Конструктор
+                      </a>
+                    ) : (
+                      <button
+                        className="no-underline text-main bg-transparent border-none cursor-pointer"
+                        onClick={() => {
+                          close();
+                          openForm({});
+                        }}
+                      >
+                        Оставить заявку
+                      </button>
+                    )}
                   </li>
                   <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
                     <a

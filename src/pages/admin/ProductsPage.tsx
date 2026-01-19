@@ -39,7 +39,7 @@ export default function ProductsPage() {
       setProducts(response.data);
       setTotalPages(response.pagination.totalPages);
     } catch (error) {
-      console.error('Failed to load products:', error);
+      console.error('Не удалось загрузить продукты:', error);
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ export default function ProductsPage() {
       const response = await api.getSubCategories(1, 100);
       setSubCategories(response.data);
     } catch (error) {
-      console.error('Failed to load subcategories:', error);
+      console.error('Не удалось загрузить подкатегории:', error);
     }
   };
 
@@ -82,24 +82,24 @@ export default function ProductsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this product?')) return;
+    if (!confirm('Вы уверены, что хотите удалить этот продукт?')) return;
 
     try {
       await api.deleteProduct(id);
       loadProducts();
     } catch (error) {
-      alert('Failed to delete product');
+      alert('Не удалось удалить продукт');
     }
   };
 
   const handleSubmit = async () => {
     if (!formData.name.trim() || !formData.description.trim() || !formData.subCategoryId) {
-      alert('Please fill in all fields');
+      alert('Пожалуйста, заполните все поля');
       return;
     }
 
     if (!editingProduct && !imageFile) {
-      alert('Please select an image file');
+      alert('Пожалуйста, выберите файл изображения');
       return;
     }
 
@@ -121,20 +121,20 @@ export default function ProductsPage() {
       close();
       loadProducts();
     } catch (error) {
-      alert('Failed to save product: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      alert('Не удалось сохранить продукт: ' + (error instanceof Error ? error.message : 'Неизвестная ошибка'));
     }
   };
 
   const getSubCategoryName = (id: number) => {
-    return subCategories.find((sc) => sc.id === id)?.name || 'Unknown';
+    return subCategories.find((sc) => sc.id === id)?.name || 'Неизвестно';
   };
 
   return (
     <div>
       <Group justify="space-between" mb="xl">
-        <Title order={2}>Products</Title>
+        <Title order={2}>Продукты</Title>
         <Button leftSection={<IconPlus size={16} />} onClick={handleCreate}>
-          Add Product
+          Добавить продукт
         </Button>
       </Group>
 
@@ -142,24 +142,24 @@ export default function ProductsPage() {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>ID</Table.Th>
-            <Table.Th>Image</Table.Th>
-            <Table.Th>Name</Table.Th>
-            <Table.Th>Description</Table.Th>
-            <Table.Th>SubCategory</Table.Th>
-            <Table.Th style={{ width: 120 }}>Actions</Table.Th>
+            <Table.Th>Изображение</Table.Th>
+            <Table.Th>Название</Table.Th>
+            <Table.Th>Описание</Table.Th>
+            <Table.Th>Подкатегория</Table.Th>
+            <Table.Th style={{ width: 120 }}>Действия</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
             <Table.Tr>
               <Table.Td colSpan={6} style={{ textAlign: 'center' }}>
-                Loading...
+                Загрузка...
               </Table.Td>
             </Table.Tr>
           ) : products.length === 0 ? (
             <Table.Tr>
               <Table.Td colSpan={6} style={{ textAlign: 'center' }}>
-                No products found
+                Продукты не найдены
               </Table.Td>
             </Table.Tr>
           ) : (
@@ -216,20 +216,20 @@ export default function ProductsPage() {
       <Modal
         opened={opened}
         onClose={close}
-        title={editingProduct ? 'Edit Product' : 'Create Product'}
+        title={editingProduct ? 'Редактировать продукт' : 'Создать продукт'}
         size="lg"
       >
         <TextInput
-          label="Name"
-          placeholder="Product name"
+          label="Название"
+          placeholder="Название продукта"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           mb="md"
           required
         />
         <Textarea
-          label="Description"
-          placeholder="Product description"
+          label="Описание"
+          placeholder="Описание продукта"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           mb="md"
@@ -237,19 +237,19 @@ export default function ProductsPage() {
           required
         />
         <FileInput
-          label="Product Image"
-          placeholder="Select image file"
+          label="Изображение продукта"
+          placeholder="Выбрать файл изображения"
           accept="image/*"
           value={imageFile}
           onChange={setImageFile}
           mb="md"
           required={!editingProduct}
           leftSection={<IconUpload size={16} />}
-          description={editingProduct ? 'Leave empty to keep current image' : 'JPEG, PNG, GIF, or WebP'}
+          description={editingProduct ? 'Оставить пустым, чтобы сохранить текущее изображение' : 'JPEG, PNG, GIF или WebP'}
         />
         {editingProduct && editingProduct.image && !imageFile && (
           <div style={{ marginBottom: '1rem' }}>
-            <div style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: '#666' }}>Current Image:</div>
+            <div style={{ fontSize: '0.875rem', marginBottom: '0.5rem', color: '#666' }}>Текущее изображение:</div>
             <Image
               src={`${process.env.API_BASE_URL}/${editingProduct.image}`}
               alt={editingProduct.name}
@@ -261,8 +261,8 @@ export default function ProductsPage() {
           </div>
         )}
         <Select
-          label="SubCategory"
-          placeholder="Select subcategory"
+          label="Подкатегория"
+          placeholder="Выбрать подкатегорию"
           value={formData.subCategoryId}
           onChange={(value) => setFormData({ ...formData, subCategoryId: value || '' })}
           data={subCategories.map((sc) => ({
@@ -274,10 +274,10 @@ export default function ProductsPage() {
         />
         <Group justify="flex-end">
           <Button variant="default" onClick={close}>
-            Cancel
+            Отмена
           </Button>
           <Button onClick={handleSubmit}>
-            {editingProduct ? 'Update' : 'Create'}
+            {editingProduct ? 'Обновить' : 'Создать'}
           </Button>
         </Group>
       </Modal>

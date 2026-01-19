@@ -40,7 +40,7 @@ export default function AdminLayout() {
         <div style={{ display: 'flex', alignItems: 'center', height: '100%', padding: '0 1rem', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <div style={{ fontWeight: 600, fontSize: '1.25rem' }}>Admin Panel</div>
+            <div style={{ fontWeight: 600, fontSize: '1.25rem' }}>Панель администратора</div>
           </div>
           <Button
             variant="subtle"
@@ -48,7 +48,7 @@ export default function AdminLayout() {
             leftSection={<IconLogout size={16} />}
             onClick={handleLogout}
           >
-            Logout
+            Выйти
           </Button>
         </div>
       </AppShell.Header>
@@ -56,7 +56,7 @@ export default function AdminLayout() {
       <AppShell.Navbar p="md">
         <NavLink
           href="#"
-          label="Dashboard"
+          label="Дэшборд"
           leftSection={<IconLayoutDashboard size={20} />}
           onClick={(e) => {
             e.preventDefault();
@@ -66,7 +66,7 @@ export default function AdminLayout() {
         />
         <NavLink
           href="#"
-          label="Categories"
+          label="Категории"
           leftSection={<IconCategory size={20} />}
           onClick={(e) => {
             e.preventDefault();
@@ -76,7 +76,7 @@ export default function AdminLayout() {
         />
         <NavLink
           href="#"
-          label="SubCategories"
+          label="Подкатегории"
           leftSection={<IconTags size={20} />}
           onClick={(e) => {
             e.preventDefault();
@@ -86,7 +86,7 @@ export default function AdminLayout() {
         />
         <NavLink
           href="#"
-          label="Products"
+          label="Продукты"
           leftSection={<IconBox size={20} />}
           onClick={(e) => {
             e.preventDefault();
@@ -96,7 +96,7 @@ export default function AdminLayout() {
         />
         <NavLink
           href="#"
-          label="Reviews"
+          label="Отзывы"
           leftSection={<IconStar size={20} />}
           onClick={(e) => {
             e.preventDefault();
@@ -106,7 +106,7 @@ export default function AdminLayout() {
         />
         <NavLink
           href="#"
-          label="Applications"
+          label="Заявки"
           leftSection={<IconClipboardText size={20} />}
           onClick={(e) => {
             e.preventDefault();

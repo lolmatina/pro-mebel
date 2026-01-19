@@ -7,12 +7,15 @@ import { MainPartnership } from "@/widgets/main/Partnership";
 import { MainProducts } from "@/widgets/main/Products";
 import { MainProjects } from "@/widgets/main/Projects";
 import { MainReviews } from "@/widgets/main/Reviews";
+import { useFeatureFlag } from "@/lib/FeatureFlagContext";
 
 export default function MainPage() {
+  const { constructorEnabled } = useFeatureFlag();
+
   return (
     <div className="w-full">
       <Hero />
-      <Constructor />
+      {constructorEnabled && <Constructor />}
       <MainAbout />
       <MainProjects />
       <MainPartnership />

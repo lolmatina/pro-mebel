@@ -2,18 +2,21 @@ import { Carousel } from "@mantine/carousel";
 import { Rating } from "@mantine/core";
 import image from "@/assets/main/reviews/image.jpg";
 import { Button } from "@/components/Button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { EmblaCarouselType } from "embla-carousel";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { api, type Review } from "@/lib/api";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
 import { motion } from "framer-motion";
+import Autoplay from 'embla-carousel-autoplay';
 
 export function MainReviews() {
   const [embla, setEmbla] = useState<EmblaCarouselType | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const { openForm } = useApplicationForm();
+  const autoplay = useRef(Autoplay({ delay: 5000 }));
+
 
   useEffect(() => {
     fetchReviews();
@@ -80,6 +83,9 @@ export function MainReviews() {
               dragFree: true,
               loop: true,
             }}
+            plugins={[autoplay.current]}
+            onMouseEnter={autoplay.current.stop}
+            onMouseLeave={() => autoplay.current.play()}
           >
             {reviews.map((review) => (
               <Carousel.Slide key={review.id}>

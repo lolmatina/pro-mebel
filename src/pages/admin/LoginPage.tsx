@@ -20,7 +20,7 @@ export default function LoginPage() {
       await login(username, password);
       navigate('/admin/categories');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      setError(err instanceof Error ? err.message : 'Ошибка входа');
     } finally {
       setLoading(false);
     }
@@ -29,13 +29,13 @@ export default function LoginPage() {
   return (
     <Container size={420} my={40}>
       <Title ta="center" mb="xl">
-        Admin Login
+        Вход администратора
       </Title>
 
       <Paper withBorder shadow="md" p={30} radius="md">
         <form onSubmit={handleSubmit}>
           <TextInput
-            label="Username"
+            label="Имя пользователя"
             placeholder="admin"
             required
             value={username}
@@ -43,8 +43,8 @@ export default function LoginPage() {
             mb="md"
           />
           <PasswordInput
-            label="Password"
-            placeholder="Your password"
+            label="Пароль"
+            placeholder="Ваш пароль"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -56,7 +56,7 @@ export default function LoginPage() {
             </div>
           )}
           <Button fullWidth type="submit" loading={loading}>
-            Sign in
+            Войти
           </Button>
         </form>
       </Paper>

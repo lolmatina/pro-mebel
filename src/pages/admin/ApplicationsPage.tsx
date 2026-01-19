@@ -29,7 +29,7 @@ export default function ApplicationsPage() {
       setApplications(response.data);
       setTotalPages(response.pagination.totalPages);
     } catch (error) {
-      console.error('Failed to load applications:', error);
+      console.error('Не удалось загрузить заявки:', error);
     } finally {
       setLoading(false);
     }
@@ -45,13 +45,13 @@ export default function ApplicationsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this application?')) return;
+    if (!confirm('Вы уверены, что хотите удалить эту заявку?')) return;
 
     try {
       await api.deleteApplication(id);
       loadApplications();
     } catch (error) {
-      alert('Failed to delete application');
+      alert('Не удалось удалить заявку');
     }
   };
 
@@ -68,7 +68,7 @@ export default function ApplicationsPage() {
   return (
     <div>
       <Group justify="space-between" mb="xl">
-        <Title order={2}>Applications</Title>
+        <Title order={2}>Заявки</Title>
       </Group>
 
       <Table striped highlightOnHover>
@@ -76,25 +76,25 @@ export default function ApplicationsPage() {
           <Table.Tr>
             <Table.Th>ID</Table.Th>
             <Table.Th>Email</Table.Th>
-            <Table.Th>Full Name</Table.Th>
-            <Table.Th>City</Table.Th>
-            <Table.Th>Ready to Order</Table.Th>
-            <Table.Th>Product ID</Table.Th>
-            <Table.Th>Created At</Table.Th>
-            <Table.Th style={{ width: 120 }}>Actions</Table.Th>
+            <Table.Th>Полное имя</Table.Th>
+            <Table.Th>Город</Table.Th>
+            <Table.Th>Готов к заказу</Table.Th>
+            <Table.Th>ID продукта</Table.Th>
+            <Table.Th>Создано</Table.Th>
+            <Table.Th style={{ width: 120 }}>Действия</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {loading ? (
             <Table.Tr>
               <Table.Td colSpan={8} style={{ textAlign: 'center' }}>
-                Loading...
+                Загрузка...
               </Table.Td>
             </Table.Tr>
           ) : applications.length === 0 ? (
             <Table.Tr>
               <Table.Td colSpan={8} style={{ textAlign: 'center' }}>
-                No applications found
+                Заявки не найдены
               </Table.Td>
             </Table.Tr>
           ) : (
@@ -106,7 +106,7 @@ export default function ApplicationsPage() {
                 <Table.Td>{application.city}</Table.Td>
                 <Table.Td>
                   <Badge color={application.readyToOrder ? 'green' : 'gray'}>
-                    {application.readyToOrder ? 'Yes' : 'No'}
+                    {application.readyToOrder ? 'Да' : 'Нет'}
                   </Badge>
                 </Table.Td>
                 <Table.Td>
@@ -150,7 +150,7 @@ export default function ApplicationsPage() {
       <Modal
         opened={opened}
         onClose={close}
-        title="Application Details"
+        title="Детали заявки"
         size="lg"
       >
         {selectedApplication && (
@@ -164,21 +164,21 @@ export default function ApplicationsPage() {
               <Text>{selectedApplication.email}</Text>
             </Group>
             <Group mb="md">
-              <Text fw={600}>Full Name:</Text>
+              <Text fw={600}>Полное имя:</Text>
               <Text>{selectedApplication.fullName}</Text>
             </Group>
             <Group mb="md">
-              <Text fw={600}>City:</Text>
+              <Text fw={600}>Город:</Text>
               <Text>{selectedApplication.city}</Text>
             </Group>
             <div style={{ marginBottom: '1rem' }}>
-              <Text fw={600} mb="xs">Description:</Text>
+              <Text fw={600} mb="xs">Описание:</Text>
               <Text style={{ whiteSpace: 'pre-wrap' }}>{selectedApplication.description}</Text>
             </div>
             <Group mb="md">
-              <Text fw={600}>Ready to Order:</Text>
+              <Text fw={600}>Готов к заказу:</Text>
               <Badge color={selectedApplication.readyToOrder ? 'green' : 'gray'}>
-                {selectedApplication.readyToOrder ? 'Yes' : 'No'}
+                {selectedApplication.readyToOrder ? 'Да' : 'Нет'}
               </Badge>
             </Group>
             {selectedApplication.productId && (
@@ -188,12 +188,12 @@ export default function ApplicationsPage() {
               </Group>
             )}
             <Group mb="md">
-              <Text fw={600}>Created At:</Text>
+              <Text fw={600}>Создано:</Text>
               <Text>{formatDate(selectedApplication.createdAt)}</Text>
             </Group>
             <Group justify="flex-end" mt="xl">
               <Button variant="default" onClick={close}>
-                Close
+                Закрыть
               </Button>
             </Group>
           </div>
