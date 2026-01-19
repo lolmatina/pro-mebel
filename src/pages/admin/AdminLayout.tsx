@@ -1,6 +1,6 @@
 import { AppShell, Burger, Button, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconBox, IconCategory, IconClipboardText, IconLayoutDashboard, IconLogout, IconStar, IconTags } from '@tabler/icons-react';
+import { IconBox, IconCategory, IconClipboardText, IconLayoutDashboard, IconLogout, IconPhoto, IconStar, IconTags } from '@tabler/icons-react';
 import { Outlet, useNavigate, useLocation } from 'react-router';
 import { useAuthStore } from '@/lib/store';
 import { useEffect } from 'react';
@@ -103,6 +103,16 @@ export default function AdminLayout() {
             navigate('/admin/reviews');
           }}
           active={location.pathname.startsWith('/admin/reviews')}
+        />
+        <NavLink
+          href="#"
+          label="Героические блоки"
+          leftSection={<IconPhoto size={20} />}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/admin/hero-blocks');
+          }}
+          active={location.pathname.startsWith('/admin/hero-blocks')}
         />
         <NavLink
           href="#"

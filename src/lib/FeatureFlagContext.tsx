@@ -1,32 +1,39 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
-import { api } from "./api";
+import { api, type HeroBlock } from "./api";
 
 interface FeatureFlagContextType {
   constructorEnabled: boolean | null; // null means loading
+  heroBlocks: HeroBlock[];
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined);
 
 export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   const [constructorEnabled, setConstructorEnabled] = useState<boolean | null>(null);
+  const [heroBlocks, setHeroBlocks] = useState<HeroBlock[]>([]);
 
   useEffect(() => {
-    const loadFeatureFlag = async () => {
+    const loadData = async () => {
       try {
-        const setting = await api.getSetting('feature_flag');
+        const [setting, blocks] = await Promise.all([
+          api.getSetting('feature_flag'),
+          api.getHeroBlocks(),
+        ]);
         setConstructorEnabled(setting.value);
+        setHeroBlocks(blocks);
       } catch (error) {
-        console.error('Не удалось загрузить настройку feature_flag:', error);
+        console.error('Не удалось загрузить данные:', error);
         // Default to false if there's an error
         setConstructorEnabled(false);
+        setHeroBlocks([]);
       }
     };
 
-    loadFeatureFlag();
+    loadData();
   }, []);
 
   return (
-    <FeatureFlagContext.Provider value={{ constructorEnabled }}>
+    <FeatureFlagContext.Provider value={{ constructorEnabled, heroBlocks }}>
       {children}
     </FeatureFlagContext.Provider>
   );
@@ -39,5 +46,6 @@ export function useFeatureFlag() {
   }
   return context;
 }
+
 
 

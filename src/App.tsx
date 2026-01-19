@@ -10,6 +10,7 @@ import CategoriesPage from "./pages/admin/CategoriesPage";
 import SubCategoriesPage from "./pages/admin/SubCategoriesPage";
 import ProductsPage from "./pages/admin/ProductsPage";
 import ReviewsPage from "./pages/admin/ReviewsPage";
+import HeroBlocksPage from "./pages/admin/HeroBlocksPage";
 import ApplicationsPage from "./pages/admin/ApplicationsPage";
 import CatalogPage from "./pages/catalog/CatalogPage";
 import { ApplicationFormProvider } from "./lib/ApplicationFormContext";
@@ -29,6 +30,7 @@ export function App() {
               <Route path="subcategories" element={<SubCategoriesPage />} />
               <Route path="products" element={<ProductsPage />} />
               <Route path="reviews" element={<ReviewsPage />} />
+              <Route path="hero-blocks" element={<HeroBlocksPage />} />
               <Route path="applications" element={<ApplicationsPage />} />
             </Route>
             <Route element={<MainLayout />}>

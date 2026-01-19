@@ -13,6 +13,8 @@ use App\Application\Actions\Category\GetSidebarAction;
 use App\Application\Actions\Category\ListCategoriesAction;
 use App\Application\Actions\Category\UpdateCategoryAction;
 use App\Application\Actions\Category\ViewCategoryAction;
+use App\Application\Actions\HeroBlock\ListHeroBlocksAction;
+use App\Application\Actions\HeroBlock\UpdateHeroBlockAction;
 use App\Application\Actions\Product\CreateProductAction;
 use App\Application\Actions\Product\DeleteProductAction;
 use App\Application\Actions\Product\ListProductsAction;
@@ -84,6 +86,9 @@ return function (App $app) {
         $group->get('/{id}', ViewReviewAction::class);
     });
 
+    // Public GET route for Hero Blocks
+    $app->get('/hero-blocks', ListHeroBlocksAction::class);
+
     // Authentication route (public)
     $app->post('/login', LoginAction::class);
 
@@ -126,6 +131,12 @@ return function (App $app) {
             $subGroup->put('/{id}', UpdateReviewAction::class);
             $subGroup->post('/{id}', UpdateReviewAction::class); // For file uploads
             $subGroup->delete('/{id}', DeleteReviewAction::class);
+        });
+
+        // Hero Block Update (admin only)
+        $group->group('/hero-blocks', function (Group $subGroup) {
+            $subGroup->put('/{id}', UpdateHeroBlockAction::class);
+            $subGroup->post('/{id}', UpdateHeroBlockAction::class); // For file uploads
         });
 
         // Application management (admin only)

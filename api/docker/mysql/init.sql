@@ -98,4 +98,19 @@ INSERT INTO reviews (name, review, rating, image) VALUES
 INSERT INTO settings (setting_key, setting_value) VALUES
     ('feature_flag', 0);
 
+CREATE TABLE IF NOT EXISTS hero_blocks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    link VARCHAR(500) NOT NULL,
+    image VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO hero_blocks (title, link, image) VALUES
+    ('Hero Block 1', '#', 'https://example.com/hero1.jpg'),
+    ('Hero Block 2', '#', 'https://example.com/hero2.jpg'),
+    ('Hero Block 3', '#', 'https://example.com/hero3.jpg'),
+    ('Hero Block 4', '#', 'https://example.com/hero4.jpg');
+
 

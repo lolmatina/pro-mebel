@@ -10,7 +10,7 @@ import { useFeatureFlag } from "@/lib/FeatureFlagContext";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
 
 export function Hero() {
-  const { constructorEnabled } = useFeatureFlag();
+  const { constructorEnabled, heroBlocks } = useFeatureFlag();
   const { openForm } = useApplicationForm();
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const canUseConstructor = Boolean(constructorEnabled) && isDesktop;
@@ -77,11 +77,11 @@ export function Hero() {
             <ImageCard
               position="top"
               padding="md"
-              src={image2}
+              src={heroBlocks[0]?.image ?? image2}
               className="w-full aspect-352/380 "
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
-                Диваны
+                {heroBlocks[0]?.title ?? "Диваны"}
               </span>
             </ImageCard>
           </motion.div>
@@ -94,11 +94,11 @@ export function Hero() {
             <ImageCard
               position="top"
               padding="md"
-              src={image3}
+              src={heroBlocks[1]?.image ?? image3}
               className="w-full aspect-352/380 "
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
-                Для спальных комнат
+                {heroBlocks[1]?.title ?? "Для спальных комнат"}
               </span>
             </ImageCard>
           </motion.div>
@@ -123,25 +123,25 @@ export function Hero() {
             <Carousel.Slide>
               <div
                 className="w-full h-47.25 rounded-3xl p-6 bg-cover bg-center"
-                style={{ backgroundImage: `url(${image1})` }}
+                style={{ backgroundImage: `url(${heroBlocks[0]?.image ?? image1})` }}
               >
-                <span className="text-[28px] text-white">Диваны</span>
+                <span className="text-[28px] text-white">{heroBlocks[0]?.title ?? "Диваны"}</span>
               </div>
             </Carousel.Slide>
             <Carousel.Slide>
               <div
                 className="w-full h-47.25 rounded-3xl p-6 bg-contain bg-center"
-                style={{ backgroundImage: `url(${image2})` }}
+                style={{ backgroundImage: `url(${heroBlocks[1]?.image ?? image2})` }}
               >
-                <span className="text-[28px] text-white">Диваны</span>
+                <span className="text-[28px] text-white">{heroBlocks[1]?.title ?? "Диваны"}</span>
               </div>
             </Carousel.Slide>
             <Carousel.Slide>
               <div
                 className="w-full h-47.25 rounded-3xl p-6 bg-cover bg-center"
-                style={{ backgroundImage: `url(${image3})` }}
+                style={{ backgroundImage: `url(${heroBlocks[2]?.image ?? image3})` }}
               >
-                <span className="text-[28px] text-white">Диваны</span>
+                <span className="text-[28px] text-white">{heroBlocks[2]?.title ?? "Диваны"}</span>
               </div>
             </Carousel.Slide>
           </Carousel>
@@ -186,11 +186,11 @@ export function Hero() {
             <ImageCard
               position="bottom"
               padding="md"
-              src={image1}
+              src={heroBlocks[2]?.image ?? image3}
               className="w-full aspect-479/380"
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
-                Мебель <br /> для кухни
+                {heroBlocks[2]?.title ?? "Мебель для кухни"}
               </span>
             </ImageCard>
           </motion.div>
@@ -204,11 +204,11 @@ export function Hero() {
             <ImageCard
               position="bottom"
               padding="md"
-              src={image1}
+              src={heroBlocks[3]?.image ?? image1}
               className="w-full aspect-479/380"
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
-                Мебель <br /> для кухни
+                {heroBlocks[3]?.title ?? "Мебель для кухни"}
               </span>
             </ImageCard>
           </motion.div>

@@ -66,6 +66,13 @@ export interface Application {
   createdAt: string;
 }
 
+export interface HeroBlock {
+  id: number;
+  title: string;
+  link: string;
+  image: string;
+}
+
 class ApiClient {
   private baseUrl: string;
   private token: string | null = null;
@@ -406,6 +413,33 @@ class ApiClient {
       }
     );
     return response.data!;
+  }
+
+  // Hero Blocks
+  async getHeroBlocks(): Promise<HeroBlock[]> {
+    const response = await this.request<ApiResponse<HeroBlock[]>>('/hero-blocks');
+    return response.data!;
+  }
+
+  async updateHeroBlockWithFile(id: number, formData: FormData): Promise<HeroBlock> {
+    const headers: HeadersInit = {};
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    }
+
+    const response = await fetch(`${this.baseUrl}/admin/hero-blocks/${id}`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Request failed' }));
+      throw new Error(errorData.error?.description || errorData.error || 'Failed to update hero block');
+    }
+
+    const result = await response.json();
+    return result.data;
   }
 }
 

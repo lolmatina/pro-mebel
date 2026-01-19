@@ -44,12 +44,12 @@ export function Footer() {
               <ul className="opacity-50 block space-y-2.5 mt-3.75">
                 <li className="block">
                   <Link to="https://www.instagram.com/promebel_salon_uralsk?igsh=cThyZ2VneHE3NDlv&utm_source=qr" className="no-underline text-white">
-                    Instagram
+                    Instagram: @promebel_salon_uralsk
                   </Link>
                 </li>
                 <li className="block">
                   <Link to="mailto:admin@promebel.org" className="no-underline text-white">
-                    Email
+                    Email: admin@promebel.org
                   </Link>
                 </li>
               </ul>
