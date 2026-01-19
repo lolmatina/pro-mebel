@@ -20,10 +20,8 @@ export function MainFAQ() {
             Все что вам требуется знать
           </h2>
           <p className="mt-6 text-lg leading-6.4 hidden lg:block">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book.{" "}
+            Мы изготавливаем корпусную и мягкую мебель, а также фасады, стеновые панели и другие элементы интерьера.
+            Работаем на собственном производстве, используем проверенные материалы и соблюдаем сроки на каждом этапе — от распила до готового изделия.
           </p>
         </motion.div>
         <motion.div
@@ -54,7 +52,7 @@ export function MainFAQ() {
               <Accordion.Panel
                 styles={{ content: { padding: 0, paddingTop: 24 } }}
               >
-                Мы работаем с ЛДСП следующих производителей: Ламарти и
+                Мы работаем с ЛДСП следующих производителей: Lamarty и
                 Kronospan. Подбор конкретных декоров осуществляется под задачи
                 проекта и согласовывается с заказчиком.
               </Accordion.Panel>

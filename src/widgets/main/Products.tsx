@@ -56,15 +56,18 @@ export function MainProducts() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <h2 className="text-[40px] text-main leading-[120%] font-medium">
-            Подберите медель под интерьер вашей мечты
+            Подберите мебель под интерьер вашей мечты
           </h2>
           <p className="text-lg leading-[120%] text-main mt-6">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s
+            Мы создаём мебель, которая становится частью пространства,
+            а не просто предметом в комнате. <br />
+            Работаем с формой, материалами и пропорциями,
+            чтобы интерьер выглядел цельно, актуально и комфортно для жизни. <br />
+            Каждый проект — это индивидуальное решение,
+            адаптированное под ваш стиль, планировку и задачи.
           </p>
           <Button className="mt-6" fullWidth onClick={() => openForm({})}>
-            Оставить заявку
+            Начать проект
           </Button>
           <motion.div
             className="hidden lg:block w-full h-186.25 bg-cover bg-center rounded-lg mt-9"

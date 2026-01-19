@@ -174,10 +174,8 @@ export function MainReviews() {
             Немного информации о нас и прочее
           </h2>
           <p className="text-lg leading-[120%] text-main mt-5 opacity-80 lg:opacity-100">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book.
+            Мы производим мебель на заказ, фасады, стеновые панели и декоративные элементы для жилых и коммерческих интерьеров.
+            Прорабатываем форму, геометрию и визуальный баланс — чтобы мебель выглядела не просто функционально, а эстетично и актуально.
           </p>
           <Button
             variant="outline"

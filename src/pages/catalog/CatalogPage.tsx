@@ -1,12 +1,13 @@
 import { Sidebar } from "@/components/Sidebar";
-import { ImageCard } from "@/components/ImageCard";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { api, type Product, type SidebarCategory } from "@/lib/api";
-import { Button, Loader, Drawer, Pagination } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { IconChevronDown, IconAdjustments } from "@tabler/icons-react";
+import { Loader, Drawer, Pagination } from "@mantine/core";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { IconChevronDown } from "@tabler/icons-react";
 import { useSearchParams } from "react-router";
 import { Footer } from "@/widgets/Footer";
+import { useApplicationForm } from "@/lib/ApplicationFormContext";
+import { Button } from "@/components/Button";
 
 export default function CatalogPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -19,10 +20,18 @@ export default function CatalogPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [limit, setLimit] = useState(9);
-  const [showAll, setShowAll] = useState(false);
+  const isLg = useMediaQuery("(min-width: 1024px)");
   const [drawerOpened, { open: openDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const [searchParams] = useSearchParams();
+  const { openForm } = useApplicationForm();
+
+  const handleOpenForm = useCallback(
+    (productId: number) => {
+      openForm({ productId });
+    },
+    [openForm]
+  );
 
   useEffect(() => {
     fetchSidebarData();
@@ -111,10 +120,10 @@ export default function CatalogPage() {
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold">{getHeaderTitle()}</h1>
           </div>
-          <div className="flex gap-2">
-            <span onClick={openDrawer} className="flex-1 rounded-full">
+          <div className="flex gap-2 justify-center items-center">
+            <Button color="#222222" variant="outline" onClick={openDrawer} className="flex-1 rounded-full">
               Вариация фильтров
-            </span>
+            </Button>
 
             {selectedSubCategories.length > 0 && (
               <div>
@@ -181,22 +190,47 @@ export default function CatalogPage() {
                       : `${process.env.API_BASE_URL}/${product.image}`;
 
                     return (
-                      <ImageCard
-                        key={product.id}
-                        src={imageUrl}
-                        position="bottom"
-                        padding="md"
-                        className="h-100 cursor-pointer relative"
-                      >
-                        <div className="z-10 w-full h-full flex flex-col justify-end bg-[rgba(0,0,0,0.4)] absolute inset-0 lg:p-7.5 p-6">
-                          <h3 className="text-white text-2xl font-bold leading-[120%]">
-                            {product.name}
-                          </h3>
-                          <p className="text-white text-sm mt-2 line-clamp-3">
+                      <div className="h-112 w-full relative overflow-hidden group rounded-[30px]">
+                        {/* Use img tag instead of background-image for better performance */}
+                        <img
+                          src={imageUrl}
+                          alt={product.name}
+                          loading="lazy"
+                          className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-110 duration-500"
+                        />
+                        {/* Simplified blur effect for mobile, full effect for desktop */}
+                        {isLg && (
+                          <div
+                            className="absolute scale-110 inset-0 transition-opacity blur-xl opacity-80"
+                            style={{
+                              maskImage: `linear-gradient(to top, white 0%, white 35%, transparent 50%)`,
+                              WebkitMaskImage: `linear-gradient(to top, black 0%, black 25%, transparent 50%)`,
+                              backgroundImage: `url(${product.image})`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                            }}
+                          />
+                        )}
+                        <div
+                          className={`absolute ${isLg
+                            ? "-bottom-16 transition-all group-hover:bottom-0"
+                            : "bottom-0"
+                            } p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent`}
+                        >
+                          <span className="text-[28px] font-medium">{product.name}</span>
+                          <span className="text-sm leading-[120%]">
                             {product.description}
-                          </p>
+                          </span>
+                          <Button
+                            variant="white"
+                            fullWidth
+                            className="mt-3"
+                            onClick={() => handleOpenForm(product.id)}
+                          >
+                            <span className="text-main">Отправить заявку</span>
+                          </Button>
                         </div>
-                      </ImageCard>
+                      </div>
                     );
                   })}
                 </div>

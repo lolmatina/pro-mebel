@@ -165,7 +165,7 @@ export function Hero() {
             Все что <br /> вам нужно
           </h2>
           <p className="text-lg text-main leading-[120%] font-medium mt-6 mb-10.5">
-            Мы занимаемся многопрофильной сборкой и все прочее
+            От идеи до реализации — мебель, фасады и интерьерные элементы в вашем стиле.
           </p>
           {canUseConstructor ? (
             <a href="/#constructor">

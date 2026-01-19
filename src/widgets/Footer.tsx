@@ -15,8 +15,7 @@ export function Footer() {
             <Logo color="white" />
           </Link>
           <div className="lg:text-sm opacity-50 leading-5.5 flex flex-col mt-2.5">
-            <span>Что-то о нас и прочее</span>
-            <span>Немного информации итд</span>
+            <span> Комфорт. Форма. Качество.</span>
           </div>
           <div className="mt-10 lg:mt-6.25 flex gap-2.5 flex-col lg:flex-row">
             <label htmlFor="message" className="hidden"></label>
