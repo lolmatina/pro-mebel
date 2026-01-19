@@ -106,7 +106,7 @@ export default function AdminLayout() {
         />
         <NavLink
           href="#"
-          label="Героические блоки"
+          label="Блоки на главной странице"
           leftSection={<IconPhoto size={20} />}
           onClick={(e) => {
             e.preventDefault();

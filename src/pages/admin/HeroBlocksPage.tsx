@@ -81,7 +81,7 @@ export default function HeroBlocksPage() {
   return (
     <div>
       <Group justify="space-between" mb="xl">
-        <Title order={2}>Героические блоки</Title>
+        <Title order={2}>Блоки на главной странице</Title>
       </Group>
 
       <Table striped highlightOnHover>
