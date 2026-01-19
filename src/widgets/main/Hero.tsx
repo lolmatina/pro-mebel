@@ -53,8 +53,8 @@ export function Hero() {
         </motion.div>
         <div className="hidden lg:flex flex-col w-88 gap-2.5">
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: 30, width: "100%" }}
+            animate={{ opacity: 1, x: 0, width: "100%" }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           >
             <ImageCard
@@ -69,6 +69,7 @@ export function Hero() {
             </ImageCard>
           </motion.div>
           <motion.div
+            className="w-full shrink-0"
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -144,8 +145,8 @@ export function Hero() {
           </p>
           <a href="/#constructor">
             <Button variant="outline">
-            Перейти в конструктор
-          </Button>
+              Перейти в конструктор
+            </Button>
           </a>
         </motion.div>
         <div className="hidden xl:flex gap-2.5 w-full justify-evenly">
@@ -154,6 +155,7 @@ export function Hero() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full"
           >
             <ImageCard
               position="bottom"
@@ -171,6 +173,7 @@ export function Hero() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full"
           >
             <ImageCard
               position="bottom"
