@@ -77,7 +77,7 @@ export function Hero() {
             <ImageCard
               position="top"
               padding="md"
-              src={heroBlocks[0]?.image ?? image2}
+              src={heroBlocks[0]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[0]?.image}` : image2}
               className="w-full aspect-352/380 "
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
@@ -94,7 +94,7 @@ export function Hero() {
             <ImageCard
               position="top"
               padding="md"
-              src={heroBlocks[1]?.image ?? image3}
+              src={heroBlocks[1]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[1]?.image}` : image3}
               className="w-full aspect-352/380 "
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
@@ -123,7 +123,7 @@ export function Hero() {
             <Carousel.Slide>
               <div
                 className="w-full h-47.25 rounded-3xl p-6 bg-cover bg-center"
-                style={{ backgroundImage: `url(${heroBlocks[0]?.image ?? image1})` }}
+                style={{ backgroundImage: `url(${heroBlocks[0]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[0]?.image}` : image1})` }}
               >
                 <span className="text-[28px] text-white">{heroBlocks[0]?.title ?? "Диваны"}</span>
               </div>
@@ -131,7 +131,7 @@ export function Hero() {
             <Carousel.Slide>
               <div
                 className="w-full h-47.25 rounded-3xl p-6 bg-contain bg-center"
-                style={{ backgroundImage: `url(${heroBlocks[1]?.image ?? image2})` }}
+                style={{ backgroundImage: `url(${heroBlocks[1]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[1]?.image}` : image2})` }}
               >
                 <span className="text-[28px] text-white">{heroBlocks[1]?.title ?? "Диваны"}</span>
               </div>
@@ -139,7 +139,7 @@ export function Hero() {
             <Carousel.Slide>
               <div
                 className="w-full h-47.25 rounded-3xl p-6 bg-cover bg-center"
-                style={{ backgroundImage: `url(${heroBlocks[2]?.image ?? image3})` }}
+                style={{ backgroundImage: `url(${heroBlocks[2]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[2]?.image}` : image3})` }}
               >
                 <span className="text-[28px] text-white">{heroBlocks[2]?.title ?? "Диваны"}</span>
               </div>
@@ -186,7 +186,7 @@ export function Hero() {
             <ImageCard
               position="bottom"
               padding="md"
-              src={heroBlocks[2]?.image ?? image3}
+              src={heroBlocks[2]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[2]?.image}` : image3}
               className="w-full aspect-479/380"
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
@@ -204,7 +204,7 @@ export function Hero() {
             <ImageCard
               position="bottom"
               padding="md"
-              src={heroBlocks[3]?.image ?? image1}
+              src={heroBlocks[3]?.image ? `${process.env.API_BASE_URL}/${heroBlocks[3]?.image}` : image1}
               className="w-full aspect-479/380"
             >
               <span className="text-[40px] leading-10 -tracking-[3px] text-white font-normal">
