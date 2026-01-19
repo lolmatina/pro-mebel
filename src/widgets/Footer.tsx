@@ -52,6 +52,21 @@ export function Footer() {
                     Email: admin@promebel.org
                   </Link>
                 </li>
+                <li className="block">
+                  <Link to="tel:+77778598259" className="no-underline text-white">
+                    Телефон: +7 (777) 859-82-59
+                  </Link>
+                </li>
+                <li className="block">
+                  <Link to="tel:+77778728182" className="no-underline text-white">
+                    Телефон: +7 (777) 872-81-82
+                  </Link>
+                </li>
+                <li className="block">
+                  <Link to="https://go.2gis.com/Wo3JS" className="no-underline text-white">
+                    Адрес: г. Уральск, ул. Сырым Датова, 1 (офис)
+                  </Link>
+                </li>
               </ul>
             </div>
             {/* <div className="text-sm leading-[120%]">
