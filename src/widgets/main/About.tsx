@@ -201,7 +201,7 @@ export function MainAbout() {
           }}
         >
           <h3 className="text-[22px] text-[rgba(34,34,34,0.7)] font-normal leading-[120%]">
-            Сколько мебеи сделали?
+            Сколько мебели сделали?
           </h3>
           <div className="text-[56px] font-medium leading-[120%]">1000+</div>
           <p className="text-[22px] text-[rgba(11,20,36,0.7)] leading-[120%] tracking-normal font-normal">

@@ -128,11 +128,10 @@ const ProductCard = memo(
             />
           )}
           <div
-            className={`absolute ${
-              isLg
+            className={`absolute ${isLg
                 ? "-bottom-16 transition-all group-hover:bottom-0"
                 : "bottom-0"
-            } p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent`}
+              } p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent`}
           >
             <span className="text-[28px] font-medium">{product.name}</span>
             <span className="text-sm leading-[120%]">
@@ -269,7 +268,7 @@ export function MainProjects() {
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.5 }}
       >
-        Мы занимаемся многопрофильной сборкой и все прочее
+        Фрагменты реализованных интерьеров и мебельных решений для кафе, офисов и жилых пространств.
       </motion.div>
 
       {/* Subcategories tabs */}
@@ -296,7 +295,7 @@ export function MainProjects() {
               Несколько наших работ
             </h2>
             <p className="text-lg font-medium text-main leading-[120%] mt-6">
-              Мы занимаемся многопрофильной сборкой и все прочее
+              Фрагменты реализованных интерьеров и мебельных решений для кафе, офисов и жилых пространств.
             </p>
           </div>
           <div>
