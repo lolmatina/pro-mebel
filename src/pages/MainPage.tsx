@@ -9,6 +9,7 @@ import { MainProjects } from "@/widgets/main/Projects";
 import { MainReviews } from "@/widgets/main/Reviews";
 import { useFeatureFlag } from "@/lib/FeatureFlagContext";
 import { useMediaQuery } from "@mantine/hooks";
+import { Seo } from "@/components/Seo";
 
 export default function MainPage() {
   const { constructorEnabled } = useFeatureFlag();
@@ -16,6 +17,11 @@ export default function MainPage() {
 
   return (
     <div className="w-full overflow-x-hidden">
+      <Seo
+        title="PRO MEBEL — мебель на заказ в Уральске"
+        description="Подбор, проектирование, производство и установка мебели. Рассчитаем стоимость и поможем выбрать решение под интерьер."
+        canonicalPath="/"
+      />
       <Hero />
       {constructorEnabled && isDesktop && <Constructor />}
       <MainAbout />

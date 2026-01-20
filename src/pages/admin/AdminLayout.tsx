@@ -4,6 +4,7 @@ import { IconBox, IconCategory, IconClipboardText, IconLayoutDashboard, IconLogo
 import { Outlet, useNavigate, useLocation } from 'react-router';
 import { useAuthStore } from '@/lib/store';
 import { useEffect, useRef } from 'react';
+import { Seo } from '@/components/Seo';
 
 export default function AdminLayout() {
   const [opened, { toggle }] = useDisclosure();
@@ -52,6 +53,8 @@ export default function AdminLayout() {
   }
 
   return (
+    <>
+      <Seo title="PRO MEBEL — Admin" noindex />
     <AppShell
       header={{ height: 60 }}
       navbar={{
@@ -155,6 +158,7 @@ export default function AdminLayout() {
         <Outlet />
       </AppShell.Main>
     </AppShell>
+    </>
   );
 }
 

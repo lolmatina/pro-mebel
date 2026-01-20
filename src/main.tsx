@@ -7,10 +7,15 @@
 
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import { HelmetProvider } from "react-helmet-async";
 
 function start() {
   const root = createRoot(document.getElementById("root")!);
-  root.render(<App />);
+  root.render(
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
+  );
 }
 
 if (document.readyState === "loading") {

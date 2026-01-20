@@ -2,6 +2,7 @@ import { Button, Container, Paper, PasswordInput, TextInput, Title } from '@mant
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuthStore } from '@/lib/store';
+import { Seo } from '@/components/Seo';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -28,6 +29,7 @@ export default function LoginPage() {
 
   return (
     <Container size={420} my={40}>
+      <Seo title="PRO MEBEL — Admin Login" noindex />
       <Title ta="center" mb="xl">
         Вход администратора
       </Title>

@@ -66,3 +66,4 @@ class ValidateTokenAction extends Action
     }
 }
 
+

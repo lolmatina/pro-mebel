@@ -2,6 +2,7 @@
 import plugin from "bun-plugin-tailwind";
 import { existsSync } from "fs";
 import { rm } from "fs/promises";
+import { writeFile } from "fs/promises";
 import path from "path";
 
 if (process.argv.includes("--help") || process.argv.includes("-h")) {
@@ -134,6 +135,41 @@ const result = await Bun.build({
   },
   ...cliConfig,
 });
+
+function buildRobotsTxt(siteUrl?: string): string {
+  const normalized = (siteUrl ?? "").replace(/\/+$/, "");
+  return [
+    "User-agent: *",
+    "Allow: /",
+    "Disallow: /admin",
+    normalized ? `Sitemap: ${normalized}/sitemap.xml` : "",
+    "",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+function buildSitemapXml(siteUrl?: string): string {
+  const normalized = (siteUrl ?? "").replace(/\/+$/, "");
+  const base = normalized || "http://localhost";
+  const urls = [`${base}/`, `${base}/catalog`];
+  const body = urls
+    .map((loc) => `  <url>\n    <loc>${loc}</loc>\n  </url>`)
+    .join("\n");
+
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    body,
+    "</urlset>",
+    "",
+  ].join("\n");
+}
+
+// Emit static SEO files for pure-static hosting.
+// Provide SITE_URL at build time (e.g. https://example.com) for correct absolute URLs in sitemap.xml.
+await writeFile(path.join(outdir, "robots.txt"), buildRobotsTxt(process.env.SITE_URL), "utf8");
+await writeFile(path.join(outdir, "sitemap.xml"), buildSitemapXml(process.env.SITE_URL), "utf8");
 
 const end = performance.now();
 

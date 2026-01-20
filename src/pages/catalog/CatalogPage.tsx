@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router";
 import { Footer } from "@/widgets/Footer";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
 import { Button } from "@/components/Button";
+import { Seo } from "@/components/Seo";
 
 export default function CatalogPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -114,6 +115,11 @@ export default function CatalogPage() {
 
   return (
     <div className="w-full">
+      <Seo
+        title={`PRO MEBEL — ${getHeaderTitle()}`}
+        description="Каталог мебели: выбирайте категории и фильтры, смотрите варианты и оставляйте заявку."
+        canonicalPath="/catalog"
+      />
       <div className="max-w-360 mx-auto px-4 lg:px-15">
         {/* Mobile Header */}
         <div className="lg:hidden mb-6">
