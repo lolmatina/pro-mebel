@@ -7,6 +7,7 @@ use App\Application\Actions\Application\DeleteApplicationAction;
 use App\Application\Actions\Application\ListApplicationsAction;
 use App\Application\Actions\Application\ViewApplicationAction;
 use App\Application\Actions\Auth\LoginAction;
+use App\Application\Actions\Auth\ValidateTokenAction;
 use App\Application\Actions\Category\CreateCategoryAction;
 use App\Application\Actions\Category\DeleteCategoryAction;
 use App\Application\Actions\Category\GetSidebarAction;
@@ -89,8 +90,9 @@ return function (App $app) {
     // Public GET route for Hero Blocks
     $app->get('/hero-blocks', ListHeroBlocksAction::class);
 
-    // Authentication route (public)
+    // Authentication routes (public)
     $app->post('/login', LoginAction::class);
+    $app->get('/auth/validate', ValidateTokenAction::class);
 
     // Public route for application submission
     $app->post('/applications', CreateApplicationAction::class);

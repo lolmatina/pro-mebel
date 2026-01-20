@@ -151,6 +151,21 @@ class ApiClient {
     return response.data!;
   }
 
+  async validateToken(): Promise<{ valid: boolean; expires_at?: number; time_until_expiry?: number; error?: string }> {
+    try {
+      const response = await this.request<ApiResponse<{ valid: boolean; expires_at?: number; time_until_expiry?: number; error?: string }>>(
+        '/auth/validate',
+        {
+          method: 'GET',
+        }
+      );
+      return response.data!;
+    } catch (error) {
+      // If request fails, token is invalid
+      return { valid: false, error: error instanceof Error ? error.message : 'Token validation failed' };
+    }
+  }
+
   // Categories
   async getCategories(page = 1, limit = 10): Promise<PaginatedResponse<Category>> {
     const response = await this.request<ApiResponse<PaginatedResponse<Category>>>(

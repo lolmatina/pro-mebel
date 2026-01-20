@@ -7,6 +7,7 @@ interface AuthState {
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
+  validateToken: () => Promise<boolean>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -22,6 +23,15 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         api.setToken(null);
         set({ token: null, isAuthenticated: false });
+      },
+      validateToken: async () => {
+        const result = await api.validateToken();
+        if (!result.valid) {
+          api.setToken(null);
+          set({ token: null, isAuthenticated: false });
+          return false;
+        }
+        return true;
       },
     }),
     {

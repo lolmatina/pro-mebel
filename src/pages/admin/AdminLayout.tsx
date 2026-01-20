@@ -3,19 +3,44 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconBox, IconCategory, IconClipboardText, IconLayoutDashboard, IconLogout, IconPhoto, IconStar, IconTags } from '@tabler/icons-react';
 import { Outlet, useNavigate, useLocation } from 'react-router';
 import { useAuthStore } from '@/lib/store';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function AdminLayout() {
   const [opened, { toggle }] = useDisclosure();
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, logout } = useAuthStore();
+  const { isAuthenticated, logout, validateToken } = useAuthStore();
+  const validationIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/admin/login');
+      return;
     }
-  }, [isAuthenticated, navigate]);
+
+    // Validate token immediately on mount
+    const checkToken = async () => {
+      const isValid = await validateToken();
+      if (!isValid) {
+        logout();
+        navigate('/admin/login');
+      }
+    };
+
+    checkToken();
+
+    // Set up periodic token validation (every 5 minutes)
+    validationIntervalRef.current = setInterval(() => {
+      checkToken();
+    }, 5 * 60 * 1000); // 5 minutes
+
+    // Cleanup interval on unmount
+    return () => {
+      if (validationIntervalRef.current) {
+        clearInterval(validationIntervalRef.current);
+      }
+    };
+  }, [isAuthenticated, navigate, validateToken, logout]);
 
   const handleLogout = () => {
     logout();
