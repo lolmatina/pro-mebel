@@ -161,6 +161,7 @@ export function MainProjects() {
   const isLg = useMediaQuery("(min-width: 1024px)");
   const [categories, setCategories] = useState<CategoryWithProducts[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [productsLoading, setProductsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -172,12 +173,7 @@ export function MainProjects() {
       // Fetch categories with subcategories
       const categoriesData = await api.getSidebar();
 
-      // Fetch fewer products initially for better performance
-      const productsResponse = await api.getProducts(1, 50);
-      const allProducts = productsResponse.data;
-
       setCategories(categoriesData);
-      setProducts(allProducts);
 
       if (categoriesData.length > 0) {
         setActive(0);
@@ -206,12 +202,33 @@ export function MainProjects() {
     return categories[active]?.subCategories?.[activeSub]?.id;
   }, [active, activeSub, categories]);
 
-  const filteredProducts = useMemo(() => {
-    if (!currentSubCategoryId) return [];
-    return products.filter(
-      (product) => product.subCategoryId === currentSubCategoryId
-    );
-  }, [products, currentSubCategoryId]);
+  useEffect(() => {
+    if (!currentSubCategoryId) {
+      setProducts([]);
+      return;
+    }
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        setProductsLoading(true);
+        const response = await api.getProducts(1, 12, [currentSubCategoryId]);
+        if (!cancelled) setProducts(response.data);
+      } catch (err) {
+        if (!cancelled) {
+          console.error("Failed to load products:", err);
+          setProducts([]);
+        }
+      } finally {
+        if (!cancelled) setProductsLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [currentSubCategoryId]);
 
   const handleOpenForm = useCallback(
     (productId: number) => {
@@ -319,14 +336,14 @@ export function MainProjects() {
             }}
             slideSize={343}
             slideGap={24}
-            withControls={isLg && filteredProducts.length > 3}
+            withControls={isLg && products.length > 3}
             withIndicators={!isLg}
             emblaOptions={{
               dragFree: false,
               loop: false,
             }}
           >
-            {filteredProducts.map((product) => (
+            {products.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
