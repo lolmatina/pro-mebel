@@ -27,8 +27,12 @@ if (file_exists(__DIR__ . '/../.env')) {
 // Re-enable error reporting but still suppress deprecations
 error_reporting(E_ALL & ~E_DEPRECATED);
 
-// Handle CORS preflight immediately
-if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+// Get request URI for CORS exclusion check
+$requestUri = $_SERVER['REQUEST_URI'] ?? '';
+$isWebhook = strpos($requestUri, '/webhook') !== false;
+
+// Handle CORS preflight immediately (skip for webhook)
+if (!$isWebhook && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin');
@@ -37,8 +41,8 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS
     exit();
 }
 
-// Add CORS headers to all responses
-if (isset($_SERVER['REQUEST_METHOD'])) {
+// Add CORS headers to all responses (skip for webhook)
+if (!$isWebhook && isset($_SERVER['REQUEST_METHOD'])) {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin');

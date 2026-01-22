@@ -17,3 +17,4 @@ class HeroBlockNotFoundException extends DomainRecordNotFoundException
 
 
 
+

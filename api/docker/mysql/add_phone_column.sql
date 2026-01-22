@@ -8,3 +8,4 @@ AFTER full_name;
 -- Optional: Update the default constraint if needed
 -- ALTER TABLE applications ALTER COLUMN phone DROP DEFAULT;
 
+

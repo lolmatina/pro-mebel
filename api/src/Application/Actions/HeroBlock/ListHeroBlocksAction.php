@@ -27,3 +27,4 @@ class ListHeroBlocksAction extends HeroBlockAction
 
 
 
+
