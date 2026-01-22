@@ -233,17 +233,15 @@ export function Header() {
                       О PRO MEBEL в цифрах
                     </a>
                   </li>
-                  <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
-                    {canUseConstructor && (
-                      <a
-                        className="no-underline text-main"
-                        onClick={close}
-                        href="/#constructor"
-                      >
-                        Конструктор
-                      </a>
-                    )}
-                  </li>
+                  {canUseConstructor && (<li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
+                    <a
+                      className="no-underline text-main"
+                      onClick={close}
+                      href="/#constructor"
+                    >
+                      Конструктор
+                    </a>
+                  </li>)}
                   <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
                     <a
                       className="no-underline text-main"
