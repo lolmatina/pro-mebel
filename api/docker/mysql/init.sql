@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS applications (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
     city VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     ready_to_order TINYINT(1) DEFAULT 0,

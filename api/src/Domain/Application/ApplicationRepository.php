@@ -21,6 +21,7 @@ interface ApplicationRepository
     /**
      * @param string $email
      * @param string $fullName
+     * @param string $phone
      * @param string $city
      * @param string $description
      * @param bool $readyToOrder
@@ -30,6 +31,7 @@ interface ApplicationRepository
     public function create(
         string $email,
         string $fullName,
+        string $phone,
         string $city,
         string $description,
         bool $readyToOrder,

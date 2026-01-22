@@ -14,6 +14,8 @@ class Application implements JsonSerializable
 
     private string $fullName;
 
+    private string $phone;
+
     private string $city;
 
     private string $description;
@@ -28,6 +30,7 @@ class Application implements JsonSerializable
         ?int $id,
         string $email,
         string $fullName,
+        string $phone,
         string $city,
         string $description,
         bool $readyToOrder,
@@ -37,6 +40,7 @@ class Application implements JsonSerializable
         $this->id = $id;
         $this->email = $email;
         $this->fullName = $fullName;
+        $this->phone = $phone;
         $this->city = $city;
         $this->description = $description;
         $this->readyToOrder = $readyToOrder;
@@ -57,6 +61,11 @@ class Application implements JsonSerializable
     public function getFullName(): string
     {
         return $this->fullName;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
     }
 
     public function getCity(): string
@@ -91,6 +100,7 @@ class Application implements JsonSerializable
             'id' => $this->id,
             'email' => $this->email,
             'fullName' => $this->fullName,
+            'phone' => $this->phone,
             'city' => $this->city,
             'description' => $this->description,
             'readyToOrder' => $this->readyToOrder,

@@ -1,11 +1,13 @@
 import { Button } from "@/components/Button";
 import { Carousel } from "@mantine/carousel";
 import { useEffect, useState, useMemo, useCallback, memo, useRef } from "react";
-import { useMediaQuery } from "@mantine/hooks";
+import { useMediaQuery, useDisclosure } from "@mantine/hooks";
 import { api, type SidebarCategory, type Product } from "@/lib/api";
 import { useNavigate } from "react-router";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
 import { motion } from "framer-motion";
+import { Modal } from "@mantine/core";
+import { IconX } from "@tabler/icons-react";
 
 interface CategoryWithProducts extends SidebarCategory {
   products?: Product[];
@@ -92,11 +94,11 @@ const ProductCard = memo(
   ({
     product,
     isLg,
-    onOpenForm,
+    onProductClick,
   }: {
     product: Product;
     isLg: boolean;
-    onOpenForm: (productId: number) => void;
+    onProductClick: (product: Product) => void;
   }) => {
     const productImage = useMemo(() => {
       return product.image.startsWith("http")
@@ -106,7 +108,10 @@ const ProductCard = memo(
 
     return (
       <Carousel.Slide key={product.id}>
-        <div className="h-112 w-full relative overflow-hidden group rounded-[30px]">
+        <div
+          className="h-112 w-full relative overflow-hidden group rounded-[30px] cursor-pointer"
+          onClick={() => onProductClick(product)}
+        >
           {/* Use img tag instead of background-image for better performance */}
           <img
             src={productImage}
@@ -129,22 +134,13 @@ const ProductCard = memo(
           )}
           <div
             className={`absolute ${isLg
-                ? "-bottom-16 transition-all group-hover:bottom-0"
-                : "bottom-0"
-              } p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent`}
+              && "bottom-0 transition-all group-hover:bottom-0"
+              } p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent pointer-events-none`}
           >
-            <span className="text-[28px] font-medium">{product.name}</span>
+            <span className="text-[28px] font-medium leading-7">{product.name}</span>
             <span className="text-sm leading-[120%]">
               {product.description}
             </span>
-            <Button
-              variant="white"
-              fullWidth
-              className="mt-3"
-              onClick={() => onOpenForm(product.id)}
-            >
-              <span className="text-main">Отправить заявку</span>
-            </Button>
           </div>
         </div>
       </Carousel.Slide>
@@ -163,6 +159,9 @@ export function MainProjects() {
   const [products, setProducts] = useState<Product[]>([]);
   const [productsLoading, setProductsLoading] = useState(false);
   const navigate = useNavigate();
+  const [modalOpened, { open: openModal, close: closeModal }] =
+    useDisclosure(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -233,8 +232,17 @@ export function MainProjects() {
   const handleOpenForm = useCallback(
     (productId: number) => {
       openForm({ productId });
+      closeModal();
     },
-    [openForm]
+    [openForm, closeModal]
+  );
+
+  const handleProductClick = useCallback(
+    (product: Product) => {
+      setSelectedProduct(product);
+      openModal();
+    },
+    [openModal]
   );
 
   const handleNavigateToCatalog = useCallback(() => {
@@ -348,7 +356,7 @@ export function MainProjects() {
                 key={product.id}
                 product={product}
                 isLg={isLg}
-                onOpenForm={handleOpenForm}
+                onProductClick={handleProductClick}
               />
             ))}
           </Carousel>
@@ -361,6 +369,65 @@ export function MainProjects() {
           Перейти в полный раздел
         </Button>
       </div>
+
+      {/* Image Modal */}
+      <Modal
+        opened={modalOpened}
+        onClose={closeModal}
+        size="xl"
+        centered
+        padding={0}
+        withCloseButton={false}
+        classNames={{
+          content: "!bg-transparent !shadow-none !max-w-[90vw]",
+          body: "!p-0",
+          inner: "!z-[9999]",
+          overlay: "!z-[9998]",
+        }}
+      >
+        {selectedProduct && (
+          <div className="relative w-full">
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              className="absolute -top-12 right-0 z-50 text-white hover:text-gray-300 transition-colors"
+              aria-label="Close"
+            >
+              <IconX size={32} stroke={2} />
+            </button>
+
+            {/* Image Container */}
+            <div className="relative rounded-[30px] overflow-hidden bg-black shadow-2xl w-full">
+              <img
+                src={
+                  selectedProduct.image.startsWith("http")
+                    ? selectedProduct.image
+                    : `${process.env.API_BASE_URL}/${selectedProduct.image}`
+                }
+                alt={selectedProduct.name}
+                className="w-full h-auto max-h-[85vh] object-cover"
+              />
+
+              {/* Product Info Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent">
+                <h3 className="text-white text-xl lg:text-3xl font-medium mb-2">
+                  {selectedProduct.name}
+                </h3>
+                <p className="text-white/90 text-xs lg:text-base mb-3 lg:mb-4 leading-[120%]">
+                  {selectedProduct.description}
+                </p>
+                <Button
+                  variant="white"
+                  fullWidth
+                  onClick={() => handleOpenForm(selectedProduct.id)}
+                >
+                  <span className="text-main">Отправить заявку</span>
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

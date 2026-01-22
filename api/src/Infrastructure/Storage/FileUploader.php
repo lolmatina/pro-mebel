@@ -11,7 +11,7 @@ class FileUploader
     private string $uploadDirectory;
     private int $maxWidth = 1200;
     private int $maxHeight = 1200;
-    private int $quality = 85;
+    private int $quality = 92;
 
     public function __construct(string $uploadDirectory)
     {

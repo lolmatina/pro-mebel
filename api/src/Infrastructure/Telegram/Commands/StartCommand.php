@@ -22,16 +22,15 @@ class StartCommand extends SystemCommand
         $message = $this->getMessage();
         $chatId = $message->getChat()->getId();
         
-        // Get the full message text
-        $fullText = $message->getText();
-        // Extract password (everything after "/start ")
-        $text = trim(str_replace('/start', '', $fullText));
+        /**
+         * Use Longman parsing instead of string replace:
+         * - Handles "/start@BotName ..."
+         * - Handles deep-link payloads: https://t.me/BotName?start=payload
+         */
+        $text = trim((string) $message->getText(true));
 
-        // Get password from environment
-        $correctPassword = $_ENV['TELEGRAM_BOT_PASSWORD'] ?? 'change-me';
-        
-        // Log for debugging (remove in production)
-        error_log("Telegram bot debug - Full text: '$fullText', Extracted: '$text', Expected: '$correctPassword'");
+        // Get password from environment (more reliable than $_ENV in many deployments)
+        $correctPassword = (string) (getenv('TELEGRAM_BOT_PASSWORD') ?: ($_ENV['TELEGRAM_BOT_PASSWORD'] ?? 'change-me'));
 
         try {
             $repo = $this->getTelegramUserRepository();

@@ -9,10 +9,12 @@ import {
   useState,
 } from "react";
 import { api, type SidebarCategory } from "@/lib/api";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { Logo } from "@/components/Logo";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
 import { useFeatureFlag } from "@/lib/FeatureFlagContext";
+import insta from "@/assets/insta.svg"
+import whatsapp from "@/assets/whatsapp.svg"
 
 export function Header() {
   const [opened, { toggle, close }] = useDisclosure();
@@ -56,6 +58,80 @@ export function Header() {
 
   return (
     <div className="w-full bg-white z-201">
+      <div className="max-w-360 mx-auto px-15 pt-6 pb-2.5 lg:flex gap-10 justify-between items-center hidden">
+        <ul className="flex justify-between text-sm leading-4 font-medium list-none w-full text-main">
+          <li className="transition-all hover:underline hover:opacity-50">
+            <a
+              className="no-underline text-inherit"
+              onClick={close}
+              href="/#main"
+            >
+              Главная
+            </a>
+          </li>
+          <li className="transition-all hover:underline hover:opacity-50">
+            <a
+              className="no-underline text-main"
+              onClick={close}
+              href="/#should-know"
+            >
+              Все что вам нужно
+            </a>
+          </li>
+          <li className="transition-all hover:underline hover:opacity-50">
+            <a
+              className="no-underline text-main"
+              onClick={close}
+              href="/#about"
+            >
+              О PRO MEBEL в цифрах
+            </a>
+          </li>
+          <li className="transition-all hover:underline hover:opacity-50">
+            <a
+              className="no-underline text-main"
+              onClick={close}
+              href="/#about-us"
+            >
+              Немного информации о нас и прочее
+            </a>
+          </li>
+          <li className="transition-all hover:underline hover:opacity-50">
+            <a
+              className="no-underline text-main"
+              onClick={close}
+              href="/#faq"
+            >
+              се что вам требуется знать
+            </a>
+          </li>
+          <li className="transition-all hover:underline hover:opacity-50">
+            <a
+              className="no-underline text-main"
+              onClick={close}
+              href="/#footer"
+            >
+              Контакты
+            </a>
+          </li>
+          <li className="inline-flex gap-5">
+            <a
+              className="no-underline text-main"
+              onClick={close}
+              href="https://wa.me/77778598259"
+            >
+              <img src={whatsapp} alt="whatsapp" />
+            </a>
+            <a
+              className="no-underline text-main"
+              onClick={close}
+              href="https://www.instagram.com/promebel_salon_uralsk?igsh=cThyZ2VneHE3NDlv&utm_source=qr"
+            >
+              <img src={insta} alt="instagram" />
+            </a>
+          </li>
+        </ul>
+      </div>
       <div className="max-w-360 mx-auto px-4 py-6 lg:py-4.5 lg:px-15 flex gap-10 justify-between items-center">
         <div className="flex gap-13 justify-start items-center z-201">
           <div className="flex justify-start items-center gap-2">
@@ -158,7 +234,7 @@ export function Header() {
                     </a>
                   </li>
                   <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
-                    {canUseConstructor ? (
+                    {canUseConstructor && (
                       <a
                         className="no-underline text-main"
                         onClick={close}
@@ -166,16 +242,6 @@ export function Header() {
                       >
                         Конструктор
                       </a>
-                    ) : (
-                      <button
-                        className="no-underline text-main bg-transparent border-none cursor-pointer"
-                        onClick={() => {
-                          close();
-                          openForm({});
-                        }}
-                      >
-                        Оставить заявку
-                      </button>
                     )}
                   </li>
                   <li className="border-b border-[#EEE6DB] py-2 text-center block text-main">
@@ -248,7 +314,7 @@ export function Header() {
                 onClick={() => openForm({})}
                 className="bg-main mt-17 px-6 py-3 text-[13px] leading-5.25 rounded-full font-semibold! text-white outline-0 transition-all active:scale-95 border-none"
               >
-                Отправить
+                Оставить заявку
               </button>
             </div>
           </Drawer>

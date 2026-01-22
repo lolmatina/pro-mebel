@@ -49,6 +49,16 @@ class CreateApplicationAction extends ApplicationAction
             return $this->respondWithData(['error' => 'Full name is required'], 400);
         }
         
+        if (!isset($data['phone']) || empty($data['phone'])) {
+            return $this->respondWithData(['error' => 'Phone is required'], 400);
+        }
+        
+        // Validate phone format (Kazakhstan: +7 XXX XXX XX XX)
+        $phoneDigits = preg_replace('/\D/', '', $data['phone']);
+        if (strlen($phoneDigits) < 11 || !preg_match('/^7\d{10}$/', $phoneDigits)) {
+            return $this->respondWithData(['error' => 'Invalid phone format. Use Kazakhstan format: +7 XXX XXX XX XX'], 400);
+        }
+        
         if (!isset($data['city']) || empty($data['city'])) {
             return $this->respondWithData(['error' => 'City is required'], 400);
         }
@@ -79,6 +89,7 @@ class CreateApplicationAction extends ApplicationAction
         $application = $this->applicationRepository->create(
             (string) $data['email'],
             (string) $data['fullName'],
+            (string) $data['phone'],
             (string) $data['city'],
             (string) $data['description'],
             $readyToOrder,

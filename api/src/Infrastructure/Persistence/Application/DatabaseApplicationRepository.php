@@ -27,6 +27,7 @@ class DatabaseApplicationRepository implements ApplicationRepository
                 (int) $row['id'],
                 $row['email'],
                 $row['full_name'],
+                $row['phone'],
                 $row['city'],
                 $row['description'],
                 (bool) $row['ready_to_order'],
@@ -56,6 +57,7 @@ class DatabaseApplicationRepository implements ApplicationRepository
             (int) $row['id'],
             $row['email'],
             $row['full_name'],
+            $row['phone'],
             $row['city'],
             $row['description'],
             (bool) $row['ready_to_order'],
@@ -70,6 +72,7 @@ class DatabaseApplicationRepository implements ApplicationRepository
     public function create(
         string $email,
         string $fullName,
+        string $phone,
         string $city,
         string $description,
         bool $readyToOrder,
@@ -77,13 +80,14 @@ class DatabaseApplicationRepository implements ApplicationRepository
     ): Application {
         $db = Database::getConnection();
         $stmt = $db->prepare(
-            'INSERT INTO applications (email, full_name, city, description, ready_to_order, product_id) 
-             VALUES (:email, :full_name, :city, :description, :ready_to_order, :product_id)'
+            'INSERT INTO applications (email, full_name, phone, city, description, ready_to_order, product_id) 
+             VALUES (:email, :full_name, :phone, :city, :description, :ready_to_order, :product_id)'
         );
         
         $stmt->execute([
             'email' => $email,
             'full_name' => $fullName,
+            'phone' => $phone,
             'city' => $city,
             'description' => $description,
             'ready_to_order' => $readyToOrder ? 1 : 0,

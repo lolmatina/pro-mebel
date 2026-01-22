@@ -1,26 +1,95 @@
-import { Checkbox, Drawer, Loader } from "@mantine/core";
+import { Checkbox, Loader } from "@mantine/core";
 import { useFormik } from "formik";
 import image from "@/assets/Img.jpg";
-import { useApplicationForm } from "@/lib/ApplicationFormContext";
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import { IconX } from "@tabler/icons-react";
+import { useNavigate, useSearchParams } from "react-router";
+import { IconArrowLeft } from "@tabler/icons-react";
 
 export function ApplicationForm() {
-  const { opened, productId, closeForm, description } = useApplicationForm();
+  const [searchParams] = useSearchParams();
+  const productIdParam = searchParams.get('productId');
+  const descriptionParam = searchParams.get('description');
+  const productId = productIdParam ? parseInt(productIdParam, 10) : undefined;
+  const description = descriptionParam || "";
+  
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const navigate = useNavigate();
+
+  const formatPhoneNumber = (value: string) => {
+    // Remove all non-numeric characters except +
+    const cleaned = value.replace(/[^\d+]/g, '');
+    
+    // If empty, return +7
+    if (!cleaned || cleaned === '+') {
+      return '+7';
+    }
+    
+    // Always ensure it starts with +7
+    let numbers = cleaned.replace(/\+/g, '');
+    if (numbers.startsWith('7')) {
+      numbers = numbers.substring(1);
+    } else if (numbers.startsWith('8')) {
+      numbers = numbers.substring(1);
+    }
+    
+    // Limit to 10 digits after +7
+    numbers = numbers.substring(0, 10);
+    
+    // Format: +7 (XXX) XXX-XX-XX
+    let formatted = '+7';
+    if (numbers.length > 0) {
+      formatted += ' (' + numbers.substring(0, 3);
+      if (numbers.length > 3) {
+        formatted += ') ' + numbers.substring(3, 6);
+        if (numbers.length > 6) {
+          formatted += '-' + numbers.substring(6, 8);
+          if (numbers.length > 8) {
+            formatted += '-' + numbers.substring(8, 10);
+          }
+        }
+      }
+    }
+    
+    return formatted;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(e.target.value);
+    formik.setFieldValue('phone', formatted);
+  };
+
+  const handlePhoneFocus = () => {
+    if (!formik.values.phone || formik.values.phone === '') {
+      formik.setFieldValue('phone', '+7');
+    }
+  };
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       email: "",
       fullName: "",
+      phone: "",
       city: "",
       description: description,
       readyToOrder: false,
       productId: productId,
+    },
+    validate: (values) => {
+      const errors: any = {};
+      
+      // Phone validation - required and must have 10 digits after +7
+      if (!values.phone || values.phone === '') {
+        errors.phone = 'Телефон обязателен';
+      } else {
+        const phoneDigits = values.phone.replace(/\D/g, '');
+        if (phoneDigits.length < 11) {
+          errors.phone = 'Введите корректный номер телефона';
+        }
+      }
+      
+      return errors;
     },
     onSubmit: () => {
       setLoading(true);
@@ -50,32 +119,22 @@ export function ApplicationForm() {
   });
 
   return (
-    <Drawer
-      size="100%"
-      opened={opened}
-      onClose={closeForm}
-      withCloseButton={false}
-      styles={{
-        body: {
-          height: "100%",
-          padding: "0",
-        },
-      }}
-      classNames={{
-        root: "z-99999999 absolute",
-        inner: "z-99999999",
-      }}
-    >
-      <div className="w-screen lg:h-screen flex justify-evenly flex-col-reverse lg:flex-row relative">
-        <span className="absolute right-0 top-0 p-3" onClick={closeForm}>
-          <IconX size={40} />
-        </span>
-        {!sent ? (
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="flex flex-col w-full py-10 px-8 lg:py-0 lg:px-0 lg:w-97.75 gap-8">
+    <div className="w-screen h-screen flex justify-evenly flex-col-reverse lg:flex-row overflow-hidden">
+      {!sent ? (
+        <div className="w-full h-full flex justify-center items-center">
+          <div className="flex flex-col w-full py-10 px-8 lg:py-0 lg:px-0 lg:w-97.75 gap-8">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate(-1)}
+                className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Назад"
+              >
+                <IconArrowLeft size={24} className="text-main" />
+              </button>
               <h2 className="text-[30px] lg:text-[40px] font-medium leading-[120%] text-main">
                 Оставьте заявку
               </h2>
+            </div>
               <input
                 type="text"
                 {...formik.getFieldProps("email")}
@@ -88,6 +147,21 @@ export function ApplicationForm() {
                 className="p-0 pb-5.25 border-b border-[#EEE6DB] focus:border-main transition-all outline-none border-0 text-main placeholder:text-main text-base placeholder:text-base"
                 placeholder="Имя Фамилия"
               />
+              <div>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formik.values.phone}
+                  onChange={handlePhoneChange}
+                  onFocus={handlePhoneFocus}
+                  onBlur={formik.handleBlur}
+                  className="p-0 pb-5.25 border-b border-[#EEE6DB] focus:border-main transition-all outline-none border-0 text-main placeholder:text-main text-base placeholder:text-base w-full"
+                  placeholder="Телефон"
+                />
+                {formik.touched.phone && formik.errors.phone && (
+                  <div className="text-red-500 text-sm mt-1">{formik.errors.phone}</div>
+                )}
+              </div>
               <input
                 type="text"
                 {...formik.getFieldProps("city")}
@@ -130,7 +204,6 @@ export function ApplicationForm() {
               <button
                 onClick={() => {
                   setSent(false);
-                  closeForm();
                   navigate("/");
                 }}
                 className="bg-main px-6 py-3 text-[13px] leading-5.25 rounded-full font-semibold! text-white outline-0 transition-all active:scale-95 border-none"
@@ -146,7 +219,6 @@ export function ApplicationForm() {
             backgroundImage: `url(${image})`,
           }}
         />
-      </div>
-    </Drawer>
+    </div>
   );
 }

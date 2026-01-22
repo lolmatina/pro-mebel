@@ -124,6 +124,7 @@ class TelegramBotService
         $message = "🆕 <b>Новая заявка</b>\n\n";
         $message .= "📧 <b>Email:</b> {$application->getEmail()}\n";
         $message .= "👤 <b>Имя:</b> {$application->getFullName()}\n";
+        $message .= "📱 <b>Телефон:</b> {$application->getPhone()}\n";
         $message .= "🏙 <b>Город:</b> {$application->getCity()}\n";
         $message .= "📝 <b>Описание:</b> {$application->getDescription()}\n";
         $message .= "🛒 <b>Готов оформить заказ:</b> {$readyToOrder}\n";

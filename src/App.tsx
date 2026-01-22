@@ -33,13 +33,13 @@ export function App() {
               <Route path="hero-blocks" element={<HeroBlocksPage />} />
               <Route path="applications" element={<ApplicationsPage />} />
             </Route>
+            <Route path="application" element={<ApplicationForm />} />
             <Route element={<MainLayout />}>
               <Route index element={<MainPage />} />
               <Route path="catalog" element={<CatalogPage />} />
               <Route path="test" element={<TestPage />} />
             </Route>
           </Routes>
-          <ApplicationForm />
         </ApplicationFormProvider>
       </BrowserRouter>
     </MantineProvider>

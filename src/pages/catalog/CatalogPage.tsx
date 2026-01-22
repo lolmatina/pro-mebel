@@ -1,9 +1,9 @@
 import { Sidebar } from "@/components/Sidebar";
 import { useState, useEffect, useCallback } from "react";
 import { api, type Product, type SidebarCategory } from "@/lib/api";
-import { Loader, Drawer, Pagination } from "@mantine/core";
+import { Loader, Drawer, Pagination, Modal } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { IconChevronDown } from "@tabler/icons-react";
+import { IconChevronDown, IconX } from "@tabler/icons-react";
 import { useSearchParams } from "react-router";
 import { Footer } from "@/widgets/Footer";
 import { useApplicationForm } from "@/lib/ApplicationFormContext";
@@ -24,14 +24,26 @@ export default function CatalogPage() {
   const isLg = useMediaQuery("(min-width: 1024px)");
   const [drawerOpened, { open: openDrawer, close: closeDrawer }] =
     useDisclosure(false);
+  const [modalOpened, { open: openModal, close: closeModal }] =
+    useDisclosure(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchParams] = useSearchParams();
   const { openForm } = useApplicationForm();
 
   const handleOpenForm = useCallback(
     (productId: number) => {
       openForm({ productId });
+      closeModal();
     },
-    [openForm]
+    [openForm, closeModal]
+  );
+
+  const handleProductClick = useCallback(
+    (product: Product) => {
+      setSelectedProduct(product);
+      openModal();
+    },
+    [openModal]
   );
 
   useEffect(() => {
@@ -196,7 +208,11 @@ export default function CatalogPage() {
                       : `${process.env.API_BASE_URL}/${product.image}`;
 
                     return (
-                      <div className="h-112 w-full relative overflow-hidden group rounded-[30px]">
+                      <div 
+                        key={product.id}
+                        className="h-112 w-full relative overflow-hidden group rounded-[30px] cursor-pointer"
+                        onClick={() => handleProductClick(product)}
+                      >
                         {/* Use img tag instead of background-image for better performance */}
                         <img
                           src={imageUrl}
@@ -211,7 +227,7 @@ export default function CatalogPage() {
                             style={{
                               maskImage: `linear-gradient(to top, white 0%, white 35%, transparent 50%)`,
                               WebkitMaskImage: `linear-gradient(to top, black 0%, black 25%, transparent 50%)`,
-                              backgroundImage: `url(${product.image})`,
+                              backgroundImage: `url(${imageUrl})`,
                               backgroundSize: "cover",
                               backgroundPosition: "center",
                             }}
@@ -219,22 +235,13 @@ export default function CatalogPage() {
                         )}
                         <div
                           className={`absolute ${isLg
-                            ? "-bottom-16 transition-all group-hover:bottom-0"
-                            : "bottom-0"
-                            } p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent`}
+                            && "bottom-0 transition-all group-hover:bottom-0"
+                            } p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent pointer-events-none`}
                         >
-                          <span className="text-[28px] font-medium">{product.name}</span>
+                          <span className="text-[28px] leading-[1] font-medium">{product.name}</span>
                           <span className="text-sm leading-[120%]">
                             {product.description}
                           </span>
-                          <Button
-                            variant="white"
-                            fullWidth
-                            className="mt-3"
-                            onClick={() => handleOpenForm(product.id)}
-                          >
-                            <span className="text-main">Отправить заявку</span>
-                          </Button>
                         </div>
                       </div>
                     );
@@ -284,6 +291,65 @@ export default function CatalogPage() {
             />
           </div>
         </Drawer>
+
+        {/* Image Modal */}
+        <Modal
+          opened={modalOpened}
+          onClose={closeModal}
+          size="xl"
+          centered
+          padding={0}
+          withCloseButton={false}
+          classNames={{
+            content: "!bg-transparent !shadow-none !max-w-[90vw]",
+            body: "!p-0",
+            inner: "!z-[9999]",
+            overlay: "!z-[9998]",
+          }}
+        >
+          {selectedProduct && (
+            <div className="relative w-full">
+              {/* Close Button */}
+              <button
+                onClick={closeModal}
+                className="absolute -top-12 right-0 z-50 text-white hover:text-gray-300 transition-colors"
+                aria-label="Close"
+              >
+                <IconX size={32} stroke={2} />
+              </button>
+
+              {/* Image Container */}
+              <div className="relative rounded-[30px] overflow-hidden bg-black shadow-2xl w-full">
+                <img
+                  src={
+                    selectedProduct.image.startsWith("http")
+                      ? selectedProduct.image
+                      : `${process.env.API_BASE_URL}/${selectedProduct.image}`
+                  }
+                  alt={selectedProduct.name}
+                  className="w-full h-auto max-h-[85vh] object-cover"
+                />
+                
+                {/* Product Info Overlay */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent">
+                  <h3 className="text-white text-xl lg:text-3xl font-medium mb-2">
+                    {selectedProduct.name}
+                  </h3>
+                  <p className="text-white/90 text-xs lg:text-base mb-3 lg:mb-4 leading-[120%]">
+                    {selectedProduct.description}
+                  </p>
+                  <Button
+                    variant="white"
+                    fullWidth
+                    onClick={() => handleOpenForm(selectedProduct.id)}
+                  >
+                    <span className="text-main">Отправить заявку</span>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </Modal>
       </div>
       <Footer />
     </div>
