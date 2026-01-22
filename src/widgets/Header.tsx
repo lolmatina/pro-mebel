@@ -102,7 +102,7 @@ export function Header() {
               onClick={close}
               href="/#faq"
             >
-              се что вам требуется знать
+              Все что вам требуется знать
             </a>
           </li>
           <li className="transition-all hover:underline hover:opacity-50">
@@ -308,11 +308,27 @@ export function Header() {
                       Контакты
                     </a>
                   </li>
+                  <li className="py-2 text-center block text-main space-x-2">
+                    <a
+                      className="no-underline text-main"
+                      onClick={close}
+                      href="https://wa.me/77778598259"
+                    >
+                      <img src={whatsapp} alt="whatsapp" width={40} height={"auto"} />
+                    </a>
+                    <a
+                      className="no-underline text-main"
+                      onClick={close}
+                      href="https://www.instagram.com/promebel_salon_uralsk?igsh=cThyZ2VneHE3NDlv&utm_source=qr"
+                    >
+                      <img src={insta} alt="instagram" width={40} height={"auto"} />
+                    </a>
+                  </li>
                 </ul>
               </div>
               <button
                 onClick={() => openForm({})}
-                className="bg-main mt-17 px-6 py-3 text-[13px] leading-5.25 rounded-full font-semibold! text-white outline-0 transition-all active:scale-95 border-none"
+                className="bg-main mt-9 px-6 py-3 text-[13px] leading-5.25 rounded-full font-semibold! text-white outline-0 transition-all active:scale-95 border-none"
               >
                 Оставить заявку
               </button>
