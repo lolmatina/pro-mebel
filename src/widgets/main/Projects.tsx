@@ -133,9 +133,7 @@ const ProductCard = memo(
             />
           )}
           <div
-            className={`absolute ${isLg
-              && "bottom-0 transition-all group-hover:bottom-0"
-              } p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent pointer-events-none`}
+            className={`absolute bottom-0 transition-all group-hover:bottom-0 p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent pointer-events-none`}
           >
             <span className="text-[28px] font-medium leading-7">{product.name}</span>
             <span className="text-sm leading-[120%]">

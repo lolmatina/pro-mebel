@@ -208,7 +208,7 @@ export default function CatalogPage() {
                       : `${process.env.API_BASE_URL}/${product.image}`;
 
                     return (
-                      <div 
+                      <div
                         key={product.id}
                         className="h-112 w-full relative overflow-hidden group rounded-[30px] cursor-pointer"
                         onClick={() => handleProductClick(product)}
@@ -234,9 +234,7 @@ export default function CatalogPage() {
                           />
                         )}
                         <div
-                          className={`absolute ${isLg
-                            && "bottom-0 transition-all group-hover:bottom-0"
-                            } p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent pointer-events-none`}
+                          className={`absolute bottom-0 transition-all group-hover:bottom-0 p-3.75 text-white flex flex-col gap-2 bg-linear-to-t from-black/70 to-transparent pointer-events-none`}
                         >
                           <span className="text-[28px] leading-[1] font-medium">{product.name}</span>
                           <span className="text-sm leading-[120%]">
@@ -329,7 +327,7 @@ export default function CatalogPage() {
                   alt={selectedProduct.name}
                   className="w-full h-auto max-h-[85vh] object-cover"
                 />
-                
+
                 {/* Product Info Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent">
                   <h3 className="text-white text-xl lg:text-3xl font-medium mb-2">
